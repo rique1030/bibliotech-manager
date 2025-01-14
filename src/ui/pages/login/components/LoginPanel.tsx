@@ -95,7 +95,6 @@ const LoginForm = () => {
 	const mutation = useMutation({
 		mutationFn: (payload: UserLoginPayload) => fetchData(payload),
 		onSuccess: (data) => {
-			console.log(JSON.stringify(data.data, null, 2));
 			if (data && data.data) {
 				navigate("/main/");
 			} else {
@@ -114,7 +113,6 @@ const LoginForm = () => {
 			email,
 			password,
 		};
-		console.log(payload);
 		mutation.mutate(payload);
 	};
 

@@ -67,6 +67,10 @@ electron.contextBridge.exposeInMainWorld("requestBook", {
 		return await ipcRenderer.invoke("books-get-by-id", payload);
 	},
 
+	getByAccessNumber: async (payload: RequestByID) => {
+		return await ipcRenderer.invoke("books-get-by-access-number", payload);
+	},
+
 	update: async (payload: RequestByID) => {
 		return await ipcRenderer.invoke("books-update", payload);
 	},
@@ -100,4 +104,18 @@ electron.contextBridge.exposeInMainWorld("requestCategory", {
 	delete: async (payload: RequestByID) => {
 		return await ipcRenderer.invoke("categories-delete", payload);
 	},
+});
+
+electron.contextBridge.exposeInMainWorld("storedSettings", {
+	getFormatIndex: async () => {
+		return await ipcRenderer.invoke("get-format-index");
+	},
+
+	setFormatIndex: async (index: number) => {
+		return await ipcRenderer.invoke("set-format-index", index);
+	},
+});
+
+electron.contextBridge.exposeInMainWorld("nodeApi", {
+	Buffer: Buffer,
 });

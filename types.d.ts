@@ -1,46 +1,32 @@
 declare global {
-	//Tables
+	interface ImageBuffer {
+		id: string;
+		key: string;
+		buffer?: Buffer;
+		temp?: string;
+	}
 	interface columnsInterface {
 		id: string;
 		label: string;
 		title: string;
-		width?: number;
+		minWidth?: number;
+		maxWidth?: number;
+		width?: number | string;
 		align?: "right";
 	}
 
-	interface ViewTableProps {
-		// rows: booksRowsInterface[];
-		columns: columnsInterface[];
-		children?: React.ReactNode;
-	}
-
-	interface ViewTableProps {
-		columns: columnsInterface[];
-		children?: React.ReactNode;
-		isCheck: boolean;
-		onCheck: (index: number | null) => void;
-		isIntermediate: boolean;
-	}
 	interface TableHeaderProps {
-		columns: columnsInterface[];
+		// indexed?: boolean | true;
+		// indented?: boolean;
+		// isSelect?: boolean | true;
+		// columns: columnsInterface[];
 		onCheck: (index: number | null) => void;
 		isCheck: boolean;
 		isIntermediate: boolean;
-	}
-
-	interface TableDataProps {
-		index: number;
-		isCheck: (index: number) => boolean;
-		onCheck?: (index: number) => void;
-		row: { [key: string]: any };
-		columns: columnsInterface[];
-		openedRowIndex: number | null;
-		onClick: (index: number) => void;
-		children?: React.ReactNode;
 	}
 
 	interface TableDataCollapsibleProps {
-		openedRowIndex: number | null;
+		openedRowIndex?: number;
 		index: number;
 		children?: React.ReactNode;
 	}
@@ -57,18 +43,15 @@ declare global {
 		cover_image?: string | null;
 		description?: string;
 		qrcode: string | null;
-		date_added: Date;
-		date_updated: Date;
+		date_added?: Date;
+		date_updated?: Date;
 		status: string;
 	}
 
 	interface booksDataInterface {
-		rows: booksRowsInterface[];
-		columns: columnsInterface[];
-		onRowClick: (index: number) => void;
-		openedRowIndex: number | null;
-		isCheck: (index: number) => boolean;
-		onCheck: (index: number) => void;
+		selectable?: boolean | false;
+		removable?: boolean | false;
+		isEditable?: boolean | false;
 	}
 
 	interface bookStatusInterface {
@@ -82,33 +65,57 @@ declare global {
 			getPaged: (payload: GetPagedPayload) => promise<any>;
 			getByID: (payload: RequestByID) => promise<any>;
 			login: (payload: UserLoginPayload) => promise<any>;
-			update: (payload: RequestByID) => promise<any>;
-			delete: (payload: RequestByID) => promise<any>;
+			update: (payload: UserUpdatePayload) => promise<any>;
+			delete: (payload: { id: RequestByID }) => promise<any>;
 		};
 		requestRole: {
 			insertMultiple: (payload: InsertRolesPayload) => promise<any>;
 			getAll: () => promise<any>;
 			getPaged: (payload: GetPagedPayload) => promise<any>;
 			getByID: (payload: RequestByID) => promise<any>;
-			update: (payload: RequestByID) => promise<any>;
+			update: (payload: RoleUpdatePayload) => promise<any>;
+			delete: (payload: { id: RequestByID }) => promise<any>;
 		};
 		requestBook: {
 			insertMultiple: (payload: InsertBooksPayload) => promise<any>;
 			getPaged: (payload: GetPagedPayload) => promise<any>;
 			getByID: (payload: RequestByID) => promise<any>;
-			update: (payload: RequestByID) => promise<any>;
-			delete: (payload: RequestByID) => promise<any>;
+			getByAccessNumber: (payload: string[]) => promise<any>;
+			update: (payload: BookUpdatePayload) => promise<any>;
+			delete: (payload: { id: RequestByID }) => promise<any>;
 		};
 		requestCategory: {
 			insertMultiple: (payload: InsertCategoriesPayload) => promise<any>;
 			getPaged: (payload: GetPagedPayload) => promise<any>;
 			getByID: (payload: RequestByID) => promise<any>;
-			update: (payload: RequestByID) => promise<any>;
-			delete: (payload: RequestByID) => promise<any>;
+			update: (payload: CategoryUpdatePayload) => promise<any>;
+			delete: (payload: { id: RequestByID }) => promise<any>;
+		};
+		storedSettings: {
+			getFormatIndex: () => promise<any>;
+			setFormatIndex: (index: number) => promise<any>;
+		};
+		nodeApi: {
+			Buffer: typeof Buffer;
 		};
 	}
 
 	//Users
+	interface UserUpdatePayload {
+		payload: UserPayload[];
+	}
+
+	interface RoleUpdatePayload {
+		payload: RolePayload[];
+	}
+
+	interface BookUpdatePayload {
+		payload: booksRowsInterface[];
+	}
+
+	interface CategoryUpdatePayload {
+		payload: CategoryPayload[];
+	}
 
 	interface UserPayload {
 		first_name: string;
@@ -128,7 +135,7 @@ declare global {
 	interface GetPagedPayload {
 		page?: number | 0;
 		per_page?: number | 10;
-		filter?: { [key: string]: string };
+		filters?: { [key: string]: string };
 		order_by?: string;
 		order_direction?: "asc" | "desc";
 	}
@@ -156,6 +163,7 @@ declare global {
 	//Books
 
 	interface BookPayload {
+		id: number;
 		access_number: string;
 		call_number: string;
 		title: string;
@@ -169,7 +177,10 @@ declare global {
 		status: "available" | "borrowed" | "overdue" | "lost" | string;
 	}
 
-	type InsertBooksPayload = BookPayload[];
+	type InsertBooksPayload = {
+		payload: BookPayload[];
+		images: File[];
+	};
 
 	//Category
 

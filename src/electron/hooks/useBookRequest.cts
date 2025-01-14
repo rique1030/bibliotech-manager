@@ -5,11 +5,7 @@ import CONFIG from "../config.cjs";
 ipcMain.handle(
 	"books-insert-multiple",
 	async (event, payload: InsertBooksPayload) => {
-		return await useRequest(
-			CONFIG.URL.BOOK.INSERT_MULTIPLE,
-			"POST",
-			payload
-		);
+		return await useRequest(CONFIG.URL.BOOK.INSERT_MULTIPLE, "POST", payload);
 	}
 );
 
@@ -21,10 +17,21 @@ ipcMain.handle("books-get-by-id", async (event, payload: RequestByID) => {
 	return await useRequest(CONFIG.URL.BOOK.GET_BOOKS_BY_ID, "POST", payload);
 });
 
-ipcMain.handle("books-update", async (event, payload: RequestByID) => {
+ipcMain.handle(
+	"books-get-by-access-number",
+	async (event, payload: string[]) => {
+		return await useRequest(
+			CONFIG.URL.BOOK.GET_BOOKS_BY_ACCESS_NUMBER,
+			"POST",
+			payload
+		);
+	}
+);
+
+ipcMain.handle("books-update", async (event, payload: BookUpdatePayload) => {
 	return await useRequest(CONFIG.URL.BOOK.UPDATE_BOOK, "POST", payload);
 });
 
-ipcMain.handle("books-delete", async (event, payload: RequestByID) => {
+ipcMain.handle("books-delete", async (event, payload: { id: RequestByID }) => {
 	return await useRequest(CONFIG.URL.BOOK.DELETE_BOOK, "POST", payload);
 });

@@ -1,4 +1,4 @@
-import { colors } from "@mui/material";
+import { alpha, colors } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 
 const lightTheme = createTheme({
@@ -75,6 +75,8 @@ const lightTheme = createTheme({
 		},
 		success: {
 			main: colors.green[500],
+			light: colors.green[200],
+			dark: colors.green[800],
 		},
 		info: {
 			main: colors.blue[500],
@@ -108,7 +110,7 @@ const lightTheme = createTheme({
 		MuiTableContainer: {
 			styleOverrides: {
 				root: {
-					border: "1px solid #e0e0e0",
+					boxSizing: "border-box",
 					"& .MuiSpan-Bold": {
 						fontWeight: "bold",
 						color: "#5b40e4",
@@ -117,11 +119,23 @@ const lightTheme = createTheme({
 				},
 			},
 		},
+		MuiTable: {
+			styleOverrides: {
+				root: {
+					borderCollapse: "collapse",
+				},
+			},
+		},
+
 		MuiTableHead: {
 			styleOverrides: {
 				root: {
+					"& thead": {
+						color: "#ffffff",
+					},
 					"& th": {
-						backgroundColor: "#5b40e4",
+						backgroundColor: "#5b40e4 !important",
+						boxSizing: "border-box",
 						color: "#ffffff",
 						userSelect: "none",
 					},
@@ -131,14 +145,28 @@ const lightTheme = createTheme({
 		MuiTableRow: {
 			styleOverrides: {
 				root: {
-					"&.MuiTableRow-Data": {
-						"&:hover": {
-							backgroundColor: "rgba(91, 64, 228, 0.25)",
-							"& .MuiTableCell-root": {
-								color: "#5b40e4",
-							},
-						},
-						transition: "background-color 0.2s ease-in-out",
+					boxSizing: "border-box",
+				},
+			},
+		},
+		MuiTableCell: {
+			styleOverrides: {
+				root: {
+					overflow: "hidden",
+					textOverflow: "ellipsis",
+					whiteSpace: "nowrap",
+					padding: "1rem",
+					fontSize: "0.8rem",
+					boxSizing: "border-box",
+					transition: "all 0.2s ease-in-out",
+				},
+			},
+		},
+		MuiButton: {
+			styleOverrides: {
+				root: {
+					"&.Mui-disabled": {
+						backgroundColor: "rgba(91, 64, 228, 0.25)",
 					},
 				},
 			},
@@ -162,28 +190,39 @@ const lightTheme = createTheme({
 				},
 			},
 		},
-		MuiTextField: {
+
+		MuiOutlinedInput: {
 			styleOverrides: {
 				root: {
-					"& .MuiOutlinedInput-root": {
-						"&:hover fieldset": {
-							borderColor: "#5b40e4",
-						},
-						"&.Mui-focused fieldset": {
-							borderColor: "#5b40e4",
-						},
+					"&:not(.Mui-disabled):hover .MuiOutlinedInput-notchedOutline": {
+						borderColor: "#5b40e4",
+					},
+
+					"&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
+						borderColor: "#ff4343",
+					},
+
+					"&.Mui-error.Mui-focused .MuiOutlinedInput-notchedOutline": {
+						borderColor: "#ff4343",
+					},
+
+					"&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+						borderColor: "#5b40e4",
 					},
 				},
 			},
 		},
-		MuiOutlinedInput: {
+		MuiAlert: {
 			styleOverrides: {
 				root: {
-					"&:hover .MuiOutlinedInput-notchedOutline": {
-						borderColor: "#5b40e4",
-					},
-					"&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-						borderColor: "#5b40e4",
+					// border: "2px solid",
+					borderRadius: "0.3rem",
+					color: alpha("#000000", 0.7),
+					fontWeight: "bold",
+					"&.MuiAlert-colorSuccess": {
+						backgroundColor: colors.green[500],
+						// borderColor: colors.green[500],
+						// color: colors.green[50],
 					},
 				},
 			},
@@ -202,8 +241,22 @@ const lightTheme = createTheme({
 		MuiSkeleton: {
 			styleOverrides: {
 				root: {
-					backgroundColor: "rgba(91, 64, 228, 0.15)",
+					backgroundColor: "#d2c6f4",
 					borderRadius: "4px",
+				},
+			},
+		},
+		MuiPagination: {
+			styleOverrides: {
+				root: {
+					"& .MuiPaginationItem-root": {
+						color: "#5b40e4",
+						"&.Mui-selected": {
+							backgroundColor: "#5b40e4",
+							color: "#ffffff",
+						},
+					},
+					BorderColor: "#5b40e4",
 				},
 			},
 		},

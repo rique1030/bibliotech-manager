@@ -36,18 +36,24 @@ ipcMain.handle("categories-get-by-id", async (event, payload: RequestByID) => {
 	);
 });
 
-ipcMain.handle("categories-update", async (event, payload: RequestByID) => {
-	return await useRequest(
-		CONFIG.URL.CATEGORY.UPDATE_CATEGORY,
-		"POST",
-		payload
-	);
-});
+ipcMain.handle(
+	"categories-update",
+	async (event, payload: CategoryUpdatePayload) => {
+		return await useRequest(
+			CONFIG.URL.CATEGORY.UPDATE_CATEGORY,
+			"POST",
+			payload
+		);
+	}
+);
 
-ipcMain.handle("categories-delete", async (event, payload: RequestByID) => {
-	return await useRequest(
-		CONFIG.URL.CATEGORY.DELETE_CATEGORY,
-		"POST",
-		payload
-	);
-});
+ipcMain.handle(
+	"categories-delete",
+	async (event, payload: { id: RequestByID }) => {
+		return await useRequest(
+			CONFIG.URL.CATEGORY.DELETE_CATEGORY,
+			"POST",
+			payload
+		);
+	}
+);

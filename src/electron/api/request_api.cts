@@ -25,11 +25,7 @@ const useRequest: RequestInterface = async (
 	method = "GET",
 	payload = null
 ) => {
-	console.log("sending request to ", url);
-	console.log("with method ", method);
-	console.log("with payload ", payload);
-
-	const options: OptionsInterface = {
+	let options: OptionsInterface = {
 		method,
 		url: CONFIG.SERVER_HOST + url,
 		headers: { "Content-Type": "application/json" },
