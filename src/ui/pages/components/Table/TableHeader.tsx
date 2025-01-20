@@ -54,7 +54,9 @@ const TableHeader = ({
 	} = useContext(TableContext);
 
 	return (
-		<TableHead>
+		<TableHead
+			sx={{ "& th": { color: "white", backgroundColor: "primary.main" } }}
+		>
 			<TableRow>
 				<ActionCell selectable={selectable} indented={indented} />
 				<StyledCell

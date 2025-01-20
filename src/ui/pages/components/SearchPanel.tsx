@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import { TableSearchContext } from "../context/TableSearchContext";
 import { useContext } from "react";
+import { TableContext } from "../context/TableContext";
 
 const SearchPanel = () => {
 	return (
@@ -27,12 +28,39 @@ const SearchPanel = () => {
 
 const SearchBar = () => {
 	const {
-		search: { suggestions, setSearchTerm },
+		search: { suggestions, filterTerm, setSearchTerm },
 	} = useContext(TableSearchContext);
+
+	const { availableRoles } = useContext(TableContext);
+
+	const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
+		let searchTerm: any = e.target.value;
+		if (filterTerm === "is_verified") {
+			switch (searchTerm) {
+				case "true":
+					searchTerm = "1";
+					break;
+				case "false":
+					searchTerm = "0";
+					break;
+				default:
+					searchTerm = "";
+					break;
+			}
+		} else if (filterTerm === "role_id") {
+			const roleIndex = availableRoles.find(
+				(role) => role.role_name === e.target.value
+			)?.id;
+			searchTerm = roleIndex;
+		}
+
+		setSearchTerm(searchTerm);
+	};
+
 	if (!suggestions) {
 		return (
 			<TextField
-				onChange={(e) => setSearchTerm(e.target.value)}
+				onChange={(e) => handleSubmit(e as any)}
 				label="Search"
 				size="small"
 				sx={{ width: "100%", maxWidth: "300px" }}
@@ -41,6 +69,7 @@ const SearchBar = () => {
 	}
 	return (
 		<Autocomplete
+			clearOnBlur={false}
 			disablePortal
 			id="combo-box-demo"
 			options={suggestions || []}
@@ -49,7 +78,7 @@ const SearchBar = () => {
 				width: "100%",
 				maxWidth: "300px",
 			}}
-			onInputChange={(_, value) => setSearchTerm(value)}
+			onInputChange={(_, value) => handleSubmit({ target: { value } } as any)}
 			renderInput={(params) => (
 				<TextField
 					{...params}

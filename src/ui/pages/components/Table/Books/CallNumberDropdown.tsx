@@ -1,17 +1,26 @@
 import { useContext } from "react";
 import { TableContext } from "../../../context/TableContext";
-import { Box, MenuItem, Select, Tooltip, Typography } from "@mui/material";
+import {
+	Box,
+	Divider,
+	MenuItem,
+	Select,
+	Tooltip,
+	Typography,
+} from "@mui/material";
+import { LabeledSelect } from "../Accounts/AccountsCollapsible/AccountsDataCollapsible";
 
 export default function CallNumberDropdown() {
 	const {
 		callNoFormatter: { formats, currentFormat, handleChangeFormat },
 	} = useContext(TableContext);
-    
+
 	return (
-		<Select
+		<LabeledSelect
+			label="Call Number Format"
 			size="small"
 			value={currentFormat.id}
-			onChange={(e) => handleChangeFormat(e.target.value)}
+			onChange={(e: any) => handleChangeFormat(e.target.value)}
 			sx={{ width: "15rem" }}
 		>
 			{formats.map((format) => {
@@ -29,10 +38,15 @@ export default function CallNumberDropdown() {
 										},
 									],
 								},
+								tooltip: {
+									sx: {
+										maxWidth: "20rem",
+										padding: 0,
+									},
+								},
 							}}
 							title={<TooltipContents {...format} />}
 							placement="right"
-							arrow
 						>
 							<Typography
 								sx={{
@@ -48,7 +62,7 @@ export default function CallNumberDropdown() {
 					</MenuItem>
 				);
 			})}
-		</Select>
+		</LabeledSelect>
 	);
 }
 
@@ -67,31 +81,34 @@ export function TooltipContents({
 			sx={{
 				display: "flex",
 				flexDirection: "column",
-				padding: 1,
 				boxSizing: "border-box",
 			}}
 		>
-			<Typography variant="h4" sx={{ fontSize: "1rem", fontWeight: "bold" }}>
+			<Typography
+				variant="h4"
+				sx={{
+					color: "text.primary",
+					padding: "1rem",
+					fontSize: "1rem",
+					fontWeight: "bold",
+				}}
+			>
 				{name}
 			</Typography>
+			<Divider />
 			<Typography
-				sx={{
-					color: "text.secondary",
-					fontSize: "0.8rem",
-					padding: "0.5rem",
-					borderRadius: "0.5rem",
-				}}
+				variant="caption"
+				sx={{ padding: "0px 1rem", fontWeight: "bold" }}
 			>
 				{format}
 			</Typography>
 			<Typography
-				component={"code"}
-				sx={{
-					backgroundColor: "#444",
+				variant="body2"
+				sx={(theme) => ({
 					fontSize: "0.8rem",
-					padding: "0.5rem",
+					padding: "0.5rem 1rem",
 					borderRadius: "0.2rem",
-				}}
+				})}
 			>
 				{description}
 			</Typography>

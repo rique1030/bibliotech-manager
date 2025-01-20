@@ -25,7 +25,7 @@ const ViewTable: React.FC<ViewTableProps> = ({ children }) => {
 	return (
 		<Box
 			component={Paper}
-			elevation={4}
+			elevation={0}
 			sx={(theme: Theme) => ({
 				flex: 1,
 				padding: 0,
@@ -33,6 +33,8 @@ const ViewTable: React.FC<ViewTableProps> = ({ children }) => {
 				overflowX: "hidden",
 				position: "relative",
 				borderRadius: theme.shape.borderRadius,
+				border: "1px solid",
+				borderColor: "divider",
 			})}
 		>
 			<Table stickyHeader>{children}</Table>
@@ -50,7 +52,7 @@ const ViewTable: React.FC<ViewTableProps> = ({ children }) => {
 						justifyContent: "center",
 						alignItems: "center",
 						opacity: fade ? 0.5 : 0,
-						transition: "opacity 0.5s ease-in-out",
+						transition: "opacity 0.3s ease-in-out",
 					}}
 				>
 					<HighlightAltIcon sx={{ fontSize: 200, color: "text" }} />

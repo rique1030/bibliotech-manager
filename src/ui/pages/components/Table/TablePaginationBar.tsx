@@ -29,12 +29,12 @@ function TablePaginationBar() {
 
 	const handleUpdate = () => {
 		setRows([]);
-		navigate(URL?.update, { state: selectedItems });
+		navigate(URL?.update as string, { state: selectedItems });
 	};
 
 	const handleDelete = () => {
 		setRows([]);
-		navigate(URL?.delete, { state: selectedItems });
+		navigate(URL?.delete as string, { state: selectedItems });
 	};
 
 	return (
@@ -47,40 +47,48 @@ function TablePaginationBar() {
 			}}
 		>
 			<Stack direction="row" spacing={2}>
-				<Tooltip
-					title={selectedItems.length === 0 ? "No items selected" : "a"}
-					disableInteractive
-					slots={{ transition: Grow }}
-					placement="top"
-				>
-					<span>
-						<Button
-							onClick={handleUpdate}
-							sx={{ height: "2rem" }}
-							variant="contained"
-							disabled={selectedItems.length === 0}
-						>
-							Edit&nbsp;Selected
-						</Button>
-					</span>
-				</Tooltip>
-				<Tooltip
-					title={selectedItems.length === 0 ? "No items selected" : "a"}
-					disableInteractive
-					slots={{ transition: Grow }}
-					placement="top"
-				>
-					<span>
-						<Button
-							onClick={handleDelete}
-							sx={{ height: "2rem" }}
-							variant="contained"
-							disabled={selectedItems.length === 0}
-						>
-							Remove&nbsp;Selected
-						</Button>
-					</span>
-				</Tooltip>
+				{URL?.update && (
+					<Tooltip
+						placement="top"
+						title={
+							selectedItems.length
+								? "Edit selected items"
+								: "Please select items to edit"
+						}
+					>
+						<span>
+							<Button
+								disabled={selectedItems.length === 0}
+								onClick={handleUpdate}
+								variant="contained"
+								sx={{ height: "2rem" }}
+							>
+								Edit&nbsp;Selected
+							</Button>
+						</span>
+					</Tooltip>
+				)}
+				{URL?.delete && (
+					<Tooltip
+						placement="top"
+						title={
+							selectedItems.length
+								? "Remove selected items"
+								: "Please select items to remove"
+						}
+					>
+						<span>
+							<Button
+								disabled={selectedItems.length === 0}
+								onClick={handleDelete}
+								variant="contained"
+								sx={{ height: "2rem" }}
+							>
+								Remove&nbsp;Selected
+							</Button>
+						</span>
+					</Tooltip>
+				)}
 			</Stack>
 			<TablePagination
 				sx={{ width: "60%" }}

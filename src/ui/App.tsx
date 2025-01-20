@@ -11,14 +11,16 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { AlertContextProvider } from "./pages/context/AlertContext";
-import { useContext } from "react";
+import CropperModalProvider from "./pages/components/CropperModal";
 
 function App() {
 	return (
 		<ReactQueryProvider>
-			<ThemeProvider theme={darkTheme}>
+			<ThemeProvider theme={lightTheme}>
 				<AlertContextProvider>
-					<RouterProvider router={router} />
+					<CropperModalProvider>
+						<RouterProvider router={router} />
+					</CropperModalProvider>
 				</AlertContextProvider>
 			</ThemeProvider>
 		</ReactQueryProvider>

@@ -1,0 +1,67 @@
+const columns: columnsInterface[] = [
+	{
+		id: "access_number",
+		label: "Acc No.",
+		title: "Access Number",
+		minWidth: 20,
+		maxWidth: 150,
+		align: "right",
+	},
+	{
+		id: "title",
+		label: "Title",
+		title: "Title",
+		minWidth: 20,
+		maxWidth: 150,
+	},
+	// {
+	// 	id: "author",
+	// 	label: "Author",
+	// 	title: "Author",
+	// 	minWidth: 20,
+	// 	maxWidth: 150,
+	// },
+	{
+		id: "first_name",
+		label: "First Name",
+		title: "First Name",
+		minWidth: 20,
+		maxWidth: 150,
+		width: "99rem",
+	},
+	{
+		id: "last_name",
+		label: "Last Name",
+		title: "Last Name",
+		minWidth: 20,
+		maxWidth: 150,
+		width: "99rem",
+	},
+	{
+		id: "status",
+		label: "Status",
+		title: "Status",
+		minWidth: 150,
+		maxWidth: 150,
+	},
+	{
+		id: "borrowed_date",
+		label: "Borrowed",
+		title: "Borrowed",
+		minWidth: 20,
+		maxWidth: 120,
+		width: "99rem",
+		align: "right",
+	},
+	{
+		id: "due_date",
+		label: "Due",
+		title: "Due",
+		minWidth: 20,
+		maxWidth: 120,
+		width: "99rem",
+		align: "right",
+	},
+];
+
+export default columns;

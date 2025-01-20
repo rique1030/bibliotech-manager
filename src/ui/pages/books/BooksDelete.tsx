@@ -3,7 +3,7 @@ import MainContainer from "../components/MainContainer";
 import BooksData from "../components/Table/Books/BooksData";
 import { useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Divider, Stack, Button } from "@mui/material";
+import { Divider, Stack, Button, Tooltip } from "@mui/material";
 import columns from "../components/Table/columns/DefaultBookColumnsInterface";
 import { useDelete } from "../hooks/useDelete";
 import { TableContext } from "../context/TableContext";
@@ -81,13 +81,25 @@ function DeleteFooter() {
 	const { handleDelete } = useContext(TableDeleteContext);
 	return (
 		<Stack direction="row" spacing={2}>
-			<Button
-				disabled={rows.length === 0}
-				variant="contained"
-				onClick={handleDelete}
+			<Tooltip
+				placement="top"
+				title={
+					rows.length
+						? "Remove selected books"
+						: "Please select books to remove"
+				}
 			>
-				Delete
-			</Button>
+				<span>
+					<Button
+						disabled={rows.length === 0}
+						onClick={() => handleDelete("book")}
+						variant="contained"
+						sx={{ height: "2rem" }}
+					>
+						Remove
+					</Button>
+				</span>
+			</Tooltip>
 		</Stack>
 	);
 }

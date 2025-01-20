@@ -1,9 +1,11 @@
 import React, { createContext } from "react";
 
 interface TableContextType {
+	availableRoles: any[];
+	availableCategories: any[];
 	rowData: {
 		rows: any[];
-		setRows: React.Dispatch<React.SetStateAction<booksRowsInterface[]>>;
+		setRows: React.Dispatch<React.SetStateAction<any[]>>;
 	};
 	columnData: {
 		columns: any[];
@@ -21,7 +23,7 @@ interface TableContextType {
 	handleRemoveEntry: any;
 	collapsibleManager: any;
 	handleEditEntry: (index: number, key: string, value: any) => void;
-	handleAddEntry: () => void;
+	// handleAddEntry: () => void;
 	callNoFormatter: {
 		verifyFormat: (callNumber: string) => boolean;
 		currentFormat: any;
@@ -38,6 +40,8 @@ interface TableContextType {
 }
 
 export const TableContext = createContext<TableContextType>({
+	availableRoles: [],
+	availableCategories: [],
 	rowData: { rows: [], setRows: () => {} },
 	columnData: { columns: [], setColumns: () => {} },
 	selectAll: {
@@ -52,7 +56,7 @@ export const TableContext = createContext<TableContextType>({
 	handleRemoveEntry: () => {},
 	collapsibleManager: () => {},
 	handleEditEntry: () => {},
-	handleAddEntry: () => {},
+	// handleAddEntry: () => {},
 	callNoFormatter: {
 		verifyFormat: () => false,
 		currentFormat: null,

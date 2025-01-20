@@ -38,18 +38,16 @@ function useConfirmationModal() {
 
 	const ConfirmationModal = (
 		<Dialog open={open} onClose={handleClose}>
-			<DialogTitle>Update</DialogTitle>
+			<DialogTitle>Confirmation</DialogTitle>
 			<DialogContent sx={{ width: "300px", pb: 0 }}>
 				<TextField
 					inputRef={focuseRef}
-					// onBlur={(e) => setValue(e.target.value)}
 					size="small"
 					helperText={error ? "Invalid input, try again" : ""}
 					placeholder="Type 'Bibliotech' to confirm"
 					variant="standard"
 					error={error}
 					fullWidth
-					// onChange={(e) => setValue(e.target.value)}
 					onKeyDown={(e) => {
 						if (e.key === "Enter") {
 							e.preventDefault();

@@ -3,7 +3,7 @@ import { createTheme } from "@mui/material/styles";
 
 const darkTheme = createTheme({
 	typography: {
-		fontFamily: "Roboto, Inter, sans-serif",
+		fontFamily: ["Roboto", "Roboto Mono", "Inter", "sans-serif"].join(", "),
 	},
 	breakpoints: {
 		values: {
@@ -129,7 +129,7 @@ const darkTheme = createTheme({
 						color: "#ffffff",
 					},
 					"& th": {
-						backgroundColor: "#5b40e4 !important",
+						backgroundColor: "#5b40e4",
 						boxSizing: "border-box",
 						color: "#ffffff",
 						userSelect: "none",

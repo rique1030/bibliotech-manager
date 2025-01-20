@@ -9,13 +9,13 @@ interface TableInsertContextType {
 				message: string,
 				duration?: number
 			) => void;
-			CustomAlert: () => JSX.Element;
 		};
 		confirmationModal: {
 			showConfirmationModal: () => Promise<boolean>;
 			ConfirmationModal: JSX.Element;
 		};
 	};
+	availableRoles?: any[];
 }
 
 export const TableInsertContext = createContext<TableInsertContextType>({
@@ -23,11 +23,11 @@ export const TableInsertContext = createContext<TableInsertContextType>({
 		handleInsert: () => Promise.resolve(),
 		resultAlert: {
 			showTimedAlert: () => {},
-			CustomAlert: () => <></>,
 		},
 		confirmationModal: {
 			showConfirmationModal: () => Promise.resolve(false),
 			ConfirmationModal: <></>,
 		},
 	},
+	availableRoles: [],
 });

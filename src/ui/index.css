@@ -22,6 +22,18 @@
 	src: url("/src/ui/assets/fonts/InriaSans-BoldItalic.ttf") format("truetype");
 }
 
+@font-face {
+	font-family: "Roboto Mono";
+	font-weight: normal;
+	src: url("/src/ui/assets/fonts/RobotoMono-Regular.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Roboto Mono";
+	font-weight: bold;
+	src: url("/src/ui/assets/fonts/RobotoMono-Bold.ttf") format("truetype");
+}
+
 body {
 	margin: 0;
 	display: flex;
@@ -31,22 +43,23 @@ body {
 }
 *::-webkit-scrollbar {
 	display: none;
+	width: 8px;
 }
 
 *::-webkit-scrollbar-track {
-	border-radius: 20px;
+	/* border-radius: 20px; */
 	background-color: #5b40e4;
 }
 
 *::-webkit-scrollbar-thumb {
-	background-color: white;
-	border-radius: 10px;
-	border: 3px solid transparent;
+	background-color: rgba(255, 255, 255, 0.214);
+	/* border-radius: 10px; */
+	/* border: 3px solid transparent; */
 	background-clip: content-box;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-	background-color: white;
+	background-color: rgba(255, 255, 255, 0.641);
 }
 
 .slide-in {

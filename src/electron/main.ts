@@ -2,15 +2,19 @@ import { app, BrowserWindow, session } from "electron";
 import { isDev } from "./util.js";
 import path from "path";
 import { getPreloadPath } from "./pathResolver.js";
+import { getWindowBounds, setWindowBounds } from "./storage/settings.cjs";
 import "./hooks/useRoleRequest.cjs";
 import "./hooks/useUserRequest.cjs";
 import "./hooks/useBookRequest.cjs";
 import "./hooks/useCategoryRequest.cjs";
-import { getWindowBounds, setWindowBounds } from "./storage/settings.cjs";
+import "./hooks/useRecordRequest.cjs";
+import { socket } from "./hooks/useConnectToWebSocket.cjs";
+
+let win: BrowserWindow;
 
 const createWindow = () => {
 	const bounds = getWindowBounds();
-	const win = new BrowserWindow({
+	win = new BrowserWindow({
 		minWidth: 1000,
 		minHeight: 600,
 		width: bounds.windowSize[0],
@@ -46,6 +50,8 @@ const createWindow = () => {
  * Create the window when the app is ready
  * If all windows are closed, quit the app
  */
+// export const mainWindow = createWindow();
+
 app.whenReady().then(() => {
 	createWindow();
 	app.on("activate", () => {
@@ -62,4 +68,12 @@ app.on("window-all-closed", () => {
 	if (process.platform !== "darwin") {
 		app.quit();
 	}
+});
+
+socket.on("request_borrow", (data) => {
+	if (socket.connected) {
+		console.log("request_borrow", data);
+		win.webContents.send("request_borrow", data);
+	}
+	return "Request received";
 });

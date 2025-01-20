@@ -39,6 +39,12 @@ export const CONFIG = Object.freeze({
 			UPDATE_BOOK_CATEGORY: "/book_categories/update", //POST
 			DELETE_BOOK_CATEGORY: "/book_categories/delete", //POST
 		},
+		RECORDS: {
+			GET_PAGED_BOOK_COPIES: "/records/get_book_count", //POST
+			GET_BORROWED_BOOKS: "/records/borrowings", //POST
+			GET_USER_RECORDS: "/records/user_records", //POST
+			GET_BOOK_CATEGORY_COUNT: "/records/get_categories", //POST
+		},
 	},
 });
 

@@ -6,6 +6,7 @@ import LogoIcon from "../../components/LogoIcon";
 import { useMutation } from "@tanstack/react-query";
 import { LoadingButton } from "@mui/lab";
 import LoginIcon from "@mui/icons-material/Login";
+import { School } from "@mui/icons-material";
 
 function LoginPanel() {
 	return (
@@ -38,9 +39,7 @@ const LoginLogo = () => (
 			gap: "0.4rem",
 		}}
 	>
-		<LogoIcon
-			sx={{ width: "4rem", height: "4rem", color: "primary.main" }}
-		/>
+		<LogoIcon sx={{ width: "4rem", height: "4rem", color: "primary.main" }} />
 		<Typography
 			variant="h5"
 			sx={{ fontWeight: "bold", margin: 0, color: "text.primary" }}
@@ -69,9 +68,7 @@ const LoginPanelTop = () => {
 			>
 				Login to your account
 			</Typography>
-			<Typography sx={{ color: "text.secondary" }}>
-				Welcome back!
-			</Typography>
+			<Typography sx={{ color: "text.secondary" }}>Welcome back!</Typography>
 		</Box>
 	);
 };
@@ -96,7 +93,22 @@ const LoginForm = () => {
 		mutationFn: (payload: UserLoginPayload) => fetchData(payload),
 		onSuccess: (data) => {
 			if (data && data.data) {
-				navigate("/main/");
+				const connectToServer = async () => {
+					const account = {
+						email: data.data.email,
+						first_name: data.data.first_name,
+						id: data.data.id,
+						is_verified: data.data.is_verified,
+						last_name: data.data.last_name,
+						profile_pic: data.data.profile_pic,
+						role_id: data.data.role_id,
+						school_id: data.data.school_id,
+					};
+					await window.storedSettings.saveAccount(account);
+					await window.webSocket.connect();
+					navigate("/main/books/view");
+				};
+				connectToServer();
 			} else {
 				setEmailError(true);
 				setPasswordError(true);
@@ -104,7 +116,7 @@ const LoginForm = () => {
 			}
 		},
 		onError: (error) => {
-			console.log(error);
+			console.error(error);
 		},
 	});
 
@@ -135,8 +147,7 @@ const LoginForm = () => {
 	};
 
 	const handleSubmit = () => {
-		const emailIsValid =
-			!!email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/i.test(email);
+		const emailIsValid = !!email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/i.test(email);
 		const passwordIsValid = !!password;
 		if (!emailIsValid) {
 			setEmailError(true);
@@ -193,13 +204,9 @@ const LoginForm = () => {
 
 			<PasswordTextField
 				error={passwordError}
-				showPassword={showPassword}
-				handleShowPassword={handleShowPassword}
-				handleMouseDownPassword={handleMouseDownPassword}
-				handleMouseUpPassword={handleMouseUpPassword}
-				setPassword={setPassword}
-				onKeyDown={(e) => onKeyDownEnter(e)}
-				onInput={(e) => {
+				onChange={(e: any) => setPassword(e.target.value)}
+				onKeyDown={(e: any) => onKeyDownEnter(e)}
+				onInput={(e: any) => {
 					if ((e.target as HTMLInputElement).value === "") {
 						handleReset();
 					}

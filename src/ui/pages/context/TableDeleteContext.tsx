@@ -1,14 +1,13 @@
 import { createContext } from "react";
 
 interface TableDeleteContextType {
-	handleDelete: () => Promise<void>;
+	handleDelete: (type?: string) => Promise<void>;
 	resultAlert: {
 		showTimedAlert: (
 			severity: "success" | "info" | "warning" | "error",
 			message: string,
 			duration?: number
 		) => void;
-		CustomAlert: () => JSX.Element;
 	};
 	confirmationModal: {
 		showConfirmationModal: () => Promise<boolean>;
@@ -20,7 +19,6 @@ export const TableDeleteContext = createContext<TableDeleteContextType>({
 	handleDelete: async () => {},
 	resultAlert: {
 		showTimedAlert: async () => {},
-		CustomAlert: () => <></>,
 	},
 	confirmationModal: {
 		showConfirmationModal: async () => false,

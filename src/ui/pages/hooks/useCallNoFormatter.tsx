@@ -33,7 +33,6 @@ function useCallNoFormatter() {
 }
 
 export { useCallNoFormatter };
-
 const formats = [
 	{
 		id: 0,
@@ -41,7 +40,7 @@ const formats = [
 		format: "###.## or ###.###",
 		regex: "\\d{3}\\.\\d{2,3}",
 		description:
-			"Three digits indicating the subject of the book followed by a decimal point and two or three more digits for more precise classification. Example: 123.45 or 123.456.",
+			"3 digits for subject, a decimal, then 2-3 digits for detail. Example: 123.45.",
 	},
 	{
 		id: 1,
@@ -49,7 +48,7 @@ const formats = [
 		format: "XX ###.### or XX ####.##",
 		regex: "[A-Z]{2} \\d{3,4}\\.\\d{2,3}",
 		description:
-			"The classification starts with two uppercase letters representing subject areas, followed by a space, then three or four digits indicating a specific category. This is further divided by a decimal point and two to three more digits for finer classification. Example: BL 123.45 or BL 1234.56.",
+			"2 letters for subject, space, 3-4 digits, and a decimal for detail. Example: BL 123.45.",
 	},
 	{
 		id: 2,
@@ -57,15 +56,14 @@ const formats = [
 		format: "##.## or ###.###",
 		regex: "\\d{2,3}\\.\\d{2,3}",
 		description:
-			"The UDC is a numeric classification which assigns a unique number to each subject, with the decimal point separating the main and sub-subject. Example: 12.34 or 123.456.",
+			"Numeric classification with 2-3 digits and a decimal for subcategories.",
 	},
 	{
 		id: 3,
 		name: "Colon Classification (CC)",
 		format: "A:B.C:D",
 		regex: "^[A-Z]:[A-Z0-9]+(\\.[A-Z0-9]+)*(\\:[A-Z0-9]+(\\.[A-Z0-9]+)*)*$",
-		description:
-			"The CC is a faceted classification system, using punctuation like colons and periods to divide the subject and sub-subject. The regex expects the format to start with an uppercase letter, followed by a colon, then alphanumeric characters, optionally followed by dot-separated sub-facets or more colon-separated facets. Example: A:B.C:D or A:B.C:123.",
+		description: "Faceted system using colons/periods. Example: A:B.C:D.",
 	},
 	{
 		id: 4,
@@ -73,7 +71,7 @@ const formats = [
 		format: "Author's Last Name, First Name",
 		regex: "[A-Z][a-z]+, [A-Z][a-z]+",
 		description:
-			"This call number system uses the author's surname or the first significant word of the title. The regex expects the format to start with an uppercase letter, followed by lowercase letters, then a comma and a space, then an uppercase letter followed by lowercase letters. Example: Doe, John or Smith, Jane.",
+			"Author surname, comma, space, then first name. Example: Doe, John.",
 	},
 	{
 		id: 5,
@@ -81,7 +79,7 @@ const formats = [
 		format: "#... or Cutter's number",
 		regex: "[A-Z]\\d{1,2}",
 		description:
-			"This is a combination of the Dewey or LC classification with a Cutter number, which is a three-character alphanumeric code. The first character is a letter, followed by one or two digits.",
+			"Letter followed by 1-2 digits for Cutter numbers. Example: A12.",
 	},
 	{
 		id: 7,
@@ -89,7 +87,7 @@ const formats = [
 		format: "##.## or ###.###",
 		regex: "\\d{2,3}\\.\\d{2,3}",
 		description:
-			"Similar to the Dewey Decimal Classification, the British Library System uses a combination of two or three digits for the main subject and two or three digits for the sub-subject, separated by a decimal point. Example: 12.34 or 123.456.",
+			"2-3 digits for main subject, decimal, then sub-subject digits. Example: 123.45.",
 	},
 	{
 		id: 8,
@@ -97,7 +95,7 @@ const formats = [
 		format: "###.## or ###.###",
 		regex: "\\d{3}\\.\\d{2,3}",
 		description:
-			"The MDC is a faceted classification system, using punctuation like periods to divide the subject and sub-subject. The regex expects the format to start with three digits, followed by a decimal point and two or three more digits for finer classification. Example: 123.45 or 123.456.",
+			"Similar to DDC with 3 digits, decimal, and 2-3 sub-digits. Example: 123.45.",
 	},
 	{
 		id: 9,
@@ -105,14 +103,13 @@ const formats = [
 		format: "WZ",
 		regex: "[A-Z]{2}",
 		description:
-			"The NLM Classification is used by the National Library of Medicine in the United States. The call number is a combination of two letters, with the first letter indicating the subject area and the second letter indicating the sub-subject. Example: WZ for the history of medicine.",
+			"2 letters, with the first for main subject and the second for detail. Example: WZ.",
 	},
 	{
 		id: 14,
 		name: "Any",
 		format: "Any",
 		regex: ".*",
-		description:
-			"This call number format accepts any input, without validation.",
+		description: "Accepts any input format without restrictions.",
 	},
 ];

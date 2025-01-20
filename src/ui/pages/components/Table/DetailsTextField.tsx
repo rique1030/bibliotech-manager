@@ -1,19 +1,27 @@
 import { useContext, useLayoutEffect, useRef, useState } from "react";
-import StyledDetailsTextfield from "../../../../books/StyledComponent/StyledDetailsTextField";
-import { TableContext } from "../../../../context/TableContext";
+import StyledDetailsTextfield from "../StyledComponent/StyledDetailsTextField";
+import { TableContext } from "../../context/TableContext";
+import { PasswordOutlined } from "@mui/icons-material";
+import PasswordTextField from "../PasswordTextField";
 
 type DetailsTextfieldProps = {
+	maxLength?: number | 255;
+	minLength?: number | 0;
 	iniitialValue: string;
 	disabled: boolean;
 	label: string;
-	required: boolean;
+	required?: boolean | false;
 	dataIndex: { id: number; key: string };
 	multiline?: boolean;
 	rows?: number;
 	sx?: any;
 	slotProps?: any;
+	type?: string;
 };
 const DetailsTextfield = ({
+	maxLength,
+	minLength,
+	type = "text",
 	iniitialValue,
 	disabled,
 	label,
@@ -28,6 +36,7 @@ const DetailsTextfield = ({
 		handleEditEntry: handleEdit,
 		callNoFormatter: { verifyFormat: verifyCallNumber, currentFormat },
 	} = useContext(TableContext);
+
 	const [error, setError] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>("");
 	const InputRef = useRef<HTMLInputElement>(null);
@@ -71,20 +80,46 @@ const DetailsTextfield = ({
 
 	const handleRequired = () => {
 		if (InputRef.current?.value.trim() === "") {
-			setErrorMessage("This field is required");
+			setErrorMessage("");
 			setError(true);
 		} else {
 			setError(false);
 		}
 		handleEdit(dataIndex.id, dataIndex.key, InputRef.current?.value);
 	};
-
+	if (type === "password")
+		return (
+			<PasswordTextField
+				onKeyDown={(e: any) => handleSubmit(e)}
+				placeholder="N/A"
+				onBlur={handleBlur}
+				defaultValue={iniitialValue}
+				inputRef={InputRef}
+				// size="small"
+				label={label}
+				required={required}
+				disabled={disabled}
+				multiline={multiline || false}
+				rows={rows || 1}
+				sx={sx}
+				error={error && !disabled}
+				slotProps={slotProps}
+				helpertext={error ? errorMessage : (disabled && "") || ""}
+				fullWidth
+			/>
+		);
 	return (
 		<StyledDetailsTextfield
+			// slotProps={{
+			// 	htmlInput: { maxLength: maxLength || 255, minLength: minLength || 0 },
+			// }}
+			// maxLength={maxLength || 255}
+			// minLength={minLength || 0}
+			type={type}
 			onKeyDown={(e) => handleSubmit(e)}
-			defaultValue={iniitialValue}
 			placeholder="N/A"
 			onBlur={handleBlur}
+			defaultValue={iniitialValue}
 			inputRef={InputRef}
 			size="small"
 			label={label}
@@ -95,7 +130,7 @@ const DetailsTextfield = ({
 			sx={sx}
 			error={error && !disabled}
 			slotProps={slotProps}
-			helperText={error ? errorMessage : (disabled && "") || " "}
+			helperText={error ? errorMessage : (disabled && "") || ""}
 			fullWidth
 		/>
 	);

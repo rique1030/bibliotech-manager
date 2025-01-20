@@ -5,16 +5,12 @@ import React from "react";
 const BorderedImage = ({
 	src,
 	alt,
-	// maxWidth,
-	// maxHeight,
 	sx,
 	isLoading,
 }: {
 	src: string;
 	alt: string;
 	sx?: any;
-	// maxWidth: number;
-	// maxHeight: number;
 	isLoading: boolean;
 }) => {
 	const [imageLoaded, setImageLoaded] = React.useState(false);
@@ -38,12 +34,16 @@ const BorderedImage = ({
 			{imageLoading && (
 				<Skeleton
 					variant="rectangular"
-					sx={(theme: Theme) => ({
+					sx={{
 						width: sx?.width,
 						height: sx?.height,
+						minWidth: sx?.width,
+						minHeight: sx?.height,
+						margin: 0,
+						padding: 0,
 						opacity: imageLoaded ? 0 : 1,
 						transition: "opacity 0.3s ease-in-out",
-					})}
+					}}
 					animation="wave"
 				/>
 			)}

@@ -155,7 +155,7 @@ const DrawerItem = ({
 	isSelect,
 }: DrawerItemProps) => {
 	return (
-		<Tooltip title={title} placement="right" arrow disableInteractive>
+		<Tooltip title={title} placement="right" disableInteractive>
 			<ListItem
 				sx={{
 					display: "flex",

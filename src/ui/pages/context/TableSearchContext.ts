@@ -16,8 +16,8 @@ interface TableSearchContextType {
 	};
 	searchFilter: { filter: string; value: string }[];
 	URL: {
-		update: string;
-		delete: string;
+		update: string | null;
+		delete: string | null;
 	};
 }
 

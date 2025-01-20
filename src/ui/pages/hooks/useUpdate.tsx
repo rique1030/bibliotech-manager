@@ -29,7 +29,6 @@ export function useUpdate({ updateData, options }: useUpdateInterface) {
 	const mutation = useMutation({
 		mutationFn: (payload) => updateData(payload),
 		onSuccess: (data: any) => {
-			console.log(data);
 			if (data && data.success) {
 				showTimedAlert("success", data.message);
 				navigate(options.url, { state: [] });
@@ -39,14 +38,13 @@ export function useUpdate({ updateData, options }: useUpdateInterface) {
 		},
 
 		onError: (error) => {
-			console.log(error);
+			console.error(error);
 			showTimedAlert(
 				"error",
 				"An error occurred. There might be a duplicate of one of the fields. Please try again later."
 			);
 		},
 	});
-	
 
 	const handleUpdate = async () => {
 		if (!VerifyRequiredFields(options.field, options.payload.entries)) {
@@ -57,10 +55,30 @@ export function useUpdate({ updateData, options }: useUpdateInterface) {
 			showTimedAlert("error", "Call number is not in correct format");
 			return;
 		}
+		if (!verifyRoles(options.payload.entries)) {
+			showTimedAlert(
+				"error",
+				"Default roles (Admin and User) are reserved and cannot be modified."
+			);
+			return;
+		}
 		const allow = await confirmationModal.showConfirmationModal();
 		if (allow) {
 			mutation.mutate(options.payload.entries);
 		}
+	};
+
+	const verifyRoles = (entries: any[]) => {
+		for (const entry of entries) {
+			if (entry && entry.role_name) {
+				const isNotValid =
+					entry.role_name == "Admin" || entry.role_name == "User";
+				if (isNotValid) {
+					return false;
+				}
+			}
+		}
+		return true;
 	};
 
 	const verifyBooks = (entries: any[]) => {

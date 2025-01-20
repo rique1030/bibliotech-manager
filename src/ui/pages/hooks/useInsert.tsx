@@ -24,7 +24,7 @@ export function useInsert({ insertData, options }: any) {
 			}
 		},
 		onError: (error) => {
-			console.log(error);
+			console.error(error);
 			showTimedAlert(
 				"error",
 				"An error occurred. There might be a duplicate of one of the fields. Please try again later."

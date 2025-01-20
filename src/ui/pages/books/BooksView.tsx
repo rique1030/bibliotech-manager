@@ -4,7 +4,7 @@ import { Divider } from "@mui/material";
 import useSearch from "../hooks/useSearch";
 import { useEffect, useContext } from "react";
 // Components
-import SearchPanel from "./SearchPanel";
+import SearchPanel from "../components/SearchPanel";
 import ViewTable from "../components/Table/ViewTable";
 import MainContainer from "../components/MainContainer";
 import TablePaginationBar from "../components/Table/TablePaginationBar";

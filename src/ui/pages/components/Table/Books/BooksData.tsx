@@ -4,6 +4,13 @@ import { Fragment, useContext } from "react";
 import BooksDataCollapsible from "./BooksCollapsible/BooksDataCollapsible";
 import { TableContext } from "../../../context/TableContext";
 import { TableBody } from "@mui/material";
+
+interface booksDataInterface {
+	selectable?: boolean | false;
+	removable?: boolean | false;
+	isEditable?: boolean | false;
+}
+
 const BooksData = ({
 	selectable,
 	removable,
@@ -19,13 +26,18 @@ const BooksData = ({
 				return (
 					<Fragment key={row.id}>
 						<TableData
+							key={`${row.id}-data`}
 							onClick={() => handleRowClick(index)}
 							selectable={selectable}
 							removable={removable}
 							index={index}
 							row={row}
 						/>
-						<TableDataCollapsible openedRowIndex={OpenedRowIndex} index={index}>
+						<TableDataCollapsible
+							key={`${row.id}-collapsible`}
+							openedRowIndex={OpenedRowIndex}
+							index={index}
+						>
 							<BooksDataCollapsible isEditable={isEditable} row={row} />
 						</TableDataCollapsible>
 					</Fragment>

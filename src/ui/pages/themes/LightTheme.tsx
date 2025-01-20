@@ -1,9 +1,9 @@
-import { alpha, colors } from "@mui/material";
+import { alpha, colors, Fade } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 
 const lightTheme = createTheme({
 	typography: {
-		fontFamily: "Roboto, Inter, sans-serif",
+		fontFamily: ["Roboto", "Roboto Mono", "Inter", "sans-serif"].join(", "),
 	},
 	breakpoints: {
 		values: {
@@ -45,6 +45,7 @@ const lightTheme = createTheme({
 
 	palette: {
 		mode: "light",
+		contrastThreshold: 2,
 		background: {
 			paper: "#ffffff",
 			default: "#f4f6f8",
@@ -61,6 +62,8 @@ const lightTheme = createTheme({
 		},
 		action: {
 			active: "#3220e6",
+			disabled: "#c7c7c7",
+			disabledBackground: "#e0e0e0",
 		},
 		text: {
 			primary: "#000000",
@@ -84,9 +87,20 @@ const lightTheme = createTheme({
 	},
 	components: {
 		MuiTooltip: {
+			defaultProps: {
+				slots: {
+					transition: Fade,
+				},
+			},
 			styleOverrides: {
 				tooltip: {
 					transition: "transform 0.3s ease-in-out",
+					background: "white",
+					border: "1px solid #e0e0e0",
+					borderRadius: "5px",
+					boxShadow: "0 0 5px rgba(0, 0, 0, 0.1)",
+					color: "black",
+					padding: "0.5rem",
 				},
 			},
 		},
@@ -134,7 +148,7 @@ const lightTheme = createTheme({
 						color: "#ffffff",
 					},
 					"& th": {
-						backgroundColor: "#5b40e4 !important",
+						// backgroundColor: "#5b40e4",
 						boxSizing: "border-box",
 						color: "#ffffff",
 						userSelect: "none",
@@ -155,7 +169,7 @@ const lightTheme = createTheme({
 					overflow: "hidden",
 					textOverflow: "ellipsis",
 					whiteSpace: "nowrap",
-					padding: "1rem",
+					// padding: "1rem",
 					fontSize: "0.8rem",
 					boxSizing: "border-box",
 					transition: "all 0.2s ease-in-out",
@@ -194,6 +208,7 @@ const lightTheme = createTheme({
 		MuiOutlinedInput: {
 			styleOverrides: {
 				root: {
+					fontSize: "inherit",
 					"&:not(.Mui-disabled):hover .MuiOutlinedInput-notchedOutline": {
 						borderColor: "#5b40e4",
 					},

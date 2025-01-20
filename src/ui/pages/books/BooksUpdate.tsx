@@ -1,7 +1,7 @@
 import ViewTable from "../components/Table/ViewTable";
 import MainContainer from "../components/MainContainer";
 import BooksData from "../components/Table/Books/BooksData";
-import { useContext,  useLayoutEffect } from "react";
+import { memo, useContext, useLayoutEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
 	Divider,
@@ -15,6 +15,14 @@ import {
 	DialogContentText,
 	DialogActions,
 	Tooltip,
+	Paper,
+	styled,
+	List,
+	ListItem,
+	Table,
+	TableBody,
+	TableCell,
+	TableRow,
 } from "@mui/material";
 import columns from "../components/Table/columns/DefaultBookColumnsInterface";
 import { TableContext } from "../context/TableContext";
@@ -22,6 +30,7 @@ import TableHeader from "../components/Table/TableHeader";
 import { TableUpdateContext } from "../context/TableUpdateContext";
 import { useUpdate } from "../hooks/useUpdate";
 import CallNumberDropdown from "../components/Table/Books/CallNumberDropdown";
+import ConfirmBorrow from "../components/BorrowingModal";
 
 const fetchData = async (payload: RequestByID): Promise<any> => {
 	return await window.requestBook.getByID(payload);
@@ -30,45 +39,6 @@ const fetchData = async (payload: RequestByID): Promise<any> => {
 const updateData = async (payload: BookUpdatePayload): Promise<any> => {
 	return await window.requestBook.update(payload);
 };
-
-function ConfirmBorrow() {
-	return (
-		<Dialog open={true}>
-			<DialogTitle>Book Borrowing Request</DialogTitle>
-			<DialogContent sx={{ width: "500px" }}>
-				<DialogContentText>
-					<Tooltip title="Sally Newton">
-						<Typography
-							sx={{
-								color: "primary.main",
-								cursor: "pointer",
-							}}
-							component={"span"}
-						>
-							Sally Newton
-						</Typography>
-					</Tooltip>{" "}
-					want's to borrow a book called{" "}
-					<Tooltip title={<Box></Box>}>
-						<Typography
-							sx={{
-								color: "primary.main",
-								cursor: "pointer",
-							}}
-							component={"span"}
-						>
-							"The Great Gatsby".
-						</Typography>
-					</Tooltip>
-				</DialogContentText>
-			</DialogContent>
-			<DialogActions>
-				<Button>Decline</Button>
-				<Button>Accept</Button>
-			</DialogActions>
-		</Dialog>
-	);
-}
 
 const field = [
 	"id",
@@ -124,7 +94,6 @@ function BooksUpdate() {
 	return (
 		<TableUpdateContext.Provider value={{ useupdate }}>
 			<MainContainer>
-				{/* <CustomAlert /> */}
 				{ConfirmationModal}
 				<ViewTable>
 					<TableHeader indented />
@@ -146,13 +115,25 @@ function UpdateFooter() {
 	} = useContext(TableContext);
 	return (
 		<Stack direction="row" spacing={2}>
-			<Button
-				disabled={rows.length === 0}
-				variant="contained"
-				onClick={handleUpdate}
+			<Tooltip
+				placement="top"
+				title={
+					rows.length
+						? "Apply changes to selected books"
+						: "Please select books to apply changes"
+				}
 			>
-				Update
-			</Button>
+				<span>
+					<Button
+						disabled={rows.length === 0}
+						onClick={handleUpdate}
+						variant="contained"
+						sx={{ height: "2rem" }}
+					>
+						Apply&nbsp;Changes
+					</Button>
+				</span>
+			</Tooltip>
 			<CallNumberDropdown />
 		</Stack>
 	);

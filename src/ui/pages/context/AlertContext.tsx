@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import useResultAlert from "../hooks/useResultAlert";
+import useResultAlert, { CustomAlert } from "../hooks/useResultAlert";
 
 interface AlertContextType {
 	resultAlert: {
@@ -8,23 +8,34 @@ interface AlertContextType {
 			message: string,
 			duration?: number
 		) => void;
-		CustomAlert: () => JSX.Element;
 	};
 }
 
 export const AlertContext = createContext<AlertContextType>({
 	resultAlert: {
 		showTimedAlert: () => {},
-		CustomAlert: () => <></>,
 	},
 });
 
 export function AlertContextProvider({ children }: any) {
 	const resultAlert = useResultAlert();
-	const { CustomAlert } = resultAlert;
+	const {
+		showTimedAlert,
+		alertOpen,
+		handleClose,
+		severity,
+		alertMessage,
+		duration,
+	} = resultAlert;
 	return (
 		<AlertContext.Provider value={{ resultAlert }}>
-			<CustomAlert />
+			<CustomAlert
+				alertMessage={alertMessage}
+				duration={duration}
+				open={alertOpen}
+				onClose={handleClose}
+				severity={severity}
+			/>
 			{children}
 		</AlertContext.Provider>
 	);

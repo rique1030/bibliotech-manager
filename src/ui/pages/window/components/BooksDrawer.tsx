@@ -11,7 +11,17 @@ import {
 	EditNoteOutlined,
 	PlaylistRemove,
 } from "@mui/icons-material";
+
+import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView";
+import { TreeItem } from "@mui/x-tree-view/TreeItem";
+import { NavLink, useNavigate } from "react-router-dom";
+
 const BooksDrawer = () => {
+	const navigate = useNavigate();
+
+	const navigateToPage = (src: string) => {
+		navigate(src);
+	};
 	return (
 		<>
 			<ParentListItem title="Books" icon={<Book />}>
@@ -23,12 +33,12 @@ const BooksDrawer = () => {
 				<ChildListItem
 					icon={<BookmarkAddOutlined />}
 					src="/main/books/insert"
-					title="Add Books"
+					title="Add New Books"
 				/>
 				<ChildListItem
 					icon={<BookmarkAddedOutlined />}
 					src="/main/books/update"
-					title="Edit Books"
+					title="Edit Existing Books"
 				/>
 				<ChildListItem
 					icon={<BookmarkRemoveOutlined />}
@@ -38,10 +48,26 @@ const BooksDrawer = () => {
 			</ParentListItem>
 
 			<ParentListItem title="Categories" icon={<LocalOffer />}>
-				<ChildListItem icon={<PlaylistAddCheck />} title="Display Categories" />
-				<ChildListItem icon={<PlaylistAdd />} title="Add Categories" />
-				<ChildListItem icon={<EditNoteOutlined />} title="Edit Categories" />
-				<ChildListItem icon={<PlaylistRemove />} title="Remove Categories" />
+				<ChildListItem
+					icon={<PlaylistAddCheck />}
+					src="/main/categories/view"
+					title="Display Categories"
+				/>
+				<ChildListItem
+					icon={<PlaylistAdd />}
+					src="/main/categories/insert"
+					title="Add New Categories"
+				/>
+				<ChildListItem
+					icon={<EditNoteOutlined />}
+					src="/main/categories/update"
+					title="Edit Categories"
+				/>
+				<ChildListItem
+					icon={<PlaylistRemove />}
+					src="/main/categories/delete"
+					title="Remove Categories"
+				/>
 			</ParentListItem>
 		</>
 	);

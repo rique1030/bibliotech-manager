@@ -9,7 +9,6 @@ interface TableUpdateContextType {
 				message: string,
 				duration?: number | undefined
 			) => void;
-			CustomAlert: () => JSX.Element;
 		};
 
 		confirmationModal: {
@@ -17,6 +16,7 @@ interface TableUpdateContextType {
 			ConfirmationModal: JSX.Element;
 		};
 	};
+	// availableRoles: any[];
 }
 
 export const TableUpdateContext = createContext<TableUpdateContextType>({
@@ -24,7 +24,6 @@ export const TableUpdateContext = createContext<TableUpdateContextType>({
 		handleUpdate: () => Promise.resolve(),
 		resultAlert: {
 			showTimedAlert: () => {},
-			CustomAlert: () => <></>,
 		},
 
 		confirmationModal: {
@@ -32,4 +31,5 @@ export const TableUpdateContext = createContext<TableUpdateContextType>({
 			ConfirmationModal: <></>,
 		},
 	},
+	// availableRoles: [],
 });

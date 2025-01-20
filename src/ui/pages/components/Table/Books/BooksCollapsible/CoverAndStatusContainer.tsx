@@ -6,12 +6,18 @@ import { TableContext } from "../../../../context/TableContext";
 import { Buffer } from "buffer";
 import CONFIG from "../../../../../config";
 import IsImageValid from "../../../../hooks/useIsImageValid";
+import CroperModalProvider, {
+	CropperModalContext,
+} from "../../../CropperModal";
+import useUploadImage from "../../../../hooks/useUploadImage";
+import ImageButton from "../../../StyledComponent/ImageButton";
+import { convertCover } from "../../../../../utils/ImageHelper";
 
 const CoverAndStatusContainer = ({
 	row,
 	edit,
 }: {
-	row: booksRowsInterface | BookPayload;
+	row: any;
 	edit?: boolean | false;
 }) => {
 	return (
@@ -22,10 +28,7 @@ const CoverAndStatusContainer = ({
 				row={row}
 				edit={edit}
 				metadataKey="cover_image"
-				src={
-					row.cover_image &&
-					`${CONFIG.SERVER_HOST}/images/book_covers/${row.cover_image}.png`
-				}
+				src={row.cover_image && convertCover(row.cover_image)}
 			/>
 			<GetStatus edit={edit} status={row.status} row={row} />
 		</Box>
@@ -43,62 +46,19 @@ function EditableImage({
 	row: any;
 	metadataKey: string;
 }) {
-	const fileInputRef = useRef<HTMLInputElement | null>(null);
-	const { handleEditEntry } = useContext(TableContext);
-	const [imageSource, setImageSource] = useState<string | undefined>();
-	const [loading, setLoading] = useState(true);
-
-	const valid = IsImageValid(src);
-
-	useEffect(() => {
-		if (edit) {
-			if (valid && !row.cover_image_blob) {
-				setImageSource(src);
-				setLoading(false);
-				return;
-			}
-			if (row.cover_image_blob) {
-				setImageSource(row.cover_image_blob);
-				setLoading(false);
-			} else {
-				setImageSource("");
-			}
-		} else {
-			setLoading(!valid);
-			setImageSource(src);
-		}
-	}, [row.cover_image_blob, src]);
-
-	const handleButtonClick = () => {
-		fileInputRef.current?.click();
-	};
-
-	const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (!e.target.files) {
-			console.log("No file selected");
-			return;
-		}
-		const file = e.target.files[0];
-		const imageUrl = URL.createObjectURL(file);
-
-		handleEditEntry?.(row.id, `${metadataKey}_blob`, imageUrl);
-
-		const reader = new FileReader();
-		reader.onloadend = () => {
-			const arrayBuffer = reader.result as ArrayBuffer;
-			const buffer = Buffer.from(arrayBuffer);
-
-			handleEditEntry?.(
-				row.id,
-				`${metadataKey}_buffer`,
-				buffer.toString("base64")
-			);
-		};
-		reader.onerror = (err) => {
-			console.error("Error reading file:", err);
-		};
-		reader.readAsArrayBuffer(file);
-	};
+	const {
+		imageSource,
+		loading,
+		handleButtonClick,
+		handleUpload,
+		fileInputRef,
+	} = useUploadImage({
+		aspectRatio: 1 / 1.5,
+		edit: edit || false,
+		src: src,
+		image_blob: row.cover_image_blob,
+		metadata: { key: "cover_image", id: row.id },
+	});
 
 	if (edit) {
 		return (
@@ -110,55 +70,19 @@ function EditableImage({
 					accept="image/*"
 					onChange={handleUpload}
 				/>
-				<Button
-					variant="text"
+				<ImageButton
+					variant="outlined"
 					sx={{
-						position: "relative",
 						width: 100,
 						height: 150,
-						borderRadius: 2,
-						border: "2px solid",
-						borderColor: "primary.main",
-						backgroundSize: "cover",
-						backgroundImage: imageSource ? `url(${imageSource})` : "none",
-						overflow: "hidden",
-						color: "transparent",
-						transition: "all 0.5s ease-in-out",
 						"&:before": {
-							content: '""',
-							position: "absolute",
-							top: 0,
-							left: 0,
-							width: "100%",
-							height: "100%",
-							backgroundColor: " transparent",
-							backgroundSize: "cover",
-							transition: "all 0.3s ease-in-out",
-						},
-						"&:hover": {
-							"&:before": {
-								backgroundColor:
-									"rgba(0, 0, 0, 0.5)" /* Add a semi-transparent overlay */,
-								backgroundSize: "cover",
-								filter: "blur(2px)",
-							},
-							"&:after": {
-								color: "white",
-							},
-						},
-						"&:after": {
-							content: '"Upload"',
-							position: "absolute",
-							top: "50%",
-							left: "50%",
-							transform: "translate(-50%, -50%)",
-							color: imageSource ? "transparent" : "white",
-							textAlign: "center",
-							transition: "all 0.3s ease-in-out",
+							backgroundImage: imageSource ? `url(${imageSource})` : "none",
 						},
 					}}
 					onClick={handleButtonClick}
-				></Button>
+				>
+					UPLOAD
+				</ImageButton>
 			</>
 		);
 	}

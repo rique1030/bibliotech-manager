@@ -48,15 +48,20 @@ declare global {
 		status: string;
 	}
 
-	interface booksDataInterface {
-		selectable?: boolean | false;
-		removable?: boolean | false;
-		isEditable?: boolean | false;
-	}
-
 	interface bookStatusInterface {
 		bookStatus: "available" | "borrowed" | "reserved" | "lost" | string;
 	}
+
+	type accountType = {
+		id: number;
+		profile_pic: string;
+		first_name: string;
+		last_name: string;
+		email: string;
+		school_id: string;
+		role_id: number;
+		is_verified: boolean;
+	};
 
 	// ELECTRON
 	interface Window {
@@ -86,6 +91,7 @@ declare global {
 		};
 		requestCategory: {
 			insertMultiple: (payload: InsertCategoriesPayload) => promise<any>;
+			getAll: () => promise<any>;
 			getPaged: (payload: GetPagedPayload) => promise<any>;
 			getByID: (payload: RequestByID) => promise<any>;
 			update: (payload: CategoryUpdatePayload) => promise<any>;
@@ -94,9 +100,28 @@ declare global {
 		storedSettings: {
 			getFormatIndex: () => promise<any>;
 			setFormatIndex: (index: number) => promise<any>;
+			getAccount: () => promise<any>;
+			saveAccount: (account: accountType) => promise<any>;
+			deleteAccount: () => promise<any>;
 		};
 		nodeApi: {
 			Buffer: typeof Buffer;
+		};
+		requestRecord: {
+			getBookCount: (payload: GetPagedPayload) => promise<any>;
+			getBorrowedBooks: (payload: GetPagedPayload) => promise<any>;
+			getUserRecords: (payload: GetPagedPayload) => promise<any>;
+			getBookCategoryCount: (payload: GetPagedPayload) => promise<any>;
+		};
+		webSocket: {
+			connect: () => void;
+			disconnect: () => void;
+			reviewRequest: (request_id: any) => void;
+			acceptRequest: (paytoad: any) => void;
+			denyRequest: (request_id: any) => void;
+		};
+		electron: {
+			on: (event: string, listener: (...args: any[]) => void) => void;
 		};
 	}
 

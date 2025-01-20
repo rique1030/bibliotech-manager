@@ -1,8 +1,9 @@
-import DetailsContainer from "../../../../books/StyledComponent/DetailsContainer";
-import TextFieldContainer from "../../../../books/StyledComponent/TextFieldContainer";
-import DetailsTextfield from "./DetailsTextField";
+import DetailsContainer from "../../../StyledComponent/DetailsContainer";
+import TextFieldContainer from "../../../StyledComponent/TextFieldContainer";
+import DetailsTextfield from "../../DetailsTextField";
 import BorderedImage from "./BorderedImage";
 import CONFIG from "../../../../../config";
+import { convertQRCode } from "../../../../../utils/ImageHelper";
 
 interface TopDescriptionContainerProps {
 	row: booksRowsInterface | BookPayload;
@@ -73,7 +74,7 @@ const TopDescriptionContainer = ({
 			</TextFieldContainer>
 			{!isEditable && (
 				<BorderedImage
-					src={`${CONFIG.SERVER_HOST}/qr-codes/${row.qrcode}.png` || ""}
+					src={convertQRCode(row.qrcode)}
 					alt="QR Code"
 					sx={{ width: 85, height: 85 }}
 					isLoading={false}

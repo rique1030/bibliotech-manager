@@ -11,7 +11,7 @@ const MainContainer = ({ children }: { children: React.ReactNode }) => {
 		>
 			<Box
 				component={Paper}
-				elevation={4}
+				elevation={0}
 				sx={{
 					width: "100%",
 					height: "100%",
@@ -20,6 +20,8 @@ const MainContainer = ({ children }: { children: React.ReactNode }) => {
 					display: "flex",
 					flexDirection: "column",
 					gap: "1rem",
+					border: "1px solid",
+					borderColor: "divider",
 				}}
 			>
 				{children}

@@ -4,15 +4,15 @@ const verifyAccessNumber = async (payload: string[]): Promise<any> => {
 	return await window.requestBook.getByAccessNumber(payload);
 };
 
-function useGenerateAccessNumber(edit: boolean) {
-	const [generatedAccessNumber, setGeneratedAccessNumber] = useState("");
+function useGenerateAccessNumber() {
+	const generateUniqueNumber = async () => {
+		const data = await generateAccessNumber();
+		return data;
+	};
 
-	useLayoutEffect(() => {
-		if (!edit) return;
-		generateAccessNumber().then((data) => {
-			setGeneratedAccessNumber(data);
-		});
-	}, []);
+	// useLayoutEffect(() => {
+	// 	generateUniqueNumber();
+	// }, []);
 
 	const generateAccessNumber = async () => {
 		const generateRandomAccessNumber = () => {
@@ -49,7 +49,7 @@ function useGenerateAccessNumber(edit: boolean) {
 		return accessnumber;
 	};
 
-	return { generatedAccessNumber };
+	return { generateAccessNumber };
 }
 
 export default useGenerateAccessNumber;

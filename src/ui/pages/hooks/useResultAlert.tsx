@@ -1,5 +1,5 @@
 import { Snackbar, Alert, SnackbarCloseReason } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 function useResultAlert() {
 	interface AlertProps {
 		severity: "success" | "info" | "warning" | "error";
@@ -28,25 +28,44 @@ function useResultAlert() {
 		setAlertOpen(false);
 	};
 
-	const CustomAlert = () => {
-		return (
-			<Snackbar
-				anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-				open={alertOpen}
-				autoHideDuration={duration}
-				onClose={handleClose}
-			>
-				<Alert severity={severity} variant="filled" onClose={handleClose}>
-					{alertMessage}
-				</Alert>
-			</Snackbar>
-		);
-	};
-
 	return {
 		showTimedAlert,
-		CustomAlert,
+		alertOpen,
+		handleClose,
+		severity,
+		alertMessage,
+		duration,
 	};
 }
+
+export const CustomAlert = ({
+	open,
+	onClose,
+	alertMessage,
+	severity,
+	duration,
+}: {
+	open: boolean;
+	onClose: (
+		event: React.SyntheticEvent | Event,
+		reason?: SnackbarCloseReason
+	) => void;
+	alertMessage: string;
+	severity: "success" | "info" | "warning" | "error";
+	duration?: number;
+}) => {
+	return (
+		<Snackbar
+			anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+			open={open}
+			autoHideDuration={duration}
+			onClose={onClose}
+		>
+			<Alert severity={severity} onClose={onClose} variant="filled">
+				{alertMessage}
+			</Alert>
+		</Snackbar>
+	);
+};
 
 export default useResultAlert;

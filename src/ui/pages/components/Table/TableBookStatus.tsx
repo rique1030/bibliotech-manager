@@ -15,23 +15,6 @@ const StyledChip = styled(Chip)(({ theme }: { theme: Theme }) => ({
 		},
 		cursor: "pointer",
 	},
-	"@keyframes blink": {
-		"0%": {
-			//backgroundColor: alpha(theme.palette.text.secondary, 0.5),
-			Transform: "scale(0.95)",
-			boxShadow: `0 0 0 0 ${alpha(theme.palette.text.secondary, 0.7)}`,
-		},
-		"50%": {
-			//backgroundColor: alpha(theme.palette.text.secondary, 0.4),
-			Transform: "scale(1)",
-			boxShadow: `0 0 0 10px ${alpha(theme.palette.text.secondary, 0)}`,
-		},
-		"100%": {
-			//backgroundColor: alpha(theme.palette.text.secondary, 0.5),
-			Transform: "scale(0.95)",
-			boxShadow: `0 0 0 0 ${alpha(theme.palette.text.secondary, 0)}`,
-		},
-	},
 }));
 
 const GetStatus = ({
@@ -52,10 +35,11 @@ const GetStatus = ({
 	];
 	const [statusIndex, setStatusIndex] = useState(1);
 	const [statusDisplay, setStatusDisplay] = useState("select status");
-	const isInitialRender = useRef(true);
+	// const isInitialRender = useRef(true);
 
 	React.useEffect(() => {
-		if (!statuses.includes(row?.status || "")) {
+		if (!statuses.includes(row?.status || "") && row?.status !== "overdue") {
+			console.log(row?.status);
 			if (edit) {
 				return setStatusDisplay("Click Me");
 			}
@@ -92,7 +76,7 @@ const GetStatus = ({
 				return theme.palette.error.main;
 				break;
 			case "overdue":
-				return theme.palette.primary.main;
+				return theme.palette.error.main;
 				break;
 			default:
 				return theme.palette.primary.main;
@@ -104,23 +88,40 @@ const GetStatus = ({
 		<StyledChip
 			onClick={edit ? handleChangeStatus : undefined}
 			label={statusDisplay.toUpperCase()}
-			sx={{
-				color: `${paletteColor}`,
-				backgroundColor: `${alpha(paletteColor, 0.3)}`,
-				border: `1px solid ${paletteColor}`,
+			variant="filled"
+			sx={(theme) => ({
+				// color: `${paletteColor}`,
+				border: "1px solid",
+				backgroundColor: paletteColor,
+				color: theme.palette.getContrastText(paletteColor),
 				"&.MuiChip-clickable": {
 					"&:hover": {
 						borderColor: paletteColor,
-						backgroundColor: paletteColor,
+						color: paletteColor,
+						backgroundColor: theme.palette.background.default,
 					},
 				},
-				animation:
-					(statusDisplay.toUpperCase() === "STATUS" || statusDisplay === "") &&
-					edit
-						? "blink 2s infinite"
-						: "none",
-			}}
-			variant="outlined"
+				animation: edit ? "blink 3s infinite" : "none",
+				"@keyframes blink": {
+					"0%": {
+						transform: "scale(1)",
+						boxShadow: `0 0 0 0  ${alpha(paletteColor, 0.7)}`,
+					},
+					"15%": {
+						transform: "scale(1.05)",
+						boxShadow: `0 0 0 10px ${alpha(paletteColor, 0)}`,
+					},
+					"30%": {
+						transform: "scale(1)",
+						boxShadow: `0 0 0 0 ${alpha(paletteColor, 0)}`,
+					},
+					"100%": {
+						transform: "scale(1)",
+						boxShadow: `0 0 0 0 ${alpha(paletteColor, 0)}`,
+					},
+				},
+			})}
+			// variant="outlined"
 			size="small"
 		/>
 	);
