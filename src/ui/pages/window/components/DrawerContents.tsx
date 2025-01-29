@@ -44,6 +44,7 @@ function ParentListItem({
 				sx={{
 					width: "100%",
 					height: "3rem",
+					maxHeight: "3rem",
 					display: "flex",
 					justifyContent: "space-between",
 					alignItems: "center",

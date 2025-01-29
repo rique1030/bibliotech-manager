@@ -1,7 +1,7 @@
 import ViewTable from "../components/Table/ViewTable";
 import MainContainer from "../components/MainContainer";
 import { useContext, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Divider, Stack, Button, Tooltip } from "@mui/material";
 import columns from "../components/Table/columns/DefaultCategoryColumnsInterface";
 import { useDelete } from "../hooks/useDelete";
@@ -32,7 +32,7 @@ function CategoryDelete() {
 	};
 
 	const options = {
-		url: "/main/categories/delete",
+		url: "/main/categories/remove-categories",
 		payload: payload,
 	};
 
@@ -75,12 +75,23 @@ function CategoryDelete() {
 export default CategoryDelete;
 
 function DeleteFooter() {
+	const navigate = useNavigate();
+	const handleGoback = () => navigate("/main/categories/manage-categories");
 	const {
 		rowData: { rows },
 	} = useContext(TableContext);
 	const { handleDelete } = useContext(TableDeleteContext);
 	return (
-		<Stack direction="row" spacing={2}>
+		<Stack direction="row" justifyContent="flex-end" spacing={2}>
+			<span>
+				<Button
+					onClick={() => handleGoback()}
+					variant="contained"
+					sx={{ height: "2rem" }}
+				>
+					Back
+				</Button>
+			</span>
 			<Tooltip
 				placement="top"
 				title={

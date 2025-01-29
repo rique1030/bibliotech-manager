@@ -1,4 +1,4 @@
-import { alpha, colors } from "@mui/material";
+import { alpha, colors, Fade } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 
 const darkTheme = createTheme({
@@ -41,12 +41,13 @@ const darkTheme = createTheme({
 	},
 	palette: {
 		mode: "dark",
+		contrastThreshold: 2,
 		background: {
-			paper: "#121212",
 			default: "#121212",
+			paper: "#1e1e1e",
 		},
 		primary: {
-			light: "#d2c6f4",
+			light: "#d2c7f6",
 			main: "#5b40e4",
 			dark: "#3b33d4",
 		},
@@ -57,6 +58,8 @@ const darkTheme = createTheme({
 		},
 		action: {
 			active: "#3220e6",
+			disabled: "#6e6e6e",
+			disabledBackground: "#303030",
 		},
 		text: {
 			primary: "#ffffff",
@@ -80,9 +83,20 @@ const darkTheme = createTheme({
 	},
 	components: {
 		MuiTooltip: {
+			defaultProps: {
+				slots: {
+					transition: Fade,
+				},
+			},
 			styleOverrides: {
 				tooltip: {
 					transition: "transform 0.3s ease-in-out",
+					background: "#1e1e1e",
+					border: "1px solid #303030",
+					borderRadius: "5px",
+					boxShadow: "0 0 5px rgba(0, 0, 0, 0.2)",
+					color: "#ffffff",
+					padding: "0.5rem",
 				},
 			},
 		},
@@ -141,7 +155,6 @@ const darkTheme = createTheme({
 			styleOverrides: {
 				root: {
 					boxSizing: "border-box",
-					border: "none",
 				},
 			},
 		},
@@ -154,7 +167,6 @@ const darkTheme = createTheme({
 					padding: "1rem",
 					fontSize: "0.8rem",
 					boxSizing: "border-box",
-					border: "none",
 					transition: "all 0.2s ease-in-out",
 				},
 			},
@@ -211,14 +223,11 @@ const darkTheme = createTheme({
 		MuiAlert: {
 			styleOverrides: {
 				root: {
-					// border: "2px solid",
 					borderRadius: "0.3rem",
 					color: alpha("#000000", 0.7),
 					fontWeight: "bold",
 					"&.MuiAlert-colorSuccess": {
 						backgroundColor: colors.green[500],
-						// borderColor: colors.green[500],
-						// color: colors.green[50],
 					},
 				},
 			},

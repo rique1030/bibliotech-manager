@@ -24,8 +24,8 @@ const searchFilter: any[] = [
 ];
 
 const URL = {
-	update: "/main/roles/update",
-	delete: "/main/roles/delete",
+	update: "/main/roles/manage-roles/edit-existing-roles",
+	delete: "/main/roles/manage-roles/remove-roles",
 };
 
 function RolesView() {
@@ -39,7 +39,11 @@ function RolesView() {
 	/**
 	 * Search
 	 */
-	const search = useSearch({ fetchData, defaulFilter: "role_name" });
+	const search = useSearch({
+		fetchData,
+		defaultFilter: "role_name",
+		queryKey: "rolesView",
+	});
 	const { rowData } = search;
 
 	useEffect(() => {

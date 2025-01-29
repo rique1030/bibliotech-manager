@@ -127,6 +127,14 @@ electron.contextBridge.exposeInMainWorld("storedSettings", {
 	deleteAccount: async () => {
 		return await ipcRenderer.invoke("delete-account");
 	},
+
+	saveTheme: async (theme: string) => {
+		return await ipcRenderer.invoke("save-theme", theme);
+	},
+
+	getTheme: async () => {
+		return await ipcRenderer.invoke("get-theme");
+	},
 });
 
 electron.contextBridge.exposeInMainWorld("requestRecord", {

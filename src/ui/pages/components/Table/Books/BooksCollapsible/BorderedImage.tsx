@@ -1,5 +1,4 @@
 import { Box, Skeleton, Theme } from "@mui/material";
-import CONFIG from "../../../../../config.ts";
 import React from "react";
 
 const BorderedImage = ({

@@ -24,8 +24,8 @@ const searchFilter: any[] = [
 ];
 
 const URL = {
-	update: "/main/categories/update",
-	delete: "/main/categories/delete",
+	update: "/main/categories/manage-categories/edit-existing-categories",
+	delete: "/main/categories/manage-categories/remove-categories",
 };
 
 function CategoryView() {
@@ -39,12 +39,19 @@ function CategoryView() {
 	/**
 	 * Search
 	 */
-	const search = useSearch({ fetchData, defaulFilter: "name" });
+	const search = useSearch({
+		fetchData,
+		defaultFilter: "name",
+		queryKey: "categoriesView",
+	});
 	const { rowData } = search;
 
 	useEffect(() => {
-		setRows(rowData);
 		setColumns(columns);
+	}, []);
+
+	useEffect(() => {
+		setRows(rowData);
 	}, [rowData]);
 
 	return (

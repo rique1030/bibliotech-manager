@@ -1,4 +1,5 @@
-import { ParentListItem, ChildListItem } from "./DrawerContents";
+import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView";
+import CustomTreeItem from "./CustomTreeItem";
 import {
 	AccountBox,
 	FolderSharedOutlined,
@@ -11,54 +12,70 @@ import {
 	EditNoteOutlined,
 	PlaylistRemove,
 } from "@mui/icons-material";
-const AccountsDrawer = () => {
+const AccountsDrawer = ({ expandedItems, handleExpandedItemChange }: any) => {
 	return (
 		<>
-			<ParentListItem title="Accounts" icon={<AccountBox />}>
-				<ChildListItem
-					icon={<FolderSharedOutlined />}
-					src="/main/accounts/view"
-					title="Display Accounts"
-				/>
-				<ChildListItem
-					icon={<PersonAddOutlined />}
-					src="/main/accounts/insert"
-					title="Add Accounts"
-				/>
-				<ChildListItem
-					icon={<ManageAccountsOutlined />}
-					src="/main/accounts/update"
-					title="Edit Accounts"
-				/>
-				<ChildListItem
-					icon={<PersonRemoveOutlined />}
-					src="/main/accounts/delete"
-					title="Remove Accounts"
-				/>
-			</ParentListItem>
-
-			<ParentListItem title="Roles" icon={<SupervisorAccountOutlined />}>
-				<ChildListItem
-					icon={<PlaylistAddCheck />}
-					src="/main/roles/view"
-					title="Display Roles"
-				/>
-				<ChildListItem
-					src="/main/roles/insert"
-					icon={<PlaylistAdd />}
-					title="Add Roles"
-				/>
-				<ChildListItem
-					icon={<EditNoteOutlined />}
-					src="/main/roles/update"
-					title="Edit Roles"
-				/>
-				<ChildListItem
-					icon={<PlaylistRemove />}
-					src="/main/roles/delete"
-					title="Remove Roles"
-				/>
-			</ParentListItem>
+			<SimpleTreeView
+				expandedItems={expandedItems}
+				onExpandedItemsChange={handleExpandedItemChange}
+			>
+				<CustomTreeItem
+					itemId="Accounts"
+					label="Accounts"
+					icon={
+						<AccountBox sx={{ fontSize: "1.2rem", color: "primary.main" }} />
+					}
+				>
+					<CustomTreeItem
+						itemId="DISPLAYACCOUNTS"
+						label="Display Accounts"
+						src="/main/accounts/manage-accounts"
+						icon={
+							<FolderSharedOutlined
+								sx={{ fontSize: "1.2rem", color: "primary.main" }}
+							/>
+						}
+					/>
+					<CustomTreeItem
+						itemId="ADDACCOUNTS"
+						label="Add Accounts"
+						src="/main/accounts/add-new-accounts"
+						icon={
+							<PersonAddOutlined
+								sx={{ fontSize: "1.2rem", color: "primary.main" }}
+							/>
+						}
+					/>
+				</CustomTreeItem>
+				<CustomTreeItem
+					itemId="Roles"
+					label="Roles"
+					icon={
+						<SupervisorAccountOutlined
+							sx={{ fontSize: "1.2rem", color: "primary.main" }}
+						/>
+					}
+				>
+					<CustomTreeItem
+						itemId="DISPLAYROLES"
+						label="Display Roles"
+						src="/main/roles/manage-roles"
+						icon={
+							<PlaylistAddCheck
+								sx={{ fontSize: "1.2rem", color: "primary.main" }}
+							/>
+						}
+					/>
+					<CustomTreeItem
+						itemId="ADDROLES"
+						label="Add Roles"
+						src="/main/roles/add-new-roles"
+						icon={
+							<PlaylistAdd sx={{ fontSize: "1.2rem", color: "primary.main" }} />
+						}
+					/>
+				</CustomTreeItem>
+			</SimpleTreeView>
 		</>
 	);
 };

@@ -7,7 +7,6 @@ import TableHeader from "../components/Table/TableHeader";
 import { TableContext } from "../context/TableContext";
 import { useInsert } from "../hooks/useInsert";
 import { TableInsertContext } from "../context/TableInsertContext";
-import CategoriesData from "../components/Table/Categories/CategoriesData";
 import RolesData from "../components/Table/Roles/RolesData";
 
 const insertData = async (payload: InsertRolesPayload): Promise<any> => {
@@ -27,7 +26,7 @@ function RolesInsert() {
 	};
 
 	const options = {
-		url: "/main/roles/view",
+		url: "/main/roles/manage-roles",
 		field,
 		payload: payload,
 	};

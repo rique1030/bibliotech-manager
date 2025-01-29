@@ -2,12 +2,13 @@ import { Skeleton, TableRow, TableCell, Checkbox, Chip } from "@mui/material";
 import GetStatus from "./TableBookStatus";
 import RemoveButton from "../RemoveButton";
 import StyledCell from "./TableStyledCell";
-import { alpha, Box, styled, Theme } from "@mui/system";
+import { alpha, Box, fontStyle, fontWeight, styled, Theme } from "@mui/system";
 import { TableContext } from "../../context/TableContext";
 import { useContext } from "react";
 import { TableSearchContext } from "../../context/TableSearchContext";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import VerifiedIcon from "@mui/icons-material/Verified";
+import ConverToLetterCase from "../../helper/ConvertToLetterCase";
 
 interface TableDataProps {
 	onClick?: (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>) => void;
@@ -22,25 +23,27 @@ const StyledDataRow = styled(TableRow)(({ theme }: { theme: Theme }) => ({
 	"&.MuiTableRow-root": {
 		userSelect: "none",
 		cursor: "pointer",
-		animation: "pop-up 0.3s ease-in-out",
 		"@keyframes pop-up": {
 			"0%": {
-				transform: "scale(0.95)",
-				Opacity: 0,
-			},
-			"50%": {
-				transform: "scale(1.025)",
-				Opacity: 0.5,
+				transform: "translateY(30px)",
+				opacity: 0,
 			},
 			"100%": {
-				transform: "scale(1)",
+				transform: "translateY(0)",
 				Opacity: 1,
 			},
 		},
+		animation: "slideInFromBottom 0.4s ease-out",
+		"@keyframes slideInFromBottom": {
+			"0%": { transform: "translateY(20px)", opacity: 0 },
+			"100%": { transform: "translateY(0)", opacity: 1 },
+		},
+
 		"&:hover": {
 			backgroundColor: alpha(theme.palette.primary.main, 0.1),
 			"& .MuiTableCell-root > div": {
-				// borderColor: `${alpha(theme.palette.primary.main, 0.4)}`,
+				// backgroundColor: alpha(theme.palette.primary.main, 0.1),
+
 				"& .MuiTypography-root": {
 					color: theme.palette.primary.main,
 				},
@@ -106,6 +109,7 @@ const IndexCell = ({ index }: { index: number }) => {
 			borderColor="divider"
 			sx={{
 				width: "4rem",
+				fontWeight: "bold",
 			}}
 		>
 			{page ? page * 10 + index : 0 * 10 + index}
@@ -165,14 +169,6 @@ const TextCell = ({ column, columns, newValue }: any) => {
 		</StyledCell>
 	);
 };
-
-function ConverToLetterCase(str: string) {
-	if (!str) return "";
-	return str
-		.split(" ")
-		.map((word) => word[0].toUpperCase() + word.slice(1))
-		.join(" ");
-}
 
 const TableData = ({
 	removable,

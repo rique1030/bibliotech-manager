@@ -39,7 +39,6 @@ const GetStatus = ({
 
 	React.useEffect(() => {
 		if (!statuses.includes(row?.status || "") && row?.status !== "overdue") {
-			console.log(row?.status);
 			if (edit) {
 				return setStatusDisplay("Click Me");
 			}
@@ -90,13 +89,13 @@ const GetStatus = ({
 			label={statusDisplay.toUpperCase()}
 			variant="filled"
 			sx={(theme) => ({
-				// color: `${paletteColor}`,
 				border: "1px solid",
 				backgroundColor: paletteColor,
 				color: theme.palette.getContrastText(paletteColor),
+				borderColor: paletteColor,
+
 				"&.MuiChip-clickable": {
 					"&:hover": {
-						borderColor: paletteColor,
 						color: paletteColor,
 						backgroundColor: theme.palette.background.default,
 					},

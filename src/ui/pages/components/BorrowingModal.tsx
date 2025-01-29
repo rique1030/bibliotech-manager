@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import { memo } from "react";
 import MultipleStopRoundedIcon from "@mui/icons-material/MultipleStopRounded";
+import { convertCover, convertProfile } from "../../utils/ImageHelper";
 
 interface RequestImageProps {
 	src: string;
@@ -43,7 +44,7 @@ const RequestImage = ({
 		alignItems: "center",
 		borderRadius: `${radius + padding / 2}rem`,
 		border: "1px solid ",
-		backgroundColor: "background.default",
+		backgroundColor: "background.paper",
 		borderColor: theme.palette.divider,
 	}));
 
@@ -85,18 +86,15 @@ const ConfirmBorrow = memo(({ requestHook }: ConfirmBorrowProps) => {
 		handleBorrowDeny,
 		handleBorrowAccept,
 	} = requestHook;
+	// console.log(data);
+	// console.log(convertProfile(data?.user?.profile_pic));
+	// console.log(convertCover(data?.book?.cover_image));
 	return (
 		<Dialog open={requestModalOpen}>
 			<Box sx={{ height: "450px", width: "400px" }}>
 				<ModalImages
-					book_image={
-						data?.book?.cover_image ||
-						"http://localhost:5000/images/book_covers/default.png"
-					}
-					user_image={
-						data?.user?.propile_pic ||
-						"http://localhost:5000/images/user_photos/default.png"
-					}
+					book_image={convertCover(data?.book?.cover_image)}
+					user_image={convertProfile(data?.user?.profile_pic)}
 				/>
 				<Divider variant="middle" />
 				<DialogContent
@@ -106,7 +104,8 @@ const ConfirmBorrow = memo(({ requestHook }: ConfirmBorrowProps) => {
 					}}
 				>
 					<Typography sx={{ padding: "1rem 0px" }} variant="h6">
-						{data?.user?.first_name} would like to borrow:
+						{data?.user?.first_name} would like to{" "}
+						{data?.type === "borrow" ? "borrow" : "return"} :
 					</Typography>
 					<TableContainer>
 						<Table>
@@ -128,20 +127,23 @@ const ConfirmBorrow = memo(({ requestHook }: ConfirmBorrowProps) => {
 				sx={{
 					padding: "1rem",
 					boxSizing: "border-box",
-					display: "flex",
-					justifyContent: "space-between",
+					display: data?.type === "borrow" ? "flex" : "inline-flex",
+					justifyContent:
+						data?.type === "borrow" ? "space-between" : "flex-end",
 				}}
 			>
-				<TextField
-					value={days.toString()}
-					onChange={(e) => setDays(parseInt(e.target.value))}
-					error={error}
-					label="Days"
-					type="number"
-					size="small"
-					slotProps={{ input: { inputProps: { min: 1 } } }}
-					sx={{ maxWidth: "150px" }}
-				/>
+				{data?.type === "borrow" && (
+					<TextField
+						value={days.toString()}
+						onChange={(e) => setDays(parseInt(e.target.value))}
+						error={error}
+						label="Days"
+						type="number"
+						size="small"
+						slotProps={{ input: { inputProps: { min: 1 } } }}
+						sx={{ maxWidth: "150px" }}
+					/>
+				)}
 				<Box>
 					<Button onClick={handleBorrowDeny}>Decline</Button>
 					<Button onClick={handleBorrowAccept}>Accept</Button>

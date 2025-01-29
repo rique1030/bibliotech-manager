@@ -4,6 +4,7 @@ import {
 	TextField,
 	ToggleButton,
 	ToggleButtonGroup,
+	Typography,
 } from "@mui/material";
 import { TableSearchContext } from "../context/TableSearchContext";
 import { useContext } from "react";
@@ -18,6 +19,7 @@ const SearchPanel = () => {
 				alignItems: "center",
 				justifyContent: "space-between",
 				boxSizing: "border-box",
+				gap: "2rem",
 			}}
 		>
 			<SearchBar />
@@ -76,7 +78,7 @@ const SearchBar = () => {
 			sx={{
 				minWidth: 10,
 				width: "100%",
-				maxWidth: "300px",
+				maxWidth: "600px",
 			}}
 			onInputChange={(_, value) => handleSubmit({ target: { value } } as any)}
 			renderInput={(params) => (
@@ -107,25 +109,36 @@ const SearchFilter = () => {
 	};
 
 	return (
-		<ToggleButtonGroup value={filterTerm} exclusive onChange={handleAlignment}>
-			{searchFilter?.map(
-				({ filter, value }: { filter: string; value: string }) => (
-					<ToggleButton
-						value={value}
-						key={value}
-						size="small"
-						sx={{
-							width: "4rem",
-
-							fontSize: "0.8rem",
-							textTransform: "capitalize",
-						}}
-					>
-						{filter}
-					</ToggleButton>
-				)
-			)}
-		</ToggleButtonGroup>
+		<Box sx={{ display: "flex", gap: "1rem" }}>
+			<Typography
+				variant="overline"
+				sx={{ fontWeight: "bold", color: "primary.main", whiteSpace: "nowrap" }}
+			>
+				Filter By:
+			</Typography>
+			<ToggleButtonGroup
+				value={filterTerm}
+				exclusive
+				onChange={handleAlignment}
+			>
+				{searchFilter?.map(
+					({ filter, value }: { filter: string; value: string }) => (
+						<ToggleButton
+							value={value}
+							key={value}
+							size="small"
+							sx={{
+								width: "4rem",
+								fontSize: "0.8rem",
+								textTransform: "capitalize",
+							}}
+						>
+							{filter}
+						</ToggleButton>
+					)
+				)}
+			</ToggleButtonGroup>
+		</Box>
 	);
 };
 

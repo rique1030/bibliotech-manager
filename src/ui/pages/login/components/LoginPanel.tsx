@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { Box, Typography, TextField } from "@mui/material";
 import PasswordTextField from "../../components/PasswordTextField";
 import { useNavigate } from "react-router-dom";
@@ -106,7 +106,7 @@ const LoginForm = () => {
 					};
 					await window.storedSettings.saveAccount(account);
 					await window.webSocket.connect();
-					navigate("/main/books/view");
+					navigate("/main/books/manage-books");
 				};
 				connectToServer();
 			} else {
@@ -172,6 +172,13 @@ const LoginForm = () => {
 		setPasswordError(false);
 		setErrorText("");
 	};
+
+	useLayoutEffect(() => {
+		const deleteAccount = async () => {
+			await window.storedSettings.deleteAccount();
+		};
+		deleteAccount();
+	}, []);
 
 	return (
 		<Box

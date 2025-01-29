@@ -1,7 +1,7 @@
 import ViewTable from "../components/Table/ViewTable";
 import MainContainer from "../components/MainContainer";
 import { useContext, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Divider, Stack, Button, Tooltip } from "@mui/material";
 import columns from "../components/Table/columns/DefaultRolesColumnsInterface";
 import { useDelete } from "../hooks/useDelete";
@@ -29,37 +29,36 @@ function RolesDelete() {
 
 	const payload = {
 		id: rows.map((row) => row.id),
+		entryIds: state,
 	};
 
 	const options = {
-		url: "/main/roles/delete",
+		url: "/main/roles/manage-roles/remove-roles",
 		payload: payload,
+		queryKey: "rolesDelete",
 	};
 
-	const usedelete = useDelete({ useDelete: deleteData, options: options });
+	const usedelete = useDelete({
+		useDelete: deleteData,
+		getData: fetchData,
+		options: options,
+	});
 	const {
 		confirmationModal: { ConfirmationModal },
+		preData,
 	} = usedelete;
+
 	useEffect(() => {
 		setColumns(columns);
-		if (!state) {
-			setRows([]);
-			return;
-		}
-		try {
-			const response = fetchData(state as RequestByID);
-			response.then((data) => {
-				setRows(data?.data);
-			});
-		} catch (error) {
-			console.error(error);
-		}
 	}, [state]);
+
+	useEffect(() => {
+		setRows(preData?.data || []);
+	}, [preData]);
 
 	return (
 		<TableDeleteContext.Provider value={usedelete}>
 			<MainContainer>
-				{/* <CustomAlert /> */}
 				{ConfirmationModal}
 				<ViewTable>
 					<TableHeader indented />
@@ -75,12 +74,23 @@ function RolesDelete() {
 export default RolesDelete;
 
 function DeleteFooter() {
+	const navigate = useNavigate();
+	const handleGoback = () => navigate("/main/roles/manage-roles");
 	const {
 		rowData: { rows },
 	} = useContext(TableContext);
 	const { handleDelete } = useContext(TableDeleteContext);
 	return (
-		<Stack direction="row" spacing={2}>
+		<Stack direction="row" justifyContent="flex-end" spacing={2}>
+			<span>
+				<Button
+					onClick={() => handleGoback()}
+					variant="contained"
+					sx={{ height: "2rem" }}
+				>
+					Back
+				</Button>
+			</span>
 			<Tooltip
 				placement="top"
 				title={

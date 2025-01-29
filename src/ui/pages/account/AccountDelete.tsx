@@ -1,7 +1,7 @@
 import ViewTable from "../components/Table/ViewTable";
 import MainContainer from "../components/MainContainer";
 import { useContext, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Divider, Stack, Button, Tooltip } from "@mui/material";
 import columns from "../components/Table/columns/DefaultAccountsColumnsInterface";
 import { useDelete } from "../hooks/useDelete";
@@ -9,7 +9,6 @@ import { TableContext } from "../context/TableContext";
 import { TableDeleteContext } from "../context/TableDeleteContext";
 import TableHeader from "../components/Table/TableHeader";
 import AccountsData from "../components/Table/Accounts/AccountsData";
-// import RolesData from "../components/Table/Roles/RolesData";
 
 const fetchData = async (payload: RequestByID): Promise<any> => {
 	return await window.requestUser.getByID(payload);
@@ -33,7 +32,7 @@ function AccountsDelete() {
 	};
 
 	const options = {
-		url: "/main/accounts/delete",
+		url: "/main/accounts/manage-accounts/remove-accounts",
 		payload: payload,
 	};
 
@@ -76,12 +75,23 @@ function AccountsDelete() {
 export default AccountsDelete;
 
 function DeleteFooter() {
+	const navigate = useNavigate();
+	const handleGoback = () => navigate("/main/accounts/manage-accounts");
 	const {
 		rowData: { rows },
 	} = useContext(TableContext);
 	const { handleDelete } = useContext(TableDeleteContext);
 	return (
-		<Stack direction="row" spacing={2}>
+		<Stack direction="row" justifyContent="flex-end" spacing={2}>
+			<span>
+				<Button
+					onClick={() => handleGoback()}
+					variant="contained"
+					sx={{ height: "2rem" }}
+				>
+					Back
+				</Button>
+			</span>
 			<Tooltip
 				placement="top"
 				title={

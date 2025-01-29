@@ -40,7 +40,11 @@ function BooksCopy() {
 		columnData: { setColumns },
 	} = useContext(TableContext);
 
-	const search = useSearch({ fetchData, defaulFilter: "call_number" });
+	const search = useSearch({
+		fetchData,
+		defaultFilter: "call_number",
+		queryKey: "bookCopies",
+	});
 	const { rowData } = search;
 
 	useEffect(() => {

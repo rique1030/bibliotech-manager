@@ -1,28 +1,26 @@
 import {
 	Box,
 	Drawer,
-	Divider,
 	IconButton,
 	ListItem,
 	List,
 	Tooltip,
-	Theme,
+	Toolbar,
 } from "@mui/material";
 import { useState } from "react";
 
 import SpaceDashboardOutlinedIcon from "@mui/icons-material/SpaceDashboardOutlined";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined";
-import LogoIcon from "../components/LogoIcon";
 
 import DrawerManager from "./components/DrawerManager";
 
-const DrawerMinSize = 60;
+const DrawerMinSize = 70;
 const DrawerMaxSize = 300;
 
 const DrawerPanel = () => {
-	const [open, setOpen] = useState(false);
-	const [categoryIndex, setCategoryIndex] = useState(0);
+	const [open, setOpen] = useState(true);
+	const [categoryIndex, setCategoryIndex] = useState(3);
 
 	const toggleDrawer = (index: number) => {
 		if (index !== categoryIndex && index !== 0) {
@@ -39,87 +37,95 @@ const DrawerPanel = () => {
 			open={open}
 			variant="permanent"
 			sx={{
-				width: open ? DrawerMaxSize : 60,
+				width: open ? DrawerMaxSize : DrawerMinSize,
 				transition: "width 0.3s ease-in-out",
 				"& .MuiDrawer-paper": {
-					width: open ? DrawerMaxSize : 60,
+					width: open ? DrawerMaxSize : DrawerMinSize,
 					transition: "width 0.3s ease-in-out",
+					zIndex: 50,
+					backgroundColor: "background.default",
+					border: "none",
+					boxSizing: "border-box",
 				},
-				zIndex: 100,
 			}}
 		>
-			<Box
+			<Toolbar
 				sx={{
-					width: open ? DrawerMaxSize : 60,
-					height: "100%",
-					transition: "width 0.3s ease-in-out",
 					display: "flex",
-					flexDirection: "row",
-					alignItems: "center",
-					backgroundColor: "background.default",
+					justifyContent: "center",
+					boxSizing: "border-box",
+					padding: "0 !important",
+					paddingTop: "3.5rem !important",
+					height: "100%",
 				}}
-				role="presentation"
 			>
-				<List
-					sx={(theme: Theme) => ({
-						display: "flex",
-						flexDirection: "column",
-						alignItems: "center",
-						alignContent: "center",
-						paddingTop: "1rem",
-						paddingBottom: "1rem",
-						boxSizing: "border-box",
-						width: "60px",
+				<Box
+					sx={{
 						height: "100%",
-						gap: "1rem",
-						background: `radial-gradient(at top right, ${theme.palette.secondary.main}, ${theme.palette.primary.dark})`,
-					})}
+						padding: "0.5rem",
+						boxSizing: "border-box",
+						width: DrawerMinSize,
+					}}
 				>
-					<DrawerItem onClick={toggleDrawer} index={0}>
-						<LogoIcon
-							sx={{
-								color: "white",
-								fontSize: "2.5rem",
-							}}
-						/>
-					</DrawerItem>
-					<Divider
-						variant="middle"
-						orientation="horizontal"
-						component="li"
-						sx={{ width: "70%", borderColor: "white" }}
-					/>
-					<DrawerItem
-						onClick={toggleDrawer}
-						index={1}
-						title="Dashboard"
-						isSelect={categoryIndex === 1 && open}
+					<List
+						sx={(theme) => ({
+							display: "flex",
+							flexDirection: "column",
+							backgroundColor: "background.paper",
+							height: "100%",
+							width: "100%",
+							padding: 0,
+							borderRadius: theme.shape.borderRadius,
+							border: "1px solid",
+							borderColor: "divider",
+							overflow: "hidden",
+						})}
 					>
-						<SpaceDashboardOutlinedIcon
-							sx={{ color: "white", fontSize: "1.6rem", fontWeight: "normal" }}
-						/>
-					</DrawerItem>
-					<DrawerItem
-						onClick={toggleDrawer}
-						index={2}
-						title="Accounts Manager"
-						isSelect={categoryIndex === 2 && open}
-					>
-						<AdminPanelSettingsOutlinedIcon
-							sx={{ color: "white", fontSize: "1.6rem", fontWeight: "normal" }}
-						/>
-					</DrawerItem>
-					<DrawerItem
-						onClick={toggleDrawer}
-						index={3}
-						title="Library Manager"
-						isSelect={categoryIndex === 3 && open}
-					>
-						<LibraryBooksOutlinedIcon
-							sx={{ color: "white", fontSize: "1.6rem", fontWeight: "normal" }}
-						/>
-					</DrawerItem>
-				</List>
+						<DrawerItem
+							isSelect={categoryIndex === 1 && open}
+							index={1}
+							title="Dashboard"
+							onClick={toggleDrawer}
+						>
+							<SpaceDashboardOutlinedIcon
+								sx={{
+									width: "1.75rem",
+									height: "1.75rem",
+									color: "primary.main",
+								}}
+							/>
+						</DrawerItem>
+						<DrawerItem
+							isSelect={categoryIndex === 3 && open}
+							index={3}
+							title="Library"
+							onClick={toggleDrawer}
+						>
+							<LibraryBooksOutlinedIcon
+								sx={{
+									width: "1.75rem",
+									height: "1.75rem",
+									color: "primary.main",
+								}}
+							/>
+						</DrawerItem>
+
+						<DrawerItem
+							isSelect={categoryIndex === 2 && open}
+							index={2}
+							title="Accounts"
+							onClick={toggleDrawer}
+						>
+							<AdminPanelSettingsOutlinedIcon
+								sx={{
+									width: "1.75rem",
+									height: "1.75rem",
+									color: "primary.main",
+								}}
+							/>
+						</DrawerItem>
+					</List>
+				</Box>
 				<Box
 					sx={{
 						display: "flex",
@@ -134,13 +140,13 @@ const DrawerPanel = () => {
 				>
 					<DrawerManager index={categoryIndex} />
 				</Box>
-			</Box>
+			</Toolbar>
 		</Drawer>
 	);
 };
 
 interface DrawerItemProps {
-	children: React.ReactNode;
+	children?: React.ReactNode;
 	onClick: (index: number) => void;
 	index: number;
 	title?: string;
@@ -161,12 +167,7 @@ const DrawerItem = ({
 					display: "flex",
 					justifyContent: "center",
 					padding: "0px",
-					"&:hover": {
-						WebkitFilter: "drop-shadow(0em 0em 1em rgb(255, 0, 191))",
-					},
-					WebkitFilter: isSelect
-						? "drop-shadow(0em 0em 0.5em rgb(255, 130, 234))"
-						: "",
+					position: "relative",
 				}}
 			>
 				<IconButton
@@ -174,12 +175,24 @@ const DrawerItem = ({
 					onClick={() => onClick(index)}
 					sx={{
 						padding: "0px",
-						width: "40px",
-						height: "40px",
-						"&:hover": {
-							background: "rgba(255,255,255,0.1)",
-						},
+						width: "100%",
+						height: DrawerMinSize,
 						transition: "all 0.03s ease-in-out",
+						"&:hover": {
+							backgroundColor: "transparent",
+						},
+						"&:before": {
+							content: '""',
+							position: "absolute",
+							width: "5px",
+							top: "50%",
+							transform: "translateY(-50%)",
+							height: isSelect ? "100%" : "0%",
+							left: 0,
+							backgroundColor: isSelect ? "primary.main" : "transparent",
+							borderRadius: "0 0.5rem 0.5rem 0",
+							transition: "all 0.1s ease-in-out",
+						},
 					}}
 				>
 					{children}

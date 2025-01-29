@@ -27,7 +27,7 @@ function CategoryInsert() {
 	};
 
 	const options = {
-		url: "/main/categories/view",
+		url: "/main/categories/manage-categories",
 		field,
 		payload: payload,
 	};

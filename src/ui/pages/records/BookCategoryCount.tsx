@@ -1,5 +1,5 @@
 // Material UI Components
-import { Divider } from "@mui/material";
+import { Divider, TableBody } from "@mui/material";
 // Hooks
 import useSearch from "../hooks/useSearch";
 import { useEffect, useContext } from "react";
@@ -8,45 +8,40 @@ import SearchPanel from "../components/SearchPanel";
 import ViewTable from "../components/Table/ViewTable";
 import MainContainer from "../components/MainContainer";
 import TablePaginationBar from "../components/Table/TablePaginationBar";
+// import BooksData from "../components/Table/Books/BooksData";
 import TableHeader from "../components/Table/TableHeader";
-import columns from "../components/Table/columns/DefaultAccountsColumnsInterface";
+import columns from "../components/Table/columns/DefaultBookCategoryCountInterface";
 import { TableContext } from "../context/TableContext";
 import { TableSearchContext } from "../context/TableSearchContext";
-import AccountsData from "../components/Table/Accounts/AccountsData";
+import TableData from "../components/Table/TableData";
 
 const fetchData = async (payload: GetPagedPayload): Promise<any> => {
-	return await window.requestUser.getPaged(payload);
+	return await window.requestRecord.getBookCategoryCount(payload);
 };
 
 const searchFilter: any[] = [
-	{ filter: "Name", value: "first_name" },
-	{ filter: "Surname", value: "last_name" },
-	{ filter: "ID no.", value: "school_id" },
-	{ filter: "Email", value: "email" },
-	{ filter: "Role", value: "role_id" },
-	{ filter: "Verified", value: "is_verified" },
+	{ filter: "Category", value: "name" },
+	{ filter: "Desc.", value: "description" },
 ];
 
 const URL = {
-	update: "/main/accounts/manage-accounts/edit-existing-accounts",
-	delete: "/main/accounts/manage-accounts/remove-accounts",
+	update: null,
+	delete: null,
 };
 
-function AccountsView() {
+function BookCategoryCount() {
 	/**
 	 * Table
 	 */
 	const {
-		rowData: { setRows },
+		rowData: { setRows, rows },
 		columnData: { setColumns },
 	} = useContext(TableContext);
-	/**
-	 * Search
-	 */
+
 	const search = useSearch({
 		fetchData,
-		defaultFilter: "first_name",
-		queryKey: "accountsView",
+		defaultFilter: "name",
+		queryKey: "bookCategoryCount",
 	});
 	const { rowData } = search;
 
@@ -61,8 +56,12 @@ function AccountsView() {
 				<SearchPanel />
 				<Divider variant="middle" />
 				<ViewTable>
-					<TableHeader selectable />
-					<AccountsData selectable />
+					<TableHeader />
+					<TableBody>
+						{(rows || []).map((row, index) => {
+							return <TableData index={index} row={row} key={index} />;
+						})}
+					</TableBody>
 				</ViewTable>
 				<Divider variant="middle" />
 				<TablePaginationBar />
@@ -71,4 +70,4 @@ function AccountsView() {
 	);
 }
 
-export default AccountsView;
+export default BookCategoryCount;

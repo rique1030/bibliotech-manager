@@ -44,7 +44,7 @@ const useRequest: RequestInterface = async (
 		return {
 			data: null,
 			success: false,
-			error: error.message,
+			error: error.code,
 			message: null,
 		};
 	}

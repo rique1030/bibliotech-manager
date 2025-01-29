@@ -47,8 +47,8 @@ const lightTheme = createTheme({
 		mode: "light",
 		contrastThreshold: 2,
 		background: {
+			default: "#e9e6f4",
 			paper: "#ffffff",
-			default: "#f4f6f8",
 		},
 		primary: {
 			light: "#d2c7f6",

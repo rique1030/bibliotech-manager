@@ -33,8 +33,6 @@ ipcMain.handle("set-format-index", async (event, index: number) => {
 	return "ok";
 });
 
-
-
 ipcMain.handle("save-account", async (event, account: accountType) => {
 	const storeAccount = await store.get("account");
 	if (storeAccount === undefined) {
@@ -52,3 +50,14 @@ ipcMain.handle("delete-account", async () => {
 	return "Account deleted";
 });
 
+ipcMain.handle("save-theme", async (event, theme: string) => {
+	store.set("theme", theme);
+	return "Theme saved";
+});
+
+ipcMain.handle("get-theme", async () => {
+	if ((await store.get("theme")) === undefined) {
+		store.set("theme", "light");
+	}
+	return await store.get("theme");
+});

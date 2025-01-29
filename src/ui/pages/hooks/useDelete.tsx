@@ -1,23 +1,55 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useConfirmationModal } from "../components/ConfirmationModal";
 
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AlertContext } from "../context/AlertContext";
 
 interface useDeleteInterface {
 	useDelete: (payload: any) => Promise<any>;
+	getData: (payload: any) => Promise<any>;
 	options: {
 		url: string;
 		payload: any;
+		queryKey: string;
 	};
 }
 
-export function useDelete({ useDelete, options }: useDeleteInterface) {
+export function useDelete({ useDelete, options, getData }: useDeleteInterface) {
 	const { resultAlert } = useContext(AlertContext);
 	const { showTimedAlert } = resultAlert;
 	const confirmationModal = useConfirmationModal();
 	const navigate = useNavigate();
+
+	/**
+	 * Initial data fetching
+	 */
+	console.log(options.payload.entryIds);
+
+	const { data: preData } = useQuery({
+		queryKey: [options.queryKey, options.payload.entryIds],
+		queryFn: () => getData(options.payload.entryIds),
+		retry: 0,
+		staleTime: Infinity,
+	});
+
+	useEffect(() => {
+		if (!preData?.success) {
+			if (preData?.error) {
+				if (preData?.error === "ECONNREFUSED") {
+					showTimedAlert(
+						"error",
+						"Unable to connect to server. Please try again later."
+					);
+				}
+				showTimedAlert("error", preData.error);
+			}
+		}
+	}, [preData]);
+
+	/**
+	 * Mutation
+	 */
 
 	const mutation = useMutation({
 		mutationFn: (payload) => useDelete(payload),
@@ -69,5 +101,11 @@ export function useDelete({ useDelete, options }: useDeleteInterface) {
 		}
 	};
 
-	return { handleDelete, resultAlert, confirmationModal };
+	return {
+		handleDelete,
+		resultAlert,
+		confirmationModal,
+		isDeleting: mutation.isPending,
+		preData,
+	};
 }

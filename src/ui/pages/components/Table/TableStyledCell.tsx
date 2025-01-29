@@ -30,9 +30,11 @@ const StyledCell = ({
 				whiteSpace: "nowrap",
 				overflow: "hidden",
 				textOverflow: "ellipsis",
-				backgroundColor: "background.default",
+				backgroundColor: "background.paper",
 				borderBottom: "2px solid",
 				borderColor: borderColor || "secondary.dark",
+				// zIndex: 10,
+				// backgroundColor: "background.default",
 			}}
 			className="MuiTableCell-Header"
 		>
@@ -41,9 +43,9 @@ const StyledCell = ({
 					display: "flex",
 					alignItems: "center",
 					borderRight: length - 1 !== index ? "2px solid" : "0px",
-
 					borderColor: borderColor || "secondary.dark",
 					// height: "1.5rem",
+					// zIndex: 10,
 					height: "100%",
 					paddingLeft: "1rem",
 					paddingRight: "1rem",
@@ -63,6 +65,7 @@ const StyledCell = ({
 							textOverflow: "ellipsis",
 							transition: "all 0.2s ease-in-out",
 							fontFamily: column.align === "right" ? "Roboto Mono" : "inherit",
+							// zIndex: 10,
 						}}
 					>
 						{children}

@@ -1,4 +1,4 @@
-import { ParentListItem, ChildListItem } from "./DrawerContents";
+import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView";
 import {
 	SpaceDashboard,
 	CollectionsBookmarkOutlined,
@@ -6,24 +6,65 @@ import {
 	FolderSharedOutlined,
 	MoreOutlined,
 } from "@mui/icons-material";
+import CustomTreeItem from "./CustomTreeItem";
 
-const RecordsDrawer = () => {
+const RecordsDrawer = ({ expandedItems, handleExpandedItemChange }: any) => {
 	return (
 		<>
-			<ParentListItem title="Dashboard" icon={<SpaceDashboard />}>
-				<ChildListItem
-					icon={<CollectionsBookmarkOutlined />}
-					src="/main/records/book_copies"
-					title="Book Copies"
-				/>
-				<ChildListItem
-					icon={<BookmarksOutlined />}
-					src="/main/records/borrowings"
-					title="Borrowings"
-				/>
-				<ChildListItem icon={<FolderSharedOutlined />} title="User Records" />
-				<ChildListItem icon={<MoreOutlined />} title="Book Categories" />
-			</ParentListItem>
+			<SimpleTreeView
+				expandedItems={expandedItems}
+				onExpandedItemsChange={handleExpandedItemChange}
+			>
+				<CustomTreeItem
+					itemId="Records"
+					label="Records"
+					icon={
+						<SpaceDashboard
+							sx={{ fontSize: "1.2rem", color: "primary.main" }}
+						/>
+					}
+				>
+					<CustomTreeItem
+						itemId="SELECTBOOKCOPIES"
+						label="Book Copies"
+						src="/main/records/book-copies"
+						icon={
+							<CollectionsBookmarkOutlined
+								sx={{ fontSize: "1.2rem", color: "primary.main" }}
+							/>
+						}
+					/>
+					<CustomTreeItem
+						itemId="SELECTBORROWINGS"
+						label="Borrowings"
+						src="/main/records/borrowings"
+						icon={
+							<BookmarksOutlined
+								sx={{ fontSize: "1.2rem", color: "primary.main" }}
+							/>
+						}
+					/>
+					<CustomTreeItem
+						itemId="SELECTUSERRECORDS"
+						label="User Records"
+						icon={
+							<FolderSharedOutlined
+								sx={{ fontSize: "1.2rem", color: "primary.main" }}
+							/>
+						}
+					/>
+					<CustomTreeItem
+						itemId="SELECTBOOKCATEGORIES"
+						label="Book Categories"
+						src="/main/records/book-categories"
+						icon={
+							<MoreOutlined
+								sx={{ fontSize: "1.2rem", color: "primary.main" }}
+							/>
+						}
+					/>
+				</CustomTreeItem>
+			</SimpleTreeView>
 		</>
 	);
 };

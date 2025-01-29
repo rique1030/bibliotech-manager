@@ -7,7 +7,6 @@ import TableHeader from "../components/Table/TableHeader";
 import { TableContext } from "../context/TableContext";
 import { useInsert } from "../hooks/useInsert";
 import { TableInsertContext } from "../context/TableInsertContext";
-import RolesData from "../components/Table/Roles/RolesData";
 import AccountsData from "../components/Table/Accounts/AccountsData";
 
 const insertData = async (payload: InsertUsersPayload): Promise<any> => {
@@ -27,7 +26,7 @@ function AccountInsert() {
 	};
 
 	const options = {
-		url: "/main/accounts/view",
+		url: "/main/accounts/manage-accounts",
 		field,
 		payload: payload,
 	};
@@ -56,8 +55,6 @@ function AccountInsert() {
 			]);
 		})();
 	}, []);
-
-	
 
 	return (
 		<TableInsertContext.Provider value={{ useinsert }}>

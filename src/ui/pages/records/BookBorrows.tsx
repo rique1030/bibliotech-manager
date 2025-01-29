@@ -41,7 +41,11 @@ function BookBorrow() {
 		columnData: { setColumns },
 	} = useContext(TableContext);
 
-	const search = useSearch({ fetchData, defaulFilter: "access_number" });
+	const search = useSearch({
+		fetchData,
+		defaultFilter: "access_number",
+		queryKey: "bookBorrows",
+	});
 	const { rowData } = search;
 
 	useEffect(() => {

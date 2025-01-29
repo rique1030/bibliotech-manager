@@ -15,6 +15,8 @@ interface TableUpdateContextType {
 			showConfirmationModal: () => Promise<boolean>;
 			ConfirmationModal: JSX.Element;
 		};
+		isUpdating: boolean;
+		preData: any;
 	};
 	// availableRoles: any[];
 }
@@ -30,6 +32,8 @@ export const TableUpdateContext = createContext<TableUpdateContextType>({
 			showConfirmationModal: () => Promise.resolve(false),
 			ConfirmationModal: <></>,
 		},
+		isUpdating: false,
+		preData: [],
 	},
 	// availableRoles: [],
 });

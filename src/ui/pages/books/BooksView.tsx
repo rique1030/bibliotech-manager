@@ -27,8 +27,8 @@ const searchFilter = [
 ];
 
 const URL = {
-	update: "/main/books/update",
-	delete: "/main/books/delete",
+	update: "/main/books/manage-books/edit-existing-books",
+	delete: "/main/books/manage-books/remove-books",
 };
 
 function BooksView() {
@@ -39,16 +39,22 @@ function BooksView() {
 		rowData: { setRows },
 		columnData: { setColumns },
 	} = useContext(TableContext);
-
 	/**
 	 * Search
 	 */
-	const search = useSearch({ fetchData, defaulFilter: "access_number" });
-	const { rowData } = search;
+	const search = useSearch({
+		fetchData,
+		defaultFilter: "access_number",
+		queryKey: "booksView",
+	});
+	const { rowData, isLoading } = search;
+
+	useEffect(() => {
+		setColumns(columns);
+	}, []);
 
 	useEffect(() => {
 		setRows(rowData);
-		setColumns(columns);
 	}, [rowData]);
 
 	return (
@@ -56,7 +62,7 @@ function BooksView() {
 			<MainContainer>
 				<SearchPanel />
 				<Divider variant="middle" />
-				<ViewTable>
+				<ViewTable isLoading={isLoading}>
 					<TableHeader selectable />
 					<BooksData selectable />
 				</ViewTable>

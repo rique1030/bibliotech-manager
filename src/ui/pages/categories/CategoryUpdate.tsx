@@ -1,5 +1,5 @@
 import { useContext, useLayoutEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Divider, Stack, Button, Tooltip } from "@mui/material";
 import { TableContext } from "../context/TableContext";
 import { TableUpdateContext } from "../context/TableUpdateContext";
@@ -31,35 +31,29 @@ function CategoryUpdate() {
 
 	const payload = {
 		entries: rows,
+		entryIds: state,
 	};
 
 	const options = {
-		url: "/main/categories/update",
+		url: "/main/categories/manage-categories/edit-existing-categories",
 		field,
 		payload: payload,
+		queryKey: "categoryUpdate",
 	};
 
-	const useupdate = useUpdate({ updateData, options });
+	const useupdate = useUpdate({ updateData, getData: fetchData, options });
 	const {
 		confirmationModal: { ConfirmationModal },
+		preData,
 	} = useupdate;
 
 	useLayoutEffect(() => {
 		setColumns(columns);
-		if (!state) {
-			setRows([]);
-			return;
-		}
-		try {
-			const response = fetchData(state as RequestByID);
-			response.then((data) => {
-				if (data.success === false) return;
-				setRows(data?.data || []);
-			});
-		} catch (error) {
-			console.error(error);
-		}
 	}, [state]);
+
+	useLayoutEffect(() => {
+		setRows(preData?.data || []);
+	}, [preData]);
 
 	return (
 		<TableUpdateContext.Provider value={{ useupdate }}>
@@ -78,6 +72,8 @@ function CategoryUpdate() {
 }
 
 function UpdateFooter() {
+	const navigate = useNavigate();
+	const handleGoback = () => navigate("/main/categories/manage-categories");
 	const {
 		useupdate: { handleUpdate },
 	} = useContext(TableUpdateContext);
@@ -85,7 +81,16 @@ function UpdateFooter() {
 		rowData: { rows },
 	} = useContext(TableContext);
 	return (
-		<Stack direction="row" spacing={2}>
+		<Stack direction="row" justifyContent="flex-end" spacing={2}>
+			<span>
+				<Button
+					onClick={() => handleGoback()}
+					variant="contained"
+					sx={{ height: "2rem" }}
+				>
+					Back
+				</Button>
+			</span>
 			<Tooltip
 				placement="top"
 				title={

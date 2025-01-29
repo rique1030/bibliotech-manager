@@ -103,6 +103,8 @@ declare global {
 			getAccount: () => promise<any>;
 			saveAccount: (account: accountType) => promise<any>;
 			deleteAccount: () => promise<any>;
+			saveTheme: (theme: string) => promise<any>;
+			getTheme: () => promise<any>;
 		};
 		nodeApi: {
 			Buffer: typeof Buffer;

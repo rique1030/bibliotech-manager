@@ -21,3 +21,9 @@ fix phone
 
 only have the overdue on the book borrows
 retrieve book on phone before passing
+
+
+category name, desction, count ng books, array of all books ids
+
+
+

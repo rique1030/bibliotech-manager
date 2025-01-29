@@ -1,36 +1,16 @@
 import ViewTable from "../components/Table/ViewTable";
 import MainContainer from "../components/MainContainer";
 import BooksData from "../components/Table/Books/BooksData";
-import { memo, useContext, useLayoutEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import {
-	Divider,
-	Stack,
-	Button,
-	Dialog,
-	DialogTitle,
-	Box,
-	Typography,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
-	Tooltip,
-	Paper,
-	styled,
-	List,
-	ListItem,
-	Table,
-	TableBody,
-	TableCell,
-	TableRow,
-} from "@mui/material";
+import { useContext, useLayoutEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Divider, Stack, Tooltip } from "@mui/material";
+import Button from "@mui/material/Button";
 import columns from "../components/Table/columns/DefaultBookColumnsInterface";
 import { TableContext } from "../context/TableContext";
 import TableHeader from "../components/Table/TableHeader";
 import { TableUpdateContext } from "../context/TableUpdateContext";
 import { useUpdate } from "../hooks/useUpdate";
 import CallNumberDropdown from "../components/Table/Books/CallNumberDropdown";
-import ConfirmBorrow from "../components/BorrowingModal";
 
 const fetchData = async (payload: RequestByID): Promise<any> => {
 	return await window.requestBook.getByID(payload);
@@ -61,35 +41,29 @@ function BooksUpdate() {
 
 	const payload = {
 		entries: rows,
+		entryIds: state,
 	};
 
 	const options = {
-		url: "/main/books/update",
+		url: "/main/books/manage-books/edit-existing-books",
 		field,
 		payload: payload,
+		queryKey: "booksUpdate",
 	};
 
-	const useupdate = useUpdate({ updateData, options });
+	const useupdate = useUpdate({ updateData, getData: fetchData, options });
 	const {
 		confirmationModal: { ConfirmationModal },
+		preData,
 	} = useupdate;
 
 	useLayoutEffect(() => {
 		setColumns(columns);
-		if (!state) {
-			setRows([]);
-			return;
-		}
-		try {
-			const response = fetchData(state as RequestByID);
-			response.then((data) => {
-				if (data.success === false) return;
-				setRows(data?.data || []);
-			});
-		} catch (error) {
-			console.error(error);
-		}
 	}, [state]);
+
+	useLayoutEffect(() => {
+		setRows(preData?.data || []);
+	}, [preData]);
 
 	return (
 		<TableUpdateContext.Provider value={{ useupdate }}>
@@ -107,34 +81,45 @@ function BooksUpdate() {
 }
 
 function UpdateFooter() {
+	const navigate = useNavigate();
+	const handleGoback = () => navigate("/main/books/manage-books");
 	const {
-		useupdate: { handleUpdate },
+		useupdate: { handleUpdate, isUpdating },
 	} = useContext(TableUpdateContext);
 	const {
 		rowData: { rows },
 	} = useContext(TableContext);
 	return (
-		<Stack direction="row" spacing={2}>
+		<Stack direction="row" justifyContent="flex-end" spacing={2}>
+			<CallNumberDropdown />
+			<Button
+				onClick={() => handleGoback()}
+				variant="contained"
+				sx={{ height: "2rem" }}
+			>
+				Back
+			</Button>
 			<Tooltip
 				placement="top"
 				title={
 					rows.length
 						? "Apply changes to selected books"
+						: isUpdating
+						? "Applying changes..."
 						: "Please select books to apply changes"
 				}
 			>
 				<span>
 					<Button
-						disabled={rows.length === 0}
+						disabled={rows.length === 0 || isUpdating}
 						onClick={handleUpdate}
 						variant="contained"
 						sx={{ height: "2rem" }}
 					>
-						Apply&nbsp;Changes
+						{isUpdating ? "Applying..." : "Apply\u00A0changes"}
 					</Button>
 				</span>
 			</Tooltip>
-			<CallNumberDropdown />
 		</Stack>
 	);
 }

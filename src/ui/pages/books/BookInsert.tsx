@@ -1,7 +1,7 @@
 import ViewTable from "../components/Table/ViewTable";
 import MainContainer from "../components/MainContainer";
-import { useContext, useEffect, useLayoutEffect } from "react";
-import { Divider, Stack, Button, Tooltip, Typography } from "@mui/material";
+import { useContext, useLayoutEffect } from "react";
+import { Divider, Stack, Button, Tooltip } from "@mui/material";
 import BooksData from "../components/Table/Books/BooksData";
 import columns from "../components/Table/columns/DefaultBookColumnsInterface";
 import TableHeader from "../components/Table/TableHeader";
@@ -37,7 +37,7 @@ function BooksInsert() {
 	};
 
 	const options = {
-		url: "/main/books/view",
+		url: "/main/books/manage-books",
 		field,
 		payload: payload,
 	};

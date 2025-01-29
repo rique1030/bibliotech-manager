@@ -19,6 +19,7 @@ import AccountDelete from "./account/AccountDelete";
 import AccountUpdate from "./account/AccountUpdate";
 import BooksCopy from "./records/BookCopies";
 import BookBorrow from "./records/BookBorrows";
+import BookCategoryCount from "./records/BookCategoryCount";
 
 const router = createHashRouter([
 	{
@@ -37,19 +38,19 @@ const router = createHashRouter([
 				path: "books",
 				children: [
 					{
-						path: "view",
+						path: "manage-books",
 						element: <BooksView />,
 					},
 					{
-						path: "update",
+						path: "manage-books/edit-existing-books",
 						element: <BooksUpdate />,
 					},
 					{
-						path: "delete",
+						path: "manage-books/remove-books",
 						element: <BooksDelete />,
 					},
 					{
-						path: "insert",
+						path: "add-new-books",
 						element: <BooksInsert />,
 					},
 				],
@@ -58,19 +59,19 @@ const router = createHashRouter([
 				path: "categories",
 				children: [
 					{
-						path: "view",
+						path: "manage-categories",
 						element: <CategoryView />,
 					},
 					{
-						path: "insert",
+						path: "add-new-categories",
 						element: <CategoryInsert />,
 					},
 					{
-						path: "update",
+						path: "manage-categories/edit-existing-categories",
 						element: <CategoryUpdate />,
 					},
 					{
-						path: "delete",
+						path: "manage-categories/remove-categories",
 						element: <CategoryDelete />,
 					},
 				],
@@ -79,19 +80,19 @@ const router = createHashRouter([
 				path: "roles",
 				children: [
 					{
-						path: "view",
+						path: "manage-roles",
 						element: <RolesView />,
 					},
 					{
-						path: "insert",
+						path: "add-new-roles",
 						element: <RolesInsert />,
 					},
 					{
-						path: "update",
+						path: "manage-roles/edit-existing-roles",
 						element: <RolesUpdate />,
 					},
 					{
-						path: "delete",
+						path: "manage-roles/remove-roles",
 						element: <RolesDelete />,
 					},
 				],
@@ -100,19 +101,19 @@ const router = createHashRouter([
 				path: "accounts",
 				children: [
 					{
-						path: "view",
+						path: "manage-accounts",
 						element: <AccountView />,
 					},
 					{
-						path: "insert",
+						path: "add-new-accounts",
 						element: <AccountInsert />,
 					},
 					{
-						path: "update",
+						path: "manage-accounts/edit-existing-accounts",
 						element: <AccountUpdate />,
 					},
 					{
-						path: "delete",
+						path: "manage-accounts/remove-accounts",
 						element: <AccountDelete />,
 					},
 				],
@@ -121,7 +122,7 @@ const router = createHashRouter([
 				path: "records",
 				children: [
 					{
-						path: "book_copies",
+						path: "book-copies",
 						element: <BooksCopy />,
 					},
 					{
@@ -129,12 +130,12 @@ const router = createHashRouter([
 						element: <BookBorrow />,
 					},
 					{
-						path: "user_records",
+						path: "user-records",
 						element: <div>User Records Page</div>, // Replace with the actual component for User Records
 					},
 					{
-						path: "book_categories",
-						element: <div>Book Categories Page</div>, // Replace with the actual component for Book Categories
+						path: "book-categories",
+						element: <BookCategoryCount />, // Replace with the actual component for Book Categories
 					},
 				],
 			},
