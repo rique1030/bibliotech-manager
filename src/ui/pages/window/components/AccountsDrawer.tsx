@@ -4,15 +4,14 @@ import {
 	AccountBox,
 	FolderSharedOutlined,
 	PersonAddOutlined,
-	ManageAccountsOutlined,
-	PersonRemoveOutlined,
 	SupervisorAccountOutlined,
 	PlaylistAddCheck,
 	PlaylistAdd,
-	EditNoteOutlined,
-	PlaylistRemove,
 } from "@mui/icons-material";
+import { useContext } from "react";
+import { PermissionContext } from "../../context/PermissionContext";
 const AccountsDrawer = ({ expandedItems, handleExpandedItemChange }: any) => {
+	const { account, roles } = useContext(PermissionContext);
 	return (
 		<>
 			<SimpleTreeView
@@ -27,6 +26,7 @@ const AccountsDrawer = ({ expandedItems, handleExpandedItemChange }: any) => {
 					}
 				>
 					<CustomTreeItem
+						disabled={!account.view}
 						itemId="DISPLAYACCOUNTS"
 						label="Display Accounts"
 						src="/main/accounts/manage-accounts"
@@ -37,6 +37,7 @@ const AccountsDrawer = ({ expandedItems, handleExpandedItemChange }: any) => {
 						}
 					/>
 					<CustomTreeItem
+						disabled={!account.insert}
 						itemId="ADDACCOUNTS"
 						label="Add Accounts"
 						src="/main/accounts/add-new-accounts"
@@ -57,6 +58,7 @@ const AccountsDrawer = ({ expandedItems, handleExpandedItemChange }: any) => {
 					}
 				>
 					<CustomTreeItem
+						disabled={!roles.view}
 						itemId="DISPLAYROLES"
 						label="Display Roles"
 						src="/main/roles/manage-roles"
@@ -67,6 +69,7 @@ const AccountsDrawer = ({ expandedItems, handleExpandedItemChange }: any) => {
 						}
 					/>
 					<CustomTreeItem
+						disabled={!roles.insert}
 						itemId="ADDROLES"
 						label="Add Roles"
 						src="/main/roles/add-new-roles"

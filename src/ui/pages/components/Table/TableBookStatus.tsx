@@ -1,15 +1,14 @@
 import { Chip, Theme, useTheme, alpha, styled } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { TableContext } from "../../context/TableContext";
-import { Transform } from "@mui/icons-material";
 
-const StyledChip = styled(Chip)(({ theme }: { theme: Theme }) => ({
+const StyledChip = styled(Chip)(() => ({
 	justifySelf: "center",
 	fontSize: "0.8rem",
 	width: 150,
 	fontWeight: "bold",
 	"&.MuiChip-clickable": {
-		transition: "all 0.2s ease-in-out",
+		transition: "color 0.2s ease-in-out",
 		"&:hover": {
 			color: "white",
 		},
@@ -35,7 +34,6 @@ const GetStatus = ({
 	];
 	const [statusIndex, setStatusIndex] = useState(1);
 	const [statusDisplay, setStatusDisplay] = useState("select status");
-	// const isInitialRender = useRef(true);
 
 	React.useEffect(() => {
 		if (!statuses.includes(row?.status || "") && row?.status !== "overdue") {

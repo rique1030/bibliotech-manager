@@ -37,6 +37,7 @@ interface TableContextType {
 			description: string;
 		}[];
 	};
+	refetch: () => void;
 }
 
 export const TableContext = createContext<TableContextType>({
@@ -56,7 +57,6 @@ export const TableContext = createContext<TableContextType>({
 	handleRemoveEntry: () => {},
 	collapsibleManager: () => {},
 	handleEditEntry: () => {},
-	// handleAddEntry: () => {},
 	callNoFormatter: {
 		verifyFormat: () => false,
 		currentFormat: null,
@@ -64,4 +64,5 @@ export const TableContext = createContext<TableContextType>({
 		handleChangeFormat: () => {},
 		formats: [],
 	},
+	refetch: () => {},
 });

@@ -36,15 +36,19 @@ export function useUpdate({
 	 * Initial data fetching
 	 */
 
-	const { data: preData } = useQuery({
+	const { data: preData, refetch, isLoading } = useQuery({
 		queryKey: [options.queryKey, options.payload.entryIds],
 		queryFn: () => getData(options.payload.entryIds),
 		retry: 0,
 		staleTime: Infinity,
+		refetchOnMount: false,
 	});
 
 	useEffect(() => {
-		console.log(preData);
+		refetch();
+	}, []);
+
+	useEffect(() => {
 		if (!preData?.success) {
 			if (preData?.error) {
 				if (preData?.error === "ECONNREFUSED") {
@@ -83,7 +87,7 @@ export function useUpdate({
 			);
 		},
 	});
-	
+
 	const handleUpdate = async () => {
 		if (!VerifyRequiredFields(options.field, options.payload.entries)) {
 			showTimedAlert("error", "All fields are required");
@@ -102,13 +106,14 @@ export function useUpdate({
 		}
 		const allow = await confirmationModal.showConfirmationModal();
 		if (allow) {
-			mutation.mutate(options.payload.entries);
+			const newEntries : any = convertCategoriesToCategoryIDs(options.payload.entries);
+			mutation.mutate(newEntries);
 		}
 	};
 
 	const verifyRoles = (entries: any[]) => {
 		for (const entry of entries) {
-			if (entry && entry.role_name) {
+			if (entry && entry.role_name && entry.hasOwnProperty("account_view")) {
 				const isNotValid =
 					entry.role_name == "Admin" || entry.role_name == "User";
 				if (isNotValid) {
@@ -131,10 +136,24 @@ export function useUpdate({
 		return true;
 	};
 
+	const convertCategoriesToCategoryIDs = (entries: any[]) => {
+		for (const entry of entries) {
+			
+			if (entry && entry.hasOwnProperty("book_categories")) {
+				const newIds = entry.book_categories.map((category: any) => category.id);
+				entry.new_ids = newIds
+				delete entry.book_categories
+				delete entry.book_category_ids
+			}
+		}
+		return entries;
+	}
+
 	return {
 		handleUpdate,
 		resultAlert,
 		confirmationModal,
+		isLoading,
 		isUpdating: mutation.isPending,
 		preData,
 	};

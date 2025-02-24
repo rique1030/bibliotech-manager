@@ -24,16 +24,16 @@ ipcMain.handle(
 	}
 );
 
-ipcMain.handle(
-	"user-records-get-paged",
-	async (event, payload: GetPagedPayload) => {
-		return await useRequest(
-			CONFIG.URL.RECORDS.GET_USER_RECORDS,
-			"POST",
-			payload
-		);
-	}
-);
+// ipcMain.handle(
+// 	"user-records-get-paged",
+// 	async (event, payload: GetPagedPayload) => {
+// 		return await useRequest(
+// 			CONFIG.URL.RECORDS.GET_USER_RECORDS,
+// 			"POST",
+// 			payload
+// 		);
+// 	}
+// );
 
 ipcMain.handle(
 	"book-category-count-get-paged",

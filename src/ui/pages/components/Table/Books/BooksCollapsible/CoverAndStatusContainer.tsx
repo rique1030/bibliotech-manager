@@ -1,14 +1,5 @@
-import { alpha, Box, Button, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import BorderedImage from "./BorderedImage";
-import GetStatus from "../../TableBookStatus";
-import { useContext, useEffect, useRef, useState } from "react";
-import { TableContext } from "../../../../context/TableContext";
-import { Buffer } from "buffer";
-import CONFIG from "../../../../../config";
-import IsImageValid from "../../../../hooks/useIsImageValid";
-import CroperModalProvider, {
-	CropperModalContext,
-} from "../../../CropperModal";
 import useUploadImage from "../../../../hooks/useUploadImage";
 import ImageButton from "../../../StyledComponent/ImageButton";
 import { convertCover } from "../../../../../utils/ImageHelper";
@@ -30,7 +21,6 @@ const CoverAndStatusContainer = ({
 				metadataKey="cover_image"
 				src={row.cover_image && convertCover(row.cover_image)}
 			/>
-			<GetStatus edit={edit} status={row.status} row={row} />
 		</Box>
 	);
 };
@@ -39,7 +29,6 @@ function EditableImage({
 	edit,
 	src,
 	row,
-	metadataKey,
 }: {
 	edit?: boolean | false;
 	src: any;
@@ -86,6 +75,7 @@ function EditableImage({
 			</>
 		);
 	}
+
 	return (
 		<BorderedImage
 			sx={{ width: 100, height: 150 }}

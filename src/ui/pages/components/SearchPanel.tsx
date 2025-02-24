@@ -1,6 +1,7 @@
 import {
 	Autocomplete,
 	Box,
+	IconButton,
 	TextField,
 	ToggleButton,
 	ToggleButtonGroup,
@@ -9,8 +10,12 @@ import {
 import { TableSearchContext } from "../context/TableSearchContext";
 import { useContext } from "react";
 import { TableContext } from "../context/TableContext";
+import ReplayIcon from "@mui/icons-material/Replay";
 
 const SearchPanel = () => {
+	const {
+		search: { refresh },
+	} = useContext(TableSearchContext);
 	return (
 		<Box
 			sx={{
@@ -23,6 +28,9 @@ const SearchPanel = () => {
 			}}
 		>
 			<SearchBar />
+			<IconButton onClick={refresh} color="primary" sx={{ height: "2rem" }}>
+				<ReplayIcon />
+			</IconButton>
 			<SearchFilter />
 		</Box>
 	);
@@ -82,12 +90,7 @@ const SearchBar = () => {
 			}}
 			onInputChange={(_, value) => handleSubmit({ target: { value } } as any)}
 			renderInput={(params) => (
-				<TextField
-					{...params}
-					// onChange={(e) => onChange(e.target.value)}
-					label="Search"
-					size="small"
-				/>
+				<TextField {...params} label="Search" size="small" />
 			)}
 		/>
 	);

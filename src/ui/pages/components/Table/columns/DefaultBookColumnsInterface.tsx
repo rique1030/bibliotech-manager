@@ -1,40 +1,31 @@
 const columns: columnsInterface[] = [
 	{
-		id: "access_number",
-		label: "Acc\u00A0No.",
-		title: "Access Number",
-		minWidth: 20,
-		maxWidth: 150,
-		width: "99rem",
-		align: "right",
-	},
-	{
 		id: "call_number",
-		label: "Call\u00A0No.",
+		label: "CALL\u00A0NO.",
 		title: "Call Number",
 		minWidth: 20,
 		maxWidth: 150,
 	},
 	{
 		id: "title",
-		label: "Title",
+		label: "TITLE",
 		title: "Title",
 		minWidth: 20,
 		maxWidth: 150,
 	},
 	{
 		id: "author",
-		label: "Author",
+		label: "AUTHOR",
 		title: "Author",
 		minWidth: 20,
 		maxWidth: 150,
 	},
 	{
-		id: "status",
-		label: "Status",
-		title: "Status",
-		minWidth: 5,
-		maxWidth: 100,
+		id: "publisher",
+		label: "PUBLISHER",
+		title: "Publisher",
+		minWidth: 20,
+		maxWidth: 150,
 	},
 ];
 

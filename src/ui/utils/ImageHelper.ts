@@ -18,5 +18,5 @@ export function convertProfile(profile: string): string {
 
 export function convertQRCode(qrCode: string | null): string {
 	if (!qrCode) return "";
-	return `${CONFIG.SERVER_HOST}/images/qr_codes/${qrCode}.png`;
+	return `${CONFIG.SERVER_HOST}/qr-codes/${qrCode}.png`;
 }

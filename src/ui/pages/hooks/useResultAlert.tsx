@@ -56,7 +56,7 @@ export const CustomAlert = ({
 }) => {
 	return (
 		<Snackbar
-			anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+			anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
 			open={open}
 			autoHideDuration={duration}
 			onClose={onClose}

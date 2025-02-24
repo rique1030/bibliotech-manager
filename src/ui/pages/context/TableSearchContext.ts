@@ -13,11 +13,13 @@ interface TableSearchContextType {
 		currentPage: number;
 		isLoading: boolean;
 		rowData: any;
+		refresh: () => void;
 	};
 	searchFilter: { filter: string; value: string }[];
 	URL: {
-		update: string | null;
-		delete: string | null;
+		update?: string | null;
+		delete?: string | null;
+		qr?: string | null;
 	};
 }
 
@@ -34,7 +36,8 @@ export const TableSearchContext = createContext<TableSearchContextType>({
 		currentPage: 0,
 		isLoading: false,
 		rowData: [],
+		refresh: () => {},
 	},
 	searchFilter: [{ filter: "", value: "" }],
-	URL: { update: "", delete: "" },
+	URL: { update: "", delete: "", qr: "" },
 });

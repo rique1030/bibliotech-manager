@@ -61,7 +61,7 @@ const TableHeader = ({
 				<ActionCell selectable={selectable} indented={indented} />
 				<StyledCell
 					color="white"
-					column={{ label: "No." }}
+					column={{ label: "No.", align: "center" }}
 					length={columns.length}
 					index={0}
 					sx={{
@@ -69,7 +69,7 @@ const TableHeader = ({
 						minWidth: "1rem",
 					}}
 				>
-					No.
+					#
 				</StyledCell>
 				{columns.map((column, index) => (
 					<StyledCell

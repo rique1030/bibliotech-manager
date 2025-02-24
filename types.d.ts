@@ -12,7 +12,7 @@ declare global {
 		minWidth?: number;
 		maxWidth?: number;
 		width?: number | string;
-		align?: "right";
+		align?: "right" | "center" | "left";
 	}
 
 	interface TableHeaderProps {
@@ -85,7 +85,7 @@ declare global {
 			insertMultiple: (payload: InsertBooksPayload) => promise<any>;
 			getPaged: (payload: GetPagedPayload) => promise<any>;
 			getByID: (payload: RequestByID) => promise<any>;
-			getByAccessNumber: (payload: string[]) => promise<any>;
+			// getByAccessNumber: (payload: string[]) => promise<any>;
 			update: (payload: BookUpdatePayload) => promise<any>;
 			delete: (payload: { id: RequestByID }) => promise<any>;
 		};
@@ -112,7 +112,7 @@ declare global {
 		requestRecord: {
 			getBookCount: (payload: GetPagedPayload) => promise<any>;
 			getBorrowedBooks: (payload: GetPagedPayload) => promise<any>;
-			getUserRecords: (payload: GetPagedPayload) => promise<any>;
+			// getUserRecords: (payload: GetPagedPayload) => promise<any>;
 			getBookCategoryCount: (payload: GetPagedPayload) => promise<any>;
 		};
 		webSocket: {

@@ -45,15 +45,6 @@ const RecordsDrawer = ({ expandedItems, handleExpandedItemChange }: any) => {
 						}
 					/>
 					<CustomTreeItem
-						itemId="SELECTUSERRECORDS"
-						label="User Records"
-						icon={
-							<FolderSharedOutlined
-								sx={{ fontSize: "1.2rem", color: "primary.main" }}
-							/>
-						}
-					/>
-					<CustomTreeItem
 						itemId="SELECTBOOKCATEGORIES"
 						label="Book Categories"
 						src="/main/records/book-categories"

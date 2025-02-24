@@ -5,6 +5,7 @@ import {
 	Box,
 	Typography,
 	CircularProgress,
+	Grid2,
 } from "@mui/material";
 import React, { useContext } from "react";
 import { TableContext } from "../../context/TableContext";
@@ -13,11 +14,13 @@ import HighlightAltIcon from "@mui/icons-material/HighlightAlt";
 interface ViewTableProps {
 	children: React.ReactNode;
 	isLoading?: boolean;
+	image?: boolean;
 }
 
 const ViewTable: React.FC<ViewTableProps> = ({
 	children,
 	isLoading = false,
+	image = false,
 }) => {
 	const [fade, setFade] = React.useState(false);
 	const {
@@ -31,6 +34,8 @@ const ViewTable: React.FC<ViewTableProps> = ({
 		}
 		setFade(false);
 	}, [rows]);
+
+	
 
 	return (
 		<Box
@@ -48,9 +53,53 @@ const ViewTable: React.FC<ViewTableProps> = ({
 				backgroundColor: "background.paper",
 			})}
 		>
-			<Table stickyHeader>{children}</Table>
-			{rows.length === 0 && (
-				<ContentIndicator isLoading={isLoading} fade={fade} />
+			{!image ? (
+				<>
+					<Table stickyHeader>{children}</Table>
+					{rows.length === 0 && (
+						<ContentIndicator isLoading={isLoading} fade={fade} />
+					)}
+				</>
+			) : (
+				<Box
+					sx={{
+						height: "100%",
+						width: "100%",
+						display: "flex",
+						overflow: "auto",
+						position: "relative",
+					}}
+				>
+					<Box
+						sx={{
+							position: "absolute",
+							top: 0,
+							left: 0,
+							right: 0,
+							bottom: 0,
+							display: "flex",
+							justifyContent: "center",
+						}}
+					>
+						{rows.length === 0 ? (
+							<ContentIndicator isLoading={isLoading} fade={fade} />
+						) : (
+							<Grid2
+								container
+								columns={5}
+								columnSpacing={"2.5%"}
+								rowSpacing={"1rem"}
+								sx={{
+									margin: "10px",
+									height: "fit-content",
+									width: "100%",
+								}}
+							>
+								{children}
+							</Grid2>
+						)}
+					</Box>
+				</Box>
 			)}
 		</Box>
 	);

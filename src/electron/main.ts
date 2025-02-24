@@ -36,7 +36,7 @@ const createWindow = () => {
 	if (isDev()) {
 		win.loadURL("http://localhost:5123");
 	} else {
-		win.removeMenu(); // Remove the default menu
+		// win.removeMenu(); // Remove the default menu
 		win.loadFile(path.join(app.getAppPath(), "/dist-react/index.html"));
 	}
 

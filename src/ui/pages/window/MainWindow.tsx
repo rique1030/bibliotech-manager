@@ -1,35 +1,34 @@
-import {
-	Alert,
-	AppBar,
-	Avatar,
-	Badge,
-	Box,
-	Breadcrumbs,
-	Button,
-	ListItemIcon,
-	Menu,
-	MenuItem,
-	Paper,
-	Snackbar,
-	SnackbarCloseReason,
-	styled,
-	Toolbar,
-	Typography,
-} from "@mui/material";
-import { useContext, useEffect, useState } from "react";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import Alert from "@mui/material/Alert";
+import AppBar from "@mui/material/AppBar";
+import Avatar from "@mui/material/Avatar";
+import Badge from "@mui/material/Badge";
+import Box from "@mui/material/Box";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+import Button from "@mui/material/Button";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Paper from "@mui/material/Paper";
+import Snackbar from "@mui/material/Snackbar";
+import styled from "@mui/material/styles/styled";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
 import DrawerPanel from "./DrawerPanel";
 import TableContextProvider from "../context/TableContextProvider";
 import ConfirmBorrow from "../components/BorrowingModal";
 import LogoIcon from "../components/LogoIcon";
 import ConverToLetterCase from "../helper/ConvertToLetterCase";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import { convertProfile } from "../../utils/ImageHelper";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { AppContext } from "../../App";
 import lightTheme from "../themes/LightTheme";
 import ContrastIcon from "@mui/icons-material/Contrast";
+import { SnackbarCloseReason } from "@mui/material/Snackbar";
+import { useContext, useEffect, useState } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { convertProfile } from "../../utils/ImageHelper";
+import { AppContext } from "../../App";
 import { useQuery } from "@tanstack/react-query";
+import { PermissionContextProvider } from "../context/PermissionContext";
 
 const StyledLink = styled(Link)(() => ({}));
 
@@ -80,7 +79,6 @@ function useRequestModal() {
 	useEffect(() => {
 		window.electron.on("request_borrow", (_event, data) => {
 			setData(data);
-			console.log(data);
 			setIncomingRequestOpen(true);
 		});
 	}, []);
@@ -134,15 +132,14 @@ function MainWindow() {
 	const [bread, setBread] = useState<string[]>([]);
 	const [profile, setProfile] = useState<any>({});
 	const [accountId, setAccountId] = useState<number[]>([]);
-
+	
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
 				const data = await window.storedSettings.getAccount();
 				setAccountId([data.id]);
-				console.log(data?.id);
 			} catch (error) {
-				console.log(error);
+				console.error(error);
 			}
 			// setTimeout(async () => {
 			// }, 3000);
@@ -151,7 +148,6 @@ function MainWindow() {
 	}, []);
 
 	useEffect(() => {
-		console.log(location.pathname);
 		const loc = location.pathname
 			.split("/")
 			.filter((x) => x !== "" && x !== "main");
@@ -165,14 +161,11 @@ function MainWindow() {
 		refetchInterval: 60000,
 		staleTime: 0,
 		refetchIntervalInBackground: true,
-		refetchOnWindowFocus: true,
 		refetchOnReconnect: true,
-		refetchOnMount: true,
 	});
 
 	useEffect(() => {
 		if (data) setProfile(data?.data?.[0]);
-		console.log(data?.data?.[0]);
 	}, [data]);
 
 	const handlekebab = (str: string) => {
@@ -290,19 +283,21 @@ function MainWindow() {
 					<ProfileAvatar profile={profile} />
 				</Toolbar>
 			</AppBar>
-			<TableContextProvider>
-				<Box
-					sx={{
-						width: "100%",
-						height: "100%",
-						maxHeight: "100%",
-						display: "flex",
-					}}
-				>
-					<DrawerPanel />
-					<Outlet />
-				</Box>
-			</TableContextProvider>
+			<PermissionContextProvider>
+				<TableContextProvider>
+					<Box
+						sx={{
+							width: "100%",
+							height: "100%",
+							maxHeight: "100%",
+							display: "flex",
+						}}
+					>
+						<DrawerPanel />
+						<Outlet />
+					</Box>
+				</TableContextProvider>
+			</PermissionContextProvider>
 		</Box>
 	);
 }

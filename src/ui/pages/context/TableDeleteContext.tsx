@@ -13,6 +13,8 @@ interface TableDeleteContextType {
 		showConfirmationModal: () => Promise<boolean>;
 		ConfirmationModal: JSX.Element;
 	};
+	isDeleting: boolean;
+	preData: any;
 }
 
 export const TableDeleteContext = createContext<TableDeleteContextType>({
@@ -24,4 +26,6 @@ export const TableDeleteContext = createContext<TableDeleteContextType>({
 		showConfirmationModal: async () => false,
 		ConfirmationModal: <></>,
 	},
+	isDeleting: false,
+	preData: [],
 });

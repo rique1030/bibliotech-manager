@@ -4,6 +4,7 @@ import useSelectAll from "../hooks/useSelectAll";
 import { TableContext } from "./TableContext";
 import { useLayoutEffect, useState } from "react";
 import { useCallNoFormatter } from "../hooks/useCallNoFormatter";
+import { useQuery } from "@tanstack/react-query";
 
 const getRoles = async (): Promise<any> => {
 	return await window.requestRole.getAll();
@@ -25,12 +26,15 @@ function TableContextProvider({ children }: { children: React.ReactNode }) {
 	const { setSelectedItems } = selectAll;
 	const { OpenedRowIndex, handleRowClick } = useCollapsibleManager();
 
+
 	const handleRemoveEntry = (id: number) => {
 		const updatedRows = rows.filter((row) => row.id !== id);
 		setRows(updatedRows);
 	};
 
 	const handleEditEntry = (index: number, key: string, value: any) => {
+		console.log(index, key, value);
+		console.log(rows);
 		setRows((prevRows) =>
 			prevRows.map((entry) => {
 				if (entry.id === index) {
@@ -45,45 +49,33 @@ function TableContextProvider({ children }: { children: React.ReactNode }) {
 	useLayoutEffect(() => {
 		handleRowClick(-1);
 		setSelectedItems([]);
-		if (location.pathname.includes("accounts")) {
-			fetchRoles();
-		}
-		if (location.pathname.includes("books")) {
-			fetchCategories();
-		}
 	}, [location.pathname]);
 
-	const fetchRoles = async () => {
-		try {
-			const fetchRoles = async () => {
-				try {
-					const roles = getRoles();
-					roles.then((data) => {
-						if (data.success === false) return;
-						setAvailableRoles(data.data);
-					});
-				} catch (error) {
-					console.error("Failed to fetch roles:", error);
-				}
-			};
+	const handleRefetch = () => {
+		refetchRoles();
+		refetchCategories();
+	}
 
-			fetchRoles();
-		} catch (error) {
-			console.error("Failed to fetch roles:", error);
-		}
-	};
+	const { data: roles, refetch: refetchRoles } = useQuery<any>({
+		queryKey: ["roles"],
+		queryFn: () => getRoles(),
+		staleTime: 60 * 1000,
+	});
 
-	const fetchCategories = async () => {
-		try {
-			const categories = getCategories();
-			categories.then((data) => {
-				if (data.success === false) return;
-				setAvailableCategories(data.data);
-			});
-		} catch (error) {
-			console.error("Failed to fetch categories:", error);
+	const { data: categories, refetch: refetchCategories } = useQuery<any>({
+		queryKey: ["categories"],
+		queryFn: () => getCategories(),
+		staleTime: 60 * 1000,
+	});
+
+	useLayoutEffect(() => {
+		if (roles?.success) {
+			setAvailableRoles(roles.data);
 		}
-	};
+		if (categories?.success) {
+			setAvailableCategories(categories.data);
+		}
+	}, [roles, categories]);
 
 	return (
 		<TableContext.Provider
@@ -97,6 +89,7 @@ function TableContextProvider({ children }: { children: React.ReactNode }) {
 				collapsibleManager: { OpenedRowIndex, handleRowClick },
 				handleEditEntry,
 				callNoFormatter,
+				refetch: handleRefetch
 			}}
 		>
 			{children}

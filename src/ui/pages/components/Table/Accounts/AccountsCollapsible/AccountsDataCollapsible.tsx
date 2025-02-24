@@ -1,28 +1,24 @@
-import {
-	alpha,
-	Box,
-	Button,
-	Chip,
-	FormControl,
-	FormLabel,
-	IconButton,
-	InputLabel,
-	MenuItem,
-	Paper,
-	Select,
-	styled,
-	Tooltip,
-} from "@mui/material";
+import Box from "@mui/material/Box";
 import CollapsibleCotainer from "../../../StyledComponent/CollapsibleContainer";
 import DetailsTextfield from "../../DetailsTextField";
+import FormControl from "@mui/material/FormControl";
+import IconButton from "@mui/material/IconButton";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Paper from "@mui/material/Paper";
+import Select from "@mui/material/Select";
+import styled from "@mui/system/styled";
+import Tooltip from "@mui/material/Tooltip";
 import VerifiedIcon from "@mui/icons-material/Verified";
-import { useContext, useEffect, useState } from "react";
-import { TableContext } from "../../../../context/TableContext";
 import useUploadImage from "../../../../hooks/useUploadImage";
 import ImageButton from "../../../StyledComponent/ImageButton";
 import BorderedImage from "../../Books/BooksCollapsible/BorderedImage";
-import CONFIG from "../../../../../config";
+import { alpha } from "@mui/material";
+import { useContext } from "react";
+import { TableContext } from "../../../../context/TableContext";
 import { convertProfile } from "../../../../../utils/ImageHelper";
+import RoleChip from "../../RoleChip";
+import columns from "../../columns/DefaultAccountsColumnsInterface";
 
 type Props = {
 	row: any;
@@ -77,34 +73,34 @@ function UploadImageButton({
 		image_blob: row.profile_pic_blob,
 		metadata: { key: "profile_pic", id: row.id },
 	});
+  	
 
-	if (edit) {
-		return (
-			<Container1>
-				<input
-					type="file"
-					ref={fileInputRef}
-					style={{ display: "none" }}
-					accept="image/*"
-					onChange={handleUpload}
-				/>
-				<ImageButton
-					sx={{
-						width: "6rem",
-						height: "6rem",
-						"&:before": {
-							backgroundImage: imageSource ? `url(${imageSource})` : "none",
-						},
-					}}
-					onClick={handleButtonClick}
-					variant="outlined"
-				>
-					UPLOAD
-				</ImageButton>
-			</Container1>
-		);
-	}
-	return (
+	const uploadButton = (
+		<Container1>
+			<input
+				type="file"
+				ref={fileInputRef}
+				style={{ display: "none" }}
+				accept="image/*"
+				onChange={handleUpload}
+			/>
+			<ImageButton
+				sx={{
+					width: "6rem",
+					height: "6rem",
+					"&:before": {
+						backgroundImage: imageSource ? `url(${imageSource})` : "none",
+					},
+				}}
+				onClick={handleButtonClick}
+				variant="outlined"
+			>
+				UPLOAD
+			</ImageButton>
+		</Container1>
+	);
+
+	const displayImage = (
 		<BorderedImage
 			sx={{ width: "6rem", height: "6rem" }}
 			src={imageSource || (row.profile_pic && convertProfile(row.profile_pic))}
@@ -112,6 +108,8 @@ function UploadImageButton({
 			alt="Profile"
 		/>
 	);
+
+	return edit ? uploadButton : displayImage;
 }
 
 const Container = styled(Box)(() => ({
@@ -130,21 +128,6 @@ const HorizontalContaner = styled(Box)(() => ({
 
 function DetailsContainer({ edit, row }: { edit?: boolean | false; row: any }) {
 	const { availableRoles } = useContext(TableContext);
-	// const { availableRoles: insertRoles } = useContext(TableInsertContext);
-	// const { availableRoles: updateRoles } = useContext(TableUpdateContext);
-
-	// useEffect(() => {
-	// 	if (!edit) return;
-	// 	if (insertRoles && insertRoles?.length > 0) {
-	// 		setRoles(insertRoles);
-	// 		return;
-	// 	}
-	// 	if (updateRoles && updateRoles?.length > 0) {
-	// 		setRoles(updateRoles);
-	// 		return;
-	// 	}
-	// }, []);
-
 	const { handleEditEntry: handleEdit } = useContext(TableContext);
 
 	return (
@@ -247,6 +230,7 @@ function DetailsContainer({ edit, row }: { edit?: boolean | false; row: any }) {
 				/>
 			</HorizontalContaner>
 			<HorizontalContaner>
+				<div className="" style={{ width: "5rem" }}></div>
 				<DetailsTextfield
 					disabled={!edit}
 					label="Email"
@@ -258,14 +242,14 @@ function DetailsContainer({ edit, row }: { edit?: boolean | false; row: any }) {
 					type="password"
 					disabled={!edit}
 					label="Password"
-					iniitialValue={row.first_name}
+					iniitialValue={row.password}
 					required={edit || false}
 					dataIndex={{ id: row.id, key: "password" }}
 				/>
-				{edit && (
+				{edit ? (
 					<LabeledSelect
 						defaultValue={row.role_id}
-						disabled={row.id === 1}
+						disabled={row.id === "4DM1N"}
 						label="role_id"
 						onChange={(e: any) => handleEdit(row.id, "role_id", e.target.value)}
 					>
@@ -277,7 +261,13 @@ function DetailsContainer({ edit, row }: { edit?: boolean | false; row: any }) {
 							);
 						})}
 					</LabeledSelect>
-				)}
+				) : <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+					<RoleChip column={{
+					id: "role_name",
+					label: "ROLE",
+					title: "Role",
+				}} columns={columns} color={row.color} newValue={row.role_name} wrapped={false} />
+				</Box> }
 			</HorizontalContaner>
 		</Container>
 	);

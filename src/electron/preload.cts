@@ -68,9 +68,9 @@ electron.contextBridge.exposeInMainWorld("requestBook", {
 		return await ipcRenderer.invoke("books-get-by-id", payload);
 	},
 
-	getByAccessNumber: async (payload: RequestByID) => {
-		return await ipcRenderer.invoke("books-get-by-access-number", payload);
-	},
+	// getByAccessNumber: async (payload: RequestByID) => {
+	// 	return await ipcRenderer.invoke("books-get-by-access-number", payload);
+	// },
 
 	update: async (payload: RequestByID) => {
 		return await ipcRenderer.invoke("books-update", payload);
@@ -146,9 +146,9 @@ electron.contextBridge.exposeInMainWorld("requestRecord", {
 		return await ipcRenderer.invoke("book-borrow-get-paged", payload);
 	},
 
-	getUserRecords: async (payload: GetPagedPayload) => {
-		return await ipcRenderer.invoke("user-records-get-paged", payload);
-	},
+	// getUserRecords: async (payload: GetPagedPayload) => {
+	// 	return await ipcRenderer.invoke("user-records-get-paged", payload);
+	// },
 
 	getBookCategoryCount: async (payload: GetPagedPayload) => {
 		return await ipcRenderer.invoke("book-category-count-get-paged", payload);

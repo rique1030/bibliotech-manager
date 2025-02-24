@@ -33,6 +33,7 @@ export function useInsert({ insertData, options }: any) {
 	});
 
 	const handleInsert = async () => {
+		console.log(options.payload.entries);
 		if (!VerifyRequiredFields(options.field, options.payload.entries)) {
 			showTimedAlert("error", "All fields are required");
 			return;
@@ -49,5 +50,10 @@ export function useInsert({ insertData, options }: any) {
 			mutation.mutate(filteredPayload);
 		}
 	};
-	return { handleInsert, resultAlert, confirmationModal };
+	return {
+		handleInsert,
+		resultAlert,
+		confirmationModal,
+		isInserting: mutation.isPending,
+	};
 }

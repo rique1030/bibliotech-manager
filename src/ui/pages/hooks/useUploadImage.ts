@@ -24,29 +24,26 @@ export default function useUploadImage({
 		cropper: { showCropperModal },
 	} = useContext(CropperModalContext);
 
+	const valid: boolean = useIsImageValid(src);
 	const [imageSource, setImageSource] = useState<string | undefined>();
 	const [loading, setLoading] = useState(true);
 
-	const valid: boolean = useIsImageValid(src);
 
 	useEffect(() => {
 		if (edit) {
-			if (valid && !image_blob) {
-				setImageSource(src);
-				setLoading(false);
-				return;
-			}
 			if (image_blob) {
 				setImageSource(image_blob);
-				setLoading(false);
+			} else if (valid) {
+				setImageSource(src);
 			} else {
 				setImageSource("");
 			}
-		} else {
-			setLoading(!valid);
-			setImageSource(src);
-		}
-	}, [image_blob, src]);
+			setLoading(false);
+			return;
+		} 
+		setImageSource(src);
+		setLoading(!valid);
+	}, [image_blob, src, edit]);
 
 	const handleButtonClick = () => {
 		fileInputRef.current?.click();

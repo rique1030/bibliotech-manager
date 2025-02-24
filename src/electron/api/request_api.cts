@@ -31,7 +31,7 @@ const useRequest: RequestInterface = async (
 		headers: { "Content-Type": "application/json" },
 		data: method === "POST" ? payload : null,
 	};
-
+	console.log(url, options, payload);
 	try {
 		const response: Response = await axios(options);
 		return {
@@ -41,10 +41,12 @@ const useRequest: RequestInterface = async (
 			message: response.data?.message || null,
 		};
 	} catch (error: any) {
+
 		return {
 			data: null,
 			success: false,
 			error: error.code,
+			full_error: error,
 			message: null,
 		};
 	}

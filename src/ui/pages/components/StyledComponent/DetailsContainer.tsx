@@ -3,8 +3,8 @@ import { styled } from "@mui/system";
 
 const DetailsContainer = styled(Box)(() => ({
 	display: "flex",
-	flexDirection: "row",
-	gap: "2rem",
+	flexDirection: "column",
+	gap: "0.8rem",
 	width: "100%",
 }));
 

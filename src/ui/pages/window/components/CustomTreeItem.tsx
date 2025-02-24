@@ -1,7 +1,7 @@
-import { Box, styled } from "@mui/material";
+import { Box, styled, Tooltip } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTreeItem2 } from "@mui/x-tree-view/useTreeItem2";
-import React, { cloneElement, useEffect } from "react";
+import React, { cloneElement } from "react";
 import {
 	TreeItem2Content,
 	TreeItem2IconContainer,
@@ -49,75 +49,89 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(
 		rootRef: ref,
 	});
 
-	const navigateToPage = () => {
+	const navigateToPage = async () => {
+		if (disabled) return;
 		if (!src) return;
-		console.log(src);
-		navigate(src);
+		setTimeout(() => navigate(src), 10);
 	};
 	return (
 		<TreeItem2Provider itemId={itemId}>
-			<TreeItem2Root {...getRootProps(other)} onClick={navigateToPage}>
-				<CustomTreeItemContent
-					sx={{ paddingLeft: "1rem" }}
-					{...getContentProps()}
-				>
-					<Box
-						sx={{
-							flexGrow: 1,
-							display: "flex",
-							gap: 1,
-							minHeight: "2rem",
-							alignItems: "center",
-						}}
-					>
-						{icon &&
-							cloneElement(icon, {
-								sx: {
-									fontSize: "1.2rem",
-									color: children
-										? "primary.main"
-										: location.pathname === src
-										? "primary.main"
-										: "text.secondary",
-								},
-							})}
-						<TreeItem2Label
-							sx={{
-								fontSize: children ? "1rem" : "0.8rem",
-								fontWeight: "bold",
-								color: children
-									? "primary.main"
-									: location.pathname === src
-									? "primary.main"
-									: "text.secondary",
-								whiteSpace: "nowrap",
-							}}
-							{...getLabelProps()}
-						/>
-					</Box>
-					<TreeItem2IconContainer
-						sx={{
-							color: "primary.main",
-							width: "1.5rem",
-							"& svg": { fontSize: "1.5rem" },
-						}}
-						{...getIconContainerProps()}
-					>
-						<TreeItem2Icon status={status} />
-					</TreeItem2IconContainer>
-				</CustomTreeItemContent>
-				{children && (
-					<TreeItem2GroupTransition
-						sx={{
-							paddingLeft: "0.5rem",
-							borderLeft: "1px dashed",
-							borderColor: "divider",
-							marginLeft: "1.5rem",
-						}}
-						{...getGroupTransitionProps()}
-					/>
-				)}
-			</TreeItem2Root>
+			<Tooltip
+				disableInteractive
+				placement="right"
+				title={
+					children
+						? ""
+						: disabled
+						? "You don't have enough permission to access this"
+						: ""
+				}
+			>
+				<span>
+					<TreeItem2Root {...getRootProps(other)} onClick={navigateToPage}>
+						<CustomTreeItemContent
+							sx={{ paddingLeft: "1rem" }}
+							{...getContentProps()}
+						>
+							<Box
+								sx={{
+									flexGrow: 1,
+									display: "flex",
+									gap: 1,
+									minHeight: "2rem",
+									alignItems: "center",
+								}}
+							>
+								{icon &&
+									cloneElement(icon, {
+										sx: {
+											fontSize: "1.2rem",
+											color: children
+												? "primary.main"
+												: location.pathname === src
+												? "primary.main"
+												: "text.secondary",
+										},
+									})}
+								<TreeItem2Label
+									sx={{
+										fontSize: children ? "1rem" : "0.8rem",
+										fontWeight: "bold",
+										color: children
+											? "primary.main"
+											: location.pathname === src
+											? "primary.main"
+											: "text.secondary",
+										whiteSpace: "nowrap",
+									}}
+									{...getLabelProps()}
+								/>
+							</Box>
+							<TreeItem2IconContainer
+								sx={{
+									color: "primary.main",
+									width: "1.5rem",
+									"& svg": { fontSize: "1.5rem" },
+								}}
+								{...getIconContainerProps()}
+							>
+								<TreeItem2Icon status={status} />
+							</TreeItem2IconContainer>
+						</CustomTreeItemContent>
+						{children && (
+							<TreeItem2GroupTransition
+								sx={{
+									paddingLeft: "0.5rem",
+									borderLeft: "1px dashed",
+									borderColor: "divider",
+									marginLeft: "1.5rem",
+								}}
+								{...getGroupTransitionProps()}
+							/>
+						)}
+					</TreeItem2Root>
+				</span>
+			</Tooltip>
 		</TreeItem2Provider>
 	);
 });

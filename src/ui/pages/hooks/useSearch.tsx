@@ -19,8 +19,8 @@ export default function useSearch({
 	const [filterTerm, setFilterTerm] = useState<string>(defaultFilter);
 	const [page, setPage] = useState(0);
 	const [perPage, setPerPage] = useState(10);
-	const [orderBy] = useState(defaultFilter);
-	const [orderDirection] = useState<"asc" | "desc">("asc");
+	// const [orderBy] = useState(defaultFilter);
+	// const [orderDirection] = useState<"asc" | "desc">("asc");
 
 	const [suggestions, setSuggestions] = useState<string[]>([]);
 
@@ -28,34 +28,56 @@ export default function useSearch({
 		page: page,
 		per_page: perPage,
 		filters: searchTerm ? { [filterTerm]: searchTerm } : undefined,
-		order_by: orderBy,
-		order_direction: orderDirection,
 	};
 
-	const { data, isLoading } = useQuery({
+	const { data, isLoading, refetch } = useQuery({
 		queryKey: [queryKey, payload],
 		queryFn: () => fetchData(payload),
 		retry: 0,
+		staleTime: 1000 * 60,
+		refetchOnReconnect: true,
+		refetchOnMount: false,
 	});
 
-	const totalCount = data?.data?.total_count || 0;
-	const maxPages = Math.max(0, Math.ceil(totalCount / perPage) - 1);
-	const currentPage = Math.min(page, maxPages);
-	const rowData = data?.data?.data || [];
-	
+	const refresh = () => {
+		refetch();
+		console.log("refetch");
+	};
+
+	const [totalCount, setTotalCount] = useState<number>(0);
+	const [maxPages, setMaxPages] = useState<number>(0);
+	const [currentPage, setCurrentPage] = useState<number>(0);
+	const [rowData, setRowData] = useState<any[]>([]);
+
+	useEffect(() => {
+		setTotalCount(data?.data?.total_count || 0);
+		setMaxPages(Math.max(0, Math.ceil(totalCount / perPage) - 1));
+		setCurrentPage(Math.min(page, maxPages));
+		setRowData(data?.data?.items || []);
+	}, [data, page, perPage, totalCount]);
+
+	useEffect(() => {
+		refetch();
+	}, []);
+
 	useEffect(() => {
 		if (filterTerm === "status") {
 			setSuggestions(["Available", "Borrowed", "Overdue", "Lost"]);
-		} else if (filterTerm === "is_verified") {
-			setSuggestions(["Verified", "Unverified"]);
-		} else if (filterTerm === "role_id") {
+		}
+		// else if (filterTerm === "is_verified") {
+		// 	setSuggestions(["Verified", "Not Verified"]);
+		// }
+		else if (filterTerm === "role_id") {
 			setSuggestions(availableRoles.map((role: any) => role.role_name));
 		} else {
-			setSuggestions(data?.data?.data.map((row: any) => row[filterTerm]) || []);
+			setSuggestions(
+				data?.data?.items.map((item: any) => item[filterTerm]) || []
+			);
 		}
 	}, [filterTerm, rowData]);
 
 	useEffect(() => {
+		console.log(data?.data?.items);
 		if (!data?.success) {
 			if (data?.error) {
 				if (data?.error === "ECONNREFUSED") {
@@ -68,7 +90,7 @@ export default function useSearch({
 				}
 			}
 		}
-	}, [data]);
+	}, [data, isLoading]);
 
 	return {
 		setSearchTerm,
@@ -82,5 +104,6 @@ export default function useSearch({
 		currentPage,
 		isLoading,
 		rowData,
+		refresh,
 	};
 }

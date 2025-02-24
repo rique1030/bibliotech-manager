@@ -26,7 +26,7 @@ const BooksData = ({
 				return (
 					<Fragment key={row.id}>
 						<TableData
-							key={`${row.id}-data`}
+							// key={`${row.id}-data`}
 							onClick={() => handleRowClick(index)}
 							selectable={selectable}
 							removable={removable}
@@ -34,7 +34,7 @@ const BooksData = ({
 							row={row}
 						/>
 						<TableDataCollapsible
-							key={`${row.id}-collapsible`}
+							// key={`${row.id}-collapsible`}
 							openedRowIndex={OpenedRowIndex}
 							index={index}
 						>

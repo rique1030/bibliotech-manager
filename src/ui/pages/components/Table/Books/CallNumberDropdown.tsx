@@ -1,13 +1,6 @@
 import { useContext } from "react";
 import { TableContext } from "../../../context/TableContext";
-import {
-	Box,
-	Divider,
-	MenuItem,
-	Select,
-	Tooltip,
-	Typography,
-} from "@mui/material";
+import { Box, Divider, MenuItem, Tooltip, Typography } from "@mui/material";
 import { LabeledSelect } from "../Accounts/AccountsCollapsible/AccountsDataCollapsible";
 
 export default function CallNumberDropdown() {
@@ -21,7 +14,7 @@ export default function CallNumberDropdown() {
 			size="small"
 			value={currentFormat.id}
 			onChange={(e: any) => handleChangeFormat(e.target.value)}
-			sx={{ width: "15rem" }}
+			sx={{ width: "15rem", height: "2rem" }}
 		>
 			{formats.map((format) => {
 				return (

@@ -21,21 +21,18 @@ export function useDelete({ useDelete, options, getData }: useDeleteInterface) {
 	const confirmationModal = useConfirmationModal();
 	const navigate = useNavigate();
 
-	/**
-	 * Initial data fetching
-	 */
-	console.log(options.payload.entryIds);
-
-	const { data: preData } = useQuery({
+	const { data: preData, isLoading } = useQuery({
 		queryKey: [options.queryKey, options.payload.entryIds],
 		queryFn: () => getData(options.payload.entryIds),
 		retry: 0,
 		staleTime: Infinity,
+		refetchOnMount: false,
 	});
 
 	useEffect(() => {
 		if (!preData?.success) {
 			if (preData?.error) {
+				console.error(preData?.full_error);
 				if (preData?.error === "ECONNREFUSED") {
 					showTimedAlert(
 						"error",
@@ -46,10 +43,6 @@ export function useDelete({ useDelete, options, getData }: useDeleteInterface) {
 			}
 		}
 	}, [preData]);
-
-	/**
-	 * Mutation
-	 */
 
 	const mutation = useMutation({
 		mutationFn: (payload) => useDelete(payload),
@@ -68,12 +61,13 @@ export function useDelete({ useDelete, options, getData }: useDeleteInterface) {
 		},
 	});
 
-	const verifyRoles = (entries: { id: number[] }) => {
-		return entries.id.includes(1) || entries.id.includes(2);
+	const verifyRoles = (entries: { id: string[] }) => {
+		return entries.id.includes("ADMIN") || entries.id.includes("U5ER");
 	};
 
-	const verifyAccounts = (entries: { id: number[] }) => {
-		return entries.id.includes(1);
+	const verifyAccounts = (entries: { id: string[] }) => {
+		console.log(entries.id);
+		return entries.id.includes("4DM1N");
 	};
 
 	const handleDelete = async (type = "") => {
@@ -86,6 +80,7 @@ export function useDelete({ useDelete, options, getData }: useDeleteInterface) {
 				return;
 			}
 		}
+		console.log(type);
 		if (type === "account") {
 			if (verifyAccounts(options.payload)) {
 				showTimedAlert(
@@ -97,7 +92,7 @@ export function useDelete({ useDelete, options, getData }: useDeleteInterface) {
 		}
 		const allow = await confirmationModal.showConfirmationModal();
 		if (allow) {
-			mutation.mutate(options.payload);
+			mutation.mutate(options.payload.id);
 		}
 	};
 
@@ -105,6 +100,7 @@ export function useDelete({ useDelete, options, getData }: useDeleteInterface) {
 		handleDelete,
 		resultAlert,
 		confirmationModal,
+		isLoading,
 		isDeleting: mutation.isPending,
 		preData,
 	};

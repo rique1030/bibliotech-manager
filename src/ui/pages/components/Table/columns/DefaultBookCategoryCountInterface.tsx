@@ -1,25 +1,25 @@
 const columns: columnsInterface[] = [
 	{
 		id: "name",
-		label: "Category",
+		label: "CATEGORY",
 		title: "Category",
 		minWidth: 20,
 		maxWidth: 150,
 	},
 	{
 		id: "description",
-		label: "Description",
+		label: "DESCRIPTION",
 		title: "Description",
-		minWidth: 20,
-		maxWidth: 150,
+		minWidth: 300,
+		maxWidth: 500,
 	},
 	{
 		id: "book_count",
-		label: "Book Count",
-		title: "Book Count",
-		minWidth: 5,
-		maxWidth: 100,
-		align: "right",
+		label: "BOOKS",
+		title: "Books",
+		minWidth: 20,
+		maxWidth: 80,
+		align: "center",
 	},
 ];
 

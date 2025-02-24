@@ -3,7 +3,7 @@ import { styled } from "@mui/system";
 
 const TextFieldContainer = styled(Box)(() => ({
 	display: "flex",
-	flexDirection: "column",
+	flexDirection: "row",
 	gap: "1rem",
 	flex: 1,
 }));

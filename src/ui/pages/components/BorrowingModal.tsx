@@ -86,9 +86,7 @@ const ConfirmBorrow = memo(({ requestHook }: ConfirmBorrowProps) => {
 		handleBorrowDeny,
 		handleBorrowAccept,
 	} = requestHook;
-	// console.log(data);
-	// console.log(convertProfile(data?.user?.profile_pic));
-	// console.log(convertCover(data?.book?.cover_image));
+
 	return (
 		<Dialog open={requestModalOpen}>
 			<Box sx={{ height: "450px", width: "400px" }}>

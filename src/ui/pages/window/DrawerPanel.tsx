@@ -7,20 +7,50 @@ import {
 	Tooltip,
 	Toolbar,
 } from "@mui/material";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import SpaceDashboardOutlinedIcon from "@mui/icons-material/SpaceDashboardOutlined";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined";
 
 import DrawerManager from "./components/DrawerManager";
+import { PermissionContext } from "../context/PermissionContext";
 
 const DrawerMinSize = 70;
 const DrawerMaxSize = 300;
 
+function isGranted(dict: {
+	view: boolean;
+	insert: boolean;
+	update: boolean;
+	delete: boolean;
+}) {
+	return dict.view || dict.insert || dict.update || dict.delete;
+}
+
 const DrawerPanel = () => {
 	const [open, setOpen] = useState(true);
-	const [categoryIndex, setCategoryIndex] = useState(3);
+	const [categoryIndex, setCategoryIndex] = useState(1);
+	const [accountsAllowed, setAccountsAllowed] = useState(false);
+	const [booksAllowed, setBooksAllowed] = useState(false);
+	const { account, roles, books, categories } = useContext(PermissionContext);
+
+	useEffect(() => {
+		setAccountsAllowed(isGranted(account) || isGranted(roles));
+		setBooksAllowed(isGranted(books) || isGranted(categories));
+	}, [account, roles, books, categories]);
+
+	// useEffect(() => {
+	// 	console.log(accountsAllowed, booksAllowed);
+	// }, [accountsAllowed, booksAllowed]);
+
+	// const getAccountPermissions = () => {
+	// 	return isGranted(account) || isGranted(roles);
+	// };
+
+	// const getBookPermissions = () => {
+	// 	return isGranted(books) || isGranted(categories);
+	// };
 
 	const toggleDrawer = (index: number) => {
 		if (index !== categoryIndex && index !== 0) {
@@ -82,6 +112,7 @@ const DrawerPanel = () => {
 						})}
 					>
 						<DrawerItem
+							permissionGranted={true}
 							isSelect={categoryIndex === 1 && open}
 							index={1}
 							title="Dashboard"
@@ -96,6 +127,7 @@ const DrawerPanel = () => {
 							/>
 						</DrawerItem>
 						<DrawerItem
+							permissionGranted={booksAllowed}
 							isSelect={categoryIndex === 3 && open}
 							index={3}
 							title="Library"
@@ -111,6 +143,7 @@ const DrawerPanel = () => {
 						</DrawerItem>
 
 						<DrawerItem
+							permissionGranted={accountsAllowed}
 							isSelect={categoryIndex === 2 && open}
 							index={2}
 							title="Accounts"
@@ -146,6 +179,7 @@ const DrawerPanel = () => {
 };
 
 interface DrawerItemProps {
+	permissionGranted: boolean;
 	children?: React.ReactNode;
 	onClick: (index: number) => void;
 	index: number;
@@ -154,6 +188,7 @@ interface DrawerItemProps {
 }
 
 const DrawerItem = ({
+	permissionGranted,
 	children,
 	onClick,
 	index,
@@ -161,7 +196,15 @@ const DrawerItem = ({
 	isSelect,
 }: DrawerItemProps) => {
 	return (
-		<Tooltip title={title} placement="right" disableInteractive>
+		<Tooltip
+			title={
+				permissionGranted
+					? title
+					: "You don't have enough permission to access this"
+			}
+			placement="right"
+			disableInteractive
+		>
 			<ListItem
 				sx={{
 					display: "flex",
@@ -172,11 +215,13 @@ const DrawerItem = ({
 			>
 				<IconButton
 					aria-label="menu"
+					disabled={!permissionGranted}
 					onClick={() => onClick(index)}
 					sx={{
 						padding: "0px",
 						width: "100%",
 						height: DrawerMinSize,
+						opacity: permissionGranted ? 1 : 0.5,
 						transition: "all 0.03s ease-in-out",
 						"&:hover": {
 							backgroundColor: "transparent",

@@ -95,7 +95,6 @@ const DetailsTextfield = ({
 				onBlur={handleBlur}
 				defaultValue={iniitialValue}
 				inputRef={InputRef}
-				// size="small"
 				label={label}
 				required={required}
 				disabled={disabled}
@@ -110,11 +109,6 @@ const DetailsTextfield = ({
 		);
 	return (
 		<StyledDetailsTextfield
-			// slotProps={{
-			// 	htmlInput: { maxLength: maxLength || 255, minLength: minLength || 0 },
-			// }}
-			// maxLength={maxLength || 255}
-			// minLength={minLength || 0}
 			type={type}
 			onKeyDown={(e) => handleSubmit(e)}
 			placeholder="N/A"

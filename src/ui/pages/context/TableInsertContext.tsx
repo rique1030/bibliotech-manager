@@ -14,6 +14,7 @@ interface TableInsertContextType {
 			showConfirmationModal: () => Promise<boolean>;
 			ConfirmationModal: JSX.Element;
 		};
+		isInserting: boolean;
 	};
 	availableRoles?: any[];
 }
@@ -28,6 +29,7 @@ export const TableInsertContext = createContext<TableInsertContextType>({
 			showConfirmationModal: () => Promise.resolve(false),
 			ConfirmationModal: <></>,
 		},
+		isInserting: false,
 	},
 	availableRoles: [],
 });

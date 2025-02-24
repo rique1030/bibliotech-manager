@@ -15,6 +15,41 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { useContext, useEffect, useRef, useState } from "react";
 import { TableContext } from "../../../../context/TableContext";
 
+const SmallDetails = styled(Box)(() => ({
+	display: "flex",
+	flexDirection: "column",
+	gap: "1rem",
+	width: "100%",
+}));
+
+const BookDetailsContainer = styled(Box)(() => ({
+	display: "flex",
+	flexDirection: "column",
+	gap: "1rem",
+	width: "100%",
+}));
+{
+	/* {!isEditable && (
+	<BorderedImage
+		src={convertQRCode(row.qrcode)}
+		alt="QR Code"
+		sx={{ width: 85, height: 85 }}
+		isLoading={false}
+	/>
+)} */
+}
+{
+	/* </QRHoler> */
+}
+
+// const QRHoler = styled(Box)(() => ({
+// 	display: "flex",
+// 	flexDirection: "row",
+// 	gap: "0.5rem",
+// 	width: "100%",
+// 	justifyContent: "space-between",
+// }))
+
 const BooksDataCollapsible = ({
 	row,
 	isEditable,
@@ -24,40 +59,28 @@ const BooksDataCollapsible = ({
 }) => {
 	return (
 		<CollapsibleCotainer>
-			<CoverAndStatusContainer edit={isEditable} row={row} />
-			<Box
-				sx={{
-					display: "flex",
-					flexDirection: "column",
-					gap: 2,
-					width: "100%",
-				}}
-			>
-				<TopDescriptionContainer row={row} isEditable={isEditable} />
-				<Box
-					sx={{
-						display: "flex",
-						flexDirection: "column",
-						gap: 2,
-						width: "100%",
-					}}
-				>
-					<DetailsContainer>
-						<DetailsTextfield
-							disabled={!isEditable}
-							label="Description"
-							iniitialValue={row.description || ""}
-							required={false}
-							multiline
-							rows={4}
-							sx={{ maxWidth: "50%" }}
-							slotProps={{ htmlInput: { maxLength: 255 } }}
-							dataIndex={{ id: row.id || 0, key: "description" }}
-						/>
-						<CategorySelector row={row} edit={isEditable} />
-					</DetailsContainer>
+			<BookDetailsContainer>
+				<Box sx={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
+					<CoverAndStatusContainer edit={isEditable} row={row} />
+					<SmallDetails>
+						<TopDescriptionContainer row={row} isEditable={isEditable} />
+						<DetailsContainer>
+							<DetailsTextfield
+								disabled={!isEditable}
+								label="Description"
+								iniitialValue={row.description || ""}
+								required={false}
+								multiline
+								rows={2}
+								sx={{ maxWidth: "100%" }}
+								slotProps={{ htmlInput: { maxLength: 255 } }}
+								dataIndex={{ id: row.id, key: "description" }}
+							/>
+						</DetailsContainer>
+					</SmallDetails>
 				</Box>
-			</Box>
+				<CategorySelector row={row} edit={isEditable} />
+			</BookDetailsContainer>
 		</CollapsibleCotainer>
 	);
 };
@@ -85,7 +108,7 @@ const ChipInput = styled(TextField)(() => ({
 }));
 
 const ChipAutoComplete = styled(Autocomplete)(() => ({
-	transition: "all 0.2s ease-in-out",
+	transition: "width 0.2s ease-in-out",
 	maxWidth: "10rem",
 	boxSizing: "border-box",
 	position: "relative",
@@ -99,12 +122,14 @@ function CategorySelector({ row, edit }: any) {
 	const handleAdd = (newValue: any) => {
 		if (!newValue) return;
 
-		const savedValue = row?.book_categories?.find(
-			(v: any) => v?.id === newValue?.id
-		)
-			? row?.book_categories.filter((v: any) => v?.id !== newValue?.id)
-			: [...row?.book_categories, newValue];
+		console.log(newValue);
 
+		const categories = Array.isArray(row?.book_categories) ? row.book_categories : [];
+
+		const savedValue = categories.find((v: any) => v?.id === newValue?.id)
+			? categories.filter((v: any) => v?.id !== newValue?.id)
+			: [...categories, newValue];
+		console.log(savedValue);
 		handleEditEntry(row.id, "book_categories", savedValue);
 	};
 
@@ -129,7 +154,7 @@ function CategorySelector({ row, edit }: any) {
 				padding: "0.5rem",
 				gap: "0.5rem",
 				boxSizing: "border-box",
-				maxWidth: "50%",
+				minHeight: "5.5rem",
 				maxHeight: "5.5rem",
 				overflow: "auto",
 				"&::-webkit-scrollbar": {

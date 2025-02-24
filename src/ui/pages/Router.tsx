@@ -1,25 +1,26 @@
 import { createHashRouter, Navigate } from "react-router-dom";
-import LoginPage from "./login/LoginPage";
 import MainWindow from "./window/MainWindow";
-import BooksView from "./books/BooksView";
-import BooksUpdate from "./books/BooksUpdate";
-import BooksDelete from "./books/BooksDelete";
-import BooksInsert from "./books/BookInsert";
-import CategoryView from "./categories/CategoryView";
-import CategoryInsert from "./categories/CategoryInsert";
-import CategoryUpdate from "./categories/CategoryUpdate";
-import CategoryDelete from "./categories/CategoryDelete";
-import RolesInsert from "./roles/RolesInsert";
-import RolesView from "./roles/RolesView";
-import RolesUpdate from "./roles/RolesUpdate";
-import RolesDelete from "./roles/RolesDelete";
-import AccountInsert from "./account/AccountInsert";
-import AccountView from "./account/AccountView";
-import AccountDelete from "./account/AccountDelete";
-import AccountUpdate from "./account/AccountUpdate";
-import BooksCopy from "./records/BookCopies";
-import BookBorrow from "./records/BookBorrows";
-import BookCategoryCount from "./records/BookCategoryCount";
+import LoginPage from "./main/login/LoginPage";
+import BooksView from "./main/books/BooksView";
+import BooksUpdate from "./main/books/BooksUpdate";
+import BooksDelete from "./main/books/BooksDelete";
+import BooksInsert from "./main/books/BooksInsert";
+import CategoryView from "./main/categories/CategoryView";
+import CategoryInsert from "./main/categories/CategoryInsert";
+import CategoryUpdate from "./main/categories/CategoryUpdate";
+import CategoryDelete from "./main/categories/CategoryDelete";
+import RolesInsert from "./main/roles/RolesInsert";
+import RolesView from "./main/roles/RolesView";
+import RolesUpdate from "./main/roles/RolesUpdate";
+import RolesDelete from "./main/roles/RolesDelete";
+import AccountInsert from "./main/account/AccountInsert";
+import AccountView from "./main/account/AccountView";
+import AccountDelete from "./main/account/AccountDelete";
+import AccountUpdate from "./main/account/AccountUpdate";
+import BooksCopy from "./main/records/BookCopies";
+import BookBorrow from "./main/records/BookBorrows";
+import BookCategoryCount from "./main/records/BookCategoryCount";
+import BooksQRView from "./main/books/BooksQRView";
 
 const router = createHashRouter([
 	{
@@ -52,6 +53,10 @@ const router = createHashRouter([
 					{
 						path: "add-new-books",
 						element: <BooksInsert />,
+					},
+					{
+						path: "manage-books/generate-qr-codes",
+						element: <BooksQRView />,
 					},
 				],
 			},
