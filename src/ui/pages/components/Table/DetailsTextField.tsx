@@ -120,6 +120,7 @@ const DetailsTextfield = ({
 				disabled={disabled}
 				multiline={multiline || false}
 				rows={rows || 1}
+				size="small"
 				sx={sx}
 				error={error && !disabled}
 				slotProps={slotProps}

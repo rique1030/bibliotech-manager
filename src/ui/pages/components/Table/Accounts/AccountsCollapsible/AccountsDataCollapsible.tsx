@@ -130,18 +130,20 @@ function DetailsContainer({ edit, row }: { edit?: boolean | false; row: any }) {
 		value,
 		slotProps,
 		type,
+		disabled,
 	}: {
 		label: string;
 		index: string;
 		value: string;
 		slotProps?: any;
 		type?: any;
+		disabled?: boolean;
 	}) => {
 		return (
 			<DetailsTextfield
 				type={type}
 				slotProps={slotProps}
-				disabled={!edit}
+				disabled={!edit || disabled || false}
 				label={label}
 				iniitialValue={value}
 				required={edit || false}
@@ -219,27 +221,33 @@ function DetailsContainer({ edit, row }: { edit?: boolean | false; row: any }) {
 					</Tooltip>
 				</IconButton>
 				{edit && (
-					<CustomTextBox
+					<DetailsTextfield
 						slotProps={{
 							htmlInput: {
 								maxLength: 10,
 								minLength: 7,
 							},
 						}}
+						disabled={row.id === "4DM1N"}
 						label="School ID"
-						index="school_id"
-						value={row.school_id}
+						iniitialValue={row.school_id}
+						required={edit || false}
+						dataIndex={{ id: row.id, key: "school_id" }}
 					/>
 				)}
-				<CustomTextBox
+				<DetailsTextfield
+					disabled={!edit}
 					label="First Name"
-					index="first_name"
-					value={row.first_name}
+					iniitialValue={row.first_name}
+					required={edit || false}
+					dataIndex={{ id: row.id, key: "first_name" }}
 				/>
-				<CustomTextBox
+				<DetailsTextfield
+					disabled={!edit}
 					label="Last Name"
-					index="last_name"
-					value={row.last_name}
+					iniitialValue={row.last_name}
+					required={edit || false}
+					dataIndex={{ id: row.id, key: "last_name" }}
 				/>
 			</HorizontalContaner>
 			<HorizontalContaner>
@@ -248,11 +256,13 @@ function DetailsContainer({ edit, row }: { edit?: boolean | false; row: any }) {
 					style={{ minWidth: "1.5rem", maxWidth: "1.5rem" }}></div>
 				<CustomTextBox label="Email" index="email" value={row.email} />
 				{edit && (
-					<CustomTextBox
+					<DetailsTextfield
+						disabled={!edit}
 						label="Password"
-						index="password"
-						value={row.password}
+						iniitialValue={row.password}
 						type="password"
+						required={edit || false}
+						dataIndex={{ id: row.id, key: "password" }}
 					/>
 				)}
 				{edit ? (
@@ -272,16 +282,18 @@ function DetailsContainer({ edit, row }: { edit?: boolean | false; row: any }) {
 						})}
 					</LabeledSelect>
 				) : (
-					<CustomTextBox
+					<DetailsTextfield
 						slotProps={{
 							htmlInput: {
 								maxLength: 10,
 								minLength: 7,
 							},
 						}}
+						disabled={row.id === "4DM1N"}
 						label="School ID"
-						index="school_id"
-						value={row.school_id}
+						iniitialValue={row.school_id}
+						required={edit || false}
+						dataIndex={{ id: row.id, key: "school_id" }}
 					/>
 				)}
 			</HorizontalContaner>

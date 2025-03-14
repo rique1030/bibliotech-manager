@@ -50,6 +50,7 @@ export function AuthProvider({ children }: any) {
 	);
 	const mutation = useMutation({
 		gcTime: 0,
+
 		mutationFn: (payload: UserLoginPayload) => SendLoginRequest(payload),
 		onSuccess: (result: any) => {
 			if (!result.success) {
@@ -63,11 +64,14 @@ export function AuthProvider({ children }: any) {
 				return;
 			}
 			setUser(userData);
+			console.log(userData);
 			window.storedSettings.saveAccount(userData).then(() => {
 				window.webSocket.connect();
-				
 				console.log("Account saved");
 				loginResolver.current?.(true);
+				window.storedSettings.getAccount().then((account: any) => {
+					console.log(account);
+				})
 			});
 		},
 		onError: (error: any) => {
@@ -75,6 +79,7 @@ export function AuthProvider({ children }: any) {
 			loginResolver.current?.(false);
 			setErrorMessage("Something went wrong. Please try again later.");
 		},
+
 	});
 
 	const { data: refreshedAccount } = useQuery({

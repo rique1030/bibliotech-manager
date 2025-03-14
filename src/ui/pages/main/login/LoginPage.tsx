@@ -27,13 +27,21 @@ function LoginPage() {
 
 	useEffect(() => {
 		window.storedSettings.getAccount().then((user: any) => {
+			console.log(user);
 			if (user) {
+				if (!user.email || !user.password) {
+					setDoLogin(true);
+					console.log("No stored account");
+					return;
+				}
 				login(
 					{ email: user.email, password: user.password },
 					"/main/records/dashboard"
 				).then((result) => {
 					if (result) {
-						setDoLogin(true);
+						setTimeout(() => {
+							setDoLogin(true);
+						}, 3000);
 					}
 				});
 			} else {

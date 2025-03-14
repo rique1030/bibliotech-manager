@@ -22,9 +22,7 @@ const PasswordTextField = ({ error, ...props }: any) => {
 			error={error}
 		>
 			<InputLabel
-				sx={{ fontSize: "0.8rem !important", 
-
-					fontWeight: "bold" }}
+				sx={{ fontSize: props.size=="small"? "0.8rem" : "1rem" }}
 				htmlFor="outlined-adornment-password"
 			>
 			Password

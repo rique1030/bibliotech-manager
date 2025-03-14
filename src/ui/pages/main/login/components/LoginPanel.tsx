@@ -115,12 +115,12 @@ const LoginForm = () => {
 					email: true,
 					password: false,
 				};
-			if (!validatePassword(password))
-				throw {
-					message: "Please enter a valid password",
-					email: false,
-					password: true,
-				};
+			// if (!validatePassword(password))
+			// 	throw {
+			// 		message: "Please enter a valid password",
+			// 		email: false,
+			// 		password: true,
+			// 	};
 			setEmailError(false);
 			setPasswordError(false);
 			setErrorText("");
