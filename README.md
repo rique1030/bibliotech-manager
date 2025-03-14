@@ -1,50 +1,43 @@
-# React + TypeScript + Vite
+# BiblioTech Manager 📖  
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![GitHub release](https://img.shields.io/github/v/release/riquelicious/BiblioTechManager?style=flat-square)  
+![GitHub license](https://img.shields.io/github/license/riquelicious/BiblioTechManager?style=flat-square)  
+![GitHub issues](https://img.shields.io/github/issues/riquelicious/BiblioTechManager?style=flat-square)  
+![GitHub last commit](https://img.shields.io/github/last-commit/riquelicious/BiblioTechManager?style=flat-square)  
 
-Currently, two official plugins are available:
+BiblioTech Manager is a **desktop application** for **library administrators** to manage:  
+✅ **Book catalog**  
+✅ **Copies**  
+✅ **Users & roles**  
+✅ **Book borrowing & returning**  
+✅ **Requests from BiblioTech Mobile**  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📌 Features  
+- 📚 **Catalog Management** – Add, edit, and remove books  
+- 🔢 **Copy Management** – Track multiple copies of each book  
+- 👥 **User & Role Management** – Assign different roles and permissions  
+- 🔄 **Borrow & Return System** – Handle book loans and returns  
+- 📱 **Mobile App Requests** – Approve or deny requests from **BiblioTech Mobile**  
 
-## Expanding the ESLint configuration
+## 📥 Installation  
+1. Download the latest **installer** from the [Releases](https://github.com/riquelicious/BiblioTechManager/releases).  
+2. Follow the installation steps based on your OS.  
+3. Open the application and start managing your library.  
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 🚀 Usage  
+1. **Manage Books & Copies** – Keep the catalog and copies updated.  
+2. **Manage Users & Roles** – Assign roles and control access.  
+3. **Process Borrow & Return** – Approve, deny, or complete book transactions.  
+4. **Handle Mobile Requests** – Review and respond to borrow requests from the mobile app.  
 
-- Configure the top-level `parserOptions` property like this:
+## 🛠 Tech Stack  
+- **Frontend:** Electron + React + Material UI  
+- **Backend:** Node.js (Express) with MySQL  
+- **State Management:** React Query  
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## 🤝 Contributing  
+Contributions are welcome! If you’d like to report an issue or suggest a feature, please open an [issue](https://github.com/riquelicious/BiblioTechManager/issues).  
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## 📄 License  
+This project is licensed under the **MIT License**.  
