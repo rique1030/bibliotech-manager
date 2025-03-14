@@ -17,6 +17,7 @@ interface TableInsertContextType {
 		isInserting: boolean;
 	};
 	availableRoles?: any[];
+	state?: any;
 }
 
 export const TableInsertContext = createContext<TableInsertContextType>({
@@ -32,4 +33,5 @@ export const TableInsertContext = createContext<TableInsertContextType>({
 		isInserting: false,
 	},
 	availableRoles: [],
+	state: {},
 });

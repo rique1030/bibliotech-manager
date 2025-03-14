@@ -1,26 +1,85 @@
 import { createHashRouter, Navigate } from "react-router-dom";
-import MainWindow from "./window/MainWindow";
+import { lazy, Suspense } from "react";
+
 import LoginPage from "./main/login/LoginPage";
-import BooksView from "./main/books/BooksView";
-import BooksUpdate from "./main/books/BooksUpdate";
-import BooksDelete from "./main/books/BooksDelete";
-import BooksInsert from "./main/books/BooksInsert";
-import CategoryView from "./main/categories/CategoryView";
-import CategoryInsert from "./main/categories/CategoryInsert";
-import CategoryUpdate from "./main/categories/CategoryUpdate";
-import CategoryDelete from "./main/categories/CategoryDelete";
-import RolesInsert from "./main/roles/RolesInsert";
-import RolesView from "./main/roles/RolesView";
-import RolesUpdate from "./main/roles/RolesUpdate";
-import RolesDelete from "./main/roles/RolesDelete";
-import AccountInsert from "./main/account/AccountInsert";
-import AccountView from "./main/account/AccountView";
-import AccountDelete from "./main/account/AccountDelete";
-import AccountUpdate from "./main/account/AccountUpdate";
-import BooksCopy from "./main/records/BookCopies";
-import BookBorrow from "./main/records/BookBorrows";
-import BookCategoryCount from "./main/records/BookCategoryCount";
-import BooksQRView from "./main/books/BooksQRView";
+import MainWindow from "./window/MainWindow";
+import { Box, CircularProgress } from "@mui/material";
+import { AuthProvider } from "./context/AuthProvider";
+
+const Dashboard = lazy(() => import("./main/records/Dashboard"));
+const BooksView = lazy(() => import("./main/books/BooksView"));
+const BooksUpdate = lazy(() => import("./main/books/BooksUpdate"));
+const BooksDelete = lazy(() => import("./main/books/BooksDelete"));
+const BooksInsert = lazy(() => import("./main/books/BooksInsert"));
+const CopyInsert = lazy(() => import("./main/copies/CopyInsert"));
+const CopyView = lazy(() => import("./main/copies/CopyView"));
+const CopyUpdate = lazy(() => import("./main/copies/CopyUpdate"));
+const CopyDelete = lazy(() => import("./main/copies/CopyDelete"));
+const CopyQRView = lazy(() => import("./main/books/BooksQRView"));
+const CategoryView = lazy(() => import("./main/categories/CategoryView"));
+const CategoryInsert = lazy(() => import("./main/categories/CategoryInsert"));
+const CategoryUpdate = lazy(() => import("./main/categories/CategoryUpdate"));
+const CategoryDelete = lazy(() => import("./main/categories/CategoryDelete"));
+const RolesInsert = lazy(() => import("./main/roles/RolesInsert"));
+const RolesView = lazy(() => import("./main/roles/RolesView"));
+const RolesUpdate = lazy(() => import("./main/roles/RolesUpdate"));
+const RolesDelete = lazy(() => import("./main/roles/RolesDelete"));
+const AccountInsert = lazy(() => import("./main/account/AccountInsert"));
+const AccountView = lazy(() => import("./main/account/AccountView"));
+const AccountDelete = lazy(() => import("./main/account/AccountDelete"));
+const AccountUpdate = lazy(() => import("./main/account/AccountUpdate"));
+const BooksCopy = lazy(() => import("./main/records/BookCopies"));
+const BookBorrow = lazy(() => import("./main/records/BookBorrows"));
+const BookCategoryCount = lazy(
+	() => import("./main/records/BookCategoryCount")
+);
+const mainRoutes = {
+	CATALOG: "book-title",
+	COPIES: "physical-copy",
+	CATEGORIES: "category",
+	ROLES: "role",
+	ACCOUNTS: "account",
+};
+
+export const routes = {
+	BOOKS: getCrudRoute(mainRoutes.CATALOG),
+	COPIES: getCrudRoute(mainRoutes.COPIES, true),
+	CATEGORIES: getCrudRoute(mainRoutes.CATEGORIES),
+	ROLES: getCrudRoute(mainRoutes.ROLES),
+	ACCOUNTS: getCrudRoute(mainRoutes.ACCOUNTS),
+};
+
+function getCrudRoute(route: string, qr = false) {
+	return {
+		INSERT: `${route}/add`,
+		VIEW: `${route}/manage`,
+		UPDATE: `${route}/manage/edit`,
+		DELETE: `${route}/manage/delete`,
+		QR: qr ? `${route}/manage/qr` : undefined,
+	};
+}
+
+export function getRoute(route: string) {
+	return `/main/${route}`;
+}
+
+function CustomSuspense({ children }: any) {
+	const Sus = () => {
+		return (
+			<Box
+				sx={{
+					height: "100%",
+					width: "100%",
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+				}}>
+				<CircularProgress color="primary" size={100} thickness={0.5} />
+			</Box>
+		);
+	};
+	return <Suspense fallback={<Sus />}>{children}</Suspense>;
+}
 
 const router = createHashRouter([
 	{
@@ -29,97 +88,206 @@ const router = createHashRouter([
 	},
 	{
 		path: "/login",
-		element: <LoginPage />,
+		element: (
+			<AuthProvider>
+				<LoginPage />
+			</AuthProvider>
+		),
 	},
 	{
 		path: "/main",
 		element: <MainWindow />,
 		children: [
 			{
-				path: "books",
+				path: mainRoutes.CATALOG,
 				children: [
 					{
-						path: "manage-books",
-						element: <BooksView />,
+						path: "add",
+						element: (
+							<CustomSuspense>
+								<BooksInsert />
+							</CustomSuspense>
+						),
 					},
 					{
-						path: "manage-books/edit-existing-books",
-						element: <BooksUpdate />,
+						path: "manage",
+						element: (
+							<CustomSuspense>
+								<BooksView />
+							</CustomSuspense>
+						),
 					},
 					{
-						path: "manage-books/remove-books",
-						element: <BooksDelete />,
+						path: "manage/edit",
+						element: (
+							<CustomSuspense>
+								<BooksUpdate />
+							</CustomSuspense>
+						),
 					},
 					{
-						path: "add-new-books",
-						element: <BooksInsert />,
-					},
-					{
-						path: "manage-books/generate-qr-codes",
-						element: <BooksQRView />,
+						path: "manage/delete",
+						element: (
+							<CustomSuspense>
+								<BooksDelete />
+							</CustomSuspense>
+						),
 					},
 				],
 			},
 			{
-				path: "categories",
+				path: mainRoutes.COPIES,
 				children: [
 					{
-						path: "manage-categories",
-						element: <CategoryView />,
+						path: "add",
+						element: (
+							<CustomSuspense>
+								<CopyInsert />
+							</CustomSuspense>
+						),
 					},
 					{
-						path: "add-new-categories",
-						element: <CategoryInsert />,
+						path: "manage",
+						element: (
+							<CustomSuspense>
+								<CopyView />
+							</CustomSuspense>
+						),
 					},
 					{
-						path: "manage-categories/edit-existing-categories",
-						element: <CategoryUpdate />,
+						path: "manage/edit",
+						element: (
+							<CustomSuspense>
+								<CopyUpdate />
+							</CustomSuspense>
+						),
 					},
 					{
-						path: "manage-categories/remove-categories",
-						element: <CategoryDelete />,
+						path: "manage/delete",
+						element: (
+							<CustomSuspense>
+								<CopyDelete />
+							</CustomSuspense>
+						),
+					},
+					{
+						path: "manage/qr",
+						element: (
+							<CustomSuspense>
+								<CopyQRView />
+							</CustomSuspense>
+						),
 					},
 				],
 			},
 			{
-				path: "roles",
+				path: mainRoutes.CATEGORIES,
 				children: [
 					{
-						path: "manage-roles",
-						element: <RolesView />,
+						path: "add",
+						element: (
+							<CustomSuspense>
+								<CategoryInsert />
+							</CustomSuspense>
+						),
 					},
 					{
-						path: "add-new-roles",
-						element: <RolesInsert />,
+						path: "manage",
+						element: (
+							<CustomSuspense>
+								<CategoryView />
+							</CustomSuspense>
+						),
 					},
 					{
-						path: "manage-roles/edit-existing-roles",
-						element: <RolesUpdate />,
+						path: "manage/edit",
+						element: (
+							<CustomSuspense>
+								<CategoryUpdate />
+							</CustomSuspense>
+						),
 					},
 					{
-						path: "manage-roles/remove-roles",
-						element: <RolesDelete />,
+						path: "manage/delete",
+						element: (
+							<CustomSuspense>
+								<CategoryDelete />
+							</CustomSuspense>
+						),
 					},
 				],
 			},
 			{
-				path: "accounts",
+				path: mainRoutes.ROLES,
 				children: [
 					{
-						path: "manage-accounts",
-						element: <AccountView />,
+						path: "add",
+						element: (
+							<CustomSuspense>
+								<RolesInsert />
+							</CustomSuspense>
+						),
 					},
 					{
-						path: "add-new-accounts",
-						element: <AccountInsert />,
+						path: "manage",
+						element: (
+							<CustomSuspense>
+								<RolesView />
+							</CustomSuspense>
+						),
 					},
 					{
-						path: "manage-accounts/edit-existing-accounts",
-						element: <AccountUpdate />,
+						path: "manage/edit",
+						element: (
+							<CustomSuspense>
+								<RolesUpdate />
+							</CustomSuspense>
+						),
 					},
 					{
-						path: "manage-accounts/remove-accounts",
-						element: <AccountDelete />,
+						path: "manage/delete",
+						element: (
+							<CustomSuspense>
+								<RolesDelete />
+							</CustomSuspense>
+						),
+					},
+				],
+			},
+			{
+				path: mainRoutes.ACCOUNTS,
+				children: [
+					{
+						path: "add",
+						element: (
+							<CustomSuspense>
+								<AccountInsert />
+							</CustomSuspense>
+						),
+					},
+					{
+						path: "manage",
+						element: (
+							<CustomSuspense>
+								<AccountView />
+							</CustomSuspense>
+						),
+					},
+					{
+						path: "manage/edit",
+						element: (
+							<CustomSuspense>
+								<AccountUpdate />
+							</CustomSuspense>
+						),
+					},
+					{
+						path: "manage/delete",
+						element: (
+							<CustomSuspense>
+								<AccountDelete />
+							</CustomSuspense>
+						),
 					},
 				],
 			},
@@ -127,20 +295,36 @@ const router = createHashRouter([
 				path: "records",
 				children: [
 					{
+						path: "dashboard",
+						element: (
+							<CustomSuspense>
+								<Dashboard />
+							</CustomSuspense>
+						),
+					},
+					{
 						path: "book-copies",
-						element: <BooksCopy />,
+						element: (
+							<CustomSuspense>
+								<BooksCopy />
+							</CustomSuspense>
+						),
 					},
 					{
 						path: "borrowings",
-						element: <BookBorrow />,
-					},
-					{
-						path: "user-records",
-						element: <div>User Records Page</div>, // Replace with the actual component for User Records
+						element: (
+							<CustomSuspense>
+								<BookBorrow />
+							</CustomSuspense>
+						),
 					},
 					{
 						path: "book-categories",
-						element: <BookCategoryCount />, // Replace with the actual component for Book Categories
+						element: (
+							<CustomSuspense>
+								<BookCategoryCount />
+							</CustomSuspense>
+						),
 					},
 				],
 			},

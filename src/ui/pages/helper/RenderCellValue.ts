@@ -1,7 +1,7 @@
 const renderCellValue = (cellValue: any): string => {
 	if (cellValue instanceof Date) {
 		const formattr = new Intl.DateTimeFormat("en-US", {
-			year: "numeric",
+			year: "2-digit",
 			month: "2-digit",
 			day: "2-digit",
 		});

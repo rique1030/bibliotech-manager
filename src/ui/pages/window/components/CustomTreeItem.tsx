@@ -28,6 +28,8 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(
 		label,
 		disabled,
 		children,
+		onClick = undefined,
+		main = false,
 		icon = null,
 		src = null,
 		...other
@@ -60,7 +62,7 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(
 				disableInteractive
 				placement="right"
 				title={
-					children
+					children || main
 						? ""
 						: disabled
 						? "You don't have enough permission to access this"
@@ -74,6 +76,7 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(
 							{...getContentProps()}
 						>
 							<Box
+								onClick={onClick}
 								sx={{
 									flexGrow: 1,
 									display: "flex",
@@ -86,7 +89,7 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(
 									cloneElement(icon, {
 										sx: {
 											fontSize: "1.2rem",
-											color: children
+											color: children || main
 												? "primary.main"
 												: location.pathname === src
 												? "primary.main"
@@ -95,9 +98,9 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(
 									})}
 								<TreeItem2Label
 									sx={{
-										fontSize: children ? "1rem" : "0.8rem",
+										fontSize: children || main ? "1rem" : "0.8rem",
 										fontWeight: "bold",
-										color: children
+										color: children || main
 											? "primary.main"
 											: location.pathname === src
 											? "primary.main"
@@ -118,7 +121,7 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(
 								<TreeItem2Icon status={status} />
 							</TreeItem2IconContainer>
 						</CustomTreeItemContent>
-						{children && (
+						{children  && (
 							<TreeItem2GroupTransition
 								sx={{
 									paddingLeft: "0.5rem",

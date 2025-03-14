@@ -39,19 +39,6 @@ const DrawerPanel = () => {
 		setAccountsAllowed(isGranted(account) || isGranted(roles));
 		setBooksAllowed(isGranted(books) || isGranted(categories));
 	}, [account, roles, books, categories]);
-
-	// useEffect(() => {
-	// 	console.log(accountsAllowed, booksAllowed);
-	// }, [accountsAllowed, booksAllowed]);
-
-	// const getAccountPermissions = () => {
-	// 	return isGranted(account) || isGranted(roles);
-	// };
-
-	// const getBookPermissions = () => {
-	// 	return isGranted(books) || isGranted(categories);
-	// };
-
 	const toggleDrawer = (index: number) => {
 		if (index !== categoryIndex && index !== 0) {
 			setCategoryIndex(index);

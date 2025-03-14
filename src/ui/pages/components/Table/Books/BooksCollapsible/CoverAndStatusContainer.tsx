@@ -12,15 +12,12 @@ const CoverAndStatusContainer = ({
 	edit?: boolean | false;
 }) => {
 	return (
-		<Box
-			sx={{ display: "flex", flexDirection: "column", gap: 2, maxWidth: 100 }}
-		>
+		<Box sx={{ display: "flex", flexDirection: "column", gap: 2, maxWidth: 100 }}>
 			<EditableImage
 				row={row}
 				edit={edit}
 				metadataKey="cover_image"
-				src={row.cover_image && convertCover(row.cover_image)}
-			/>
+				src={row.cover_image && convertCover(row.cover_image)}/>
 		</Box>
 	);
 };

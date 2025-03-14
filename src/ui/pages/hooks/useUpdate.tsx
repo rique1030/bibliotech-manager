@@ -81,9 +81,7 @@ export function useUpdate({
 			console.error(error);
 			showTimedAlert(
 				"error",
-				"An error occurred." +
-					"There might be a duplicate of one of the fields. " +
-					"Please try again later."
+				error?.message || "An error occurred. Please try again later."
 			);
 		},
 	});

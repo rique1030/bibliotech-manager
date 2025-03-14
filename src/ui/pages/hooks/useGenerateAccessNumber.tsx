@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState } from "react";
 
 const verifyAccessNumber = async (payload: string[]): Promise<any> => {
-	return await window.requestBook.getByAccessNumber(payload);
+	return await window.requestCopy.getByAccessNumber(payload);
 };
 
 function useGenerateAccessNumber() {
@@ -10,9 +10,9 @@ function useGenerateAccessNumber() {
 		return data;
 	};
 
-	// useLayoutEffect(() => {
-	// 	generateUniqueNumber();
-	// }, []);
+	useLayoutEffect(() => {
+		generateUniqueNumber();
+	}, []);
 
 	const generateAccessNumber = async () => {
 		const generateRandomAccessNumber = () => {

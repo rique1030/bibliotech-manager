@@ -1,7 +1,6 @@
 import {
 	Box,
 	Button,
-	Grow,
 	Stack,
 	TablePagination,
 	Tooltip,
@@ -11,6 +10,16 @@ import { useNavigate } from "react-router-dom";
 import { TableContext } from "../../context/TableContext";
 import { TableSearchContext } from "../../context/TableSearchContext";
 
+interface TablePaginationBarProps {
+	canUpdate?: boolean;
+	canDelete?: boolean;
+	QR?: boolean;
+	doExport?: any;
+	canExport?: boolean;
+	footer?: boolean;
+	isExporting?: boolean;
+}
+
 function TablePaginationBar({
 	canUpdate = false,
 	canDelete = false,
@@ -19,18 +28,7 @@ function TablePaginationBar({
 	doExport,
 	footer = false,
 	isExporting = false,
-}: {
-	canUpdate?: boolean;
-	canDelete?: boolean;
-	QR?: boolean;
-	doExport?: any;
-	canExport?: boolean;
-	footer?: boolean;
-	isExporting?: boolean;
-}) {
-	/**
-	 * Handles the update and delete buttons
-	 */
+}: TablePaginationBarProps) {
 
 	const {
 		selectAll: { selectedItems },

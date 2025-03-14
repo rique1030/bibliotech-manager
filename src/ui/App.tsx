@@ -13,6 +13,7 @@ import CropperModalProvider from "./pages/components/CropperModal";
 import { createContext, useEffect } from "react";
 import useTheme from "./pages/hooks/useTheme";
 import lightTheme from "./pages/themes/LightTheme";
+import { AuthProvider } from "./pages/context/AuthProvider";
 
 export const AppContext = createContext({
 	theme: lightTheme,

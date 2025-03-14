@@ -1,34 +1,33 @@
 import { ipcMain } from "electron";
-import useRequest from "../api/request_api.cjs";
-import CONFIG from "../config.cjs";
+import useRequest, { getURL } from "../api/request_api.cjs";
 
 ipcMain.handle(
 	"users-insert-multiple",
-	async (event, payload: InsertUsersPayload) => {
-		return await useRequest(CONFIG.URL.USER.INSERT_MULTIPLE, "POST", payload);
+	async (_event, payload: InsertUsersPayload) => {
+		return await useRequest((await getURL()).API.USERS.CREATE, "POST", payload);
 	}
 );
 
-ipcMain.handle("users-get-paged", async (event, payload: GetPagedPayload) => {
-	return await useRequest(CONFIG.URL.USER.GET_PAGED_USERS, "POST", payload);
+ipcMain.handle("users-get-paged", async (_event, payload: GetPagedPayload) => {
+	return await useRequest((await getURL()).API.USERS.PAGED, "POST", payload);
 });
 
-ipcMain.handle("users-get-by-id", async (event, payload: RequestByID) => {
-	return await useRequest(CONFIG.URL.USER.GET_USERS_BY_ID, "POST", payload);
+ipcMain.handle("users-get-by-id", async (_event, payload: RequestByID) => {
+	return await useRequest((await getURL()).API.USERS.GET_BY_ID, "POST", payload);
 });
 
-ipcMain.handle("users-login", async (event, payload: UserLoginPayload) => {
+ipcMain.handle("users-login", async (_event, payload: UserLoginPayload) => {
 	return await useRequest(
-		CONFIG.URL.USER.GET_USER_BY_EMAIL_AND_PASSWORD,
+		(await getURL()).API.USERS.GET_LOGIN,
 		"POST",
 		payload
 	);
 });
 
-ipcMain.handle("users-update", async (event, payload: UserUpdatePayload) => {
-	return await useRequest(CONFIG.URL.USER.UPDATE_USER, "POST", payload);
+ipcMain.handle("users-update", async (_event, payload: UserUpdatePayload) => {
+	return await useRequest((await getURL()).API.USERS.UPDATE, "POST", payload);
 });
 
-ipcMain.handle("users-delete", async (event, payload: { id: RequestByID }) => {
-	return await useRequest(CONFIG.URL.USER.DELETE_USER, "POST", payload);
+ipcMain.handle("users-delete", async (_event, payload: { id: RequestByID }) => {
+	return await useRequest((await getURL()).API.USERS.DELETE, "POST", payload);
 });

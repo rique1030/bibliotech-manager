@@ -4,12 +4,13 @@ import BooksData from "../../components/Table/Books/BooksData";
 import { useContext, useLayoutEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Divider } from "@mui/material";
-import columns from "../../components/Table/columns/DefaultBookColumnsInterface";
+import columns from "../../components/Table/columns/catalog/insert";
 import { TableContext } from "../../context/TableContext";
 import TableHeader from "../../components/Table/TableHeader";
 import { TableUpdateContext } from "../../context/TableUpdateContext";
 import { useUpdate } from "../../hooks/useUpdate";
 import UpdateFooter from "../../components/update/Footer";
+import { getRoute, routes } from "../../Router";
 
 const fetchData = async (payload: RequestByID): Promise<any> => {
 	return await window.requestBook.getByID(payload);
@@ -42,7 +43,7 @@ function BooksUpdate() {
 	};
 
 	const options = {
-		url: "/main/books/manage-books/edit-existing-books",
+		url: getRoute(routes.BOOKS.UPDATE), //books/manage-books/edit-existing-books",
 		field,
 		payload: payload,
 		queryKey: "booksUpdate",
@@ -68,8 +69,8 @@ function BooksUpdate() {
 			<MainContainer>
 				{ConfirmationModal}
 				<ViewTable isLoading={isLoading}>
-					<TableHeader indented />
-					<BooksData removable isEditable />
+					<TableHeader />
+					<BooksData edit />
 				</ViewTable>
 				<Divider />
 				<Footer />
@@ -80,13 +81,9 @@ function BooksUpdate() {
 
 function Footer() {
 	const navigate = useNavigate();
-	const handleGoback = () => navigate("/main/books/manage-books");
-	const {
-		useupdate: { handleUpdate, isUpdating },
-	} = useContext(TableUpdateContext);
-	const {
-		rowData: { rows },
-	} = useContext(TableContext);
+	const handleGoback = () => navigate(getRoute(routes.BOOKS.VIEW));
+	const { useupdate: { handleUpdate, isUpdating } } = useContext(TableUpdateContext);
+	const { rowData: { rows } } = useContext(TableContext);
 	return (
 		<UpdateFooter
 			isUpdating={isUpdating}

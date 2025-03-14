@@ -7,6 +7,7 @@ import {
 	DialogTitle,
 	TextField,
 } from "@mui/material";
+
 function useConfirmationModal() {
 	const [error, setError] = useState<boolean>(false);
 	const [open, setOpen] = useState(false);

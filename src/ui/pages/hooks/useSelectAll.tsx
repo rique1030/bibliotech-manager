@@ -24,7 +24,7 @@ function useSelectAll<T>(items: T[]) {
 	};
 
 	const isSelected = (item: T) => selectedItems.includes(item);
-	const isAllSelected = selectedItems.length === items.length;
+	const isAllSelected = selectedItems.length === items.length && items.length > 0;	
 	const isIntermediate = selectedItems.length > 0 && !isAllSelected; // Partial selection state
 
 	return {

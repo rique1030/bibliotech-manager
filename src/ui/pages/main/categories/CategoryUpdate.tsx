@@ -1,15 +1,16 @@
 import { useContext, useLayoutEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Divider, Stack, Button, Tooltip } from "@mui/material";
+import { Divider } from "@mui/material";
 import { TableContext } from "../../context/TableContext";
 import { TableUpdateContext } from "../../context/TableUpdateContext";
 import { useUpdate } from "../../hooks/useUpdate";
 import ViewTable from "../../components/Table/ViewTable";
 import MainContainer from "../../components/MainContainer";
-import columns from "../../components/Table/columns/DefaultCategoryColumnsInterface";
+import columns from "../../components/Table/columns/category/insert";
 import TableHeader from "../../components/Table/TableHeader";
 import CategoriesData from "../../components/Table/Categories/CategoriesData";
 import UpdateFooter from "../../components/update/Footer";
+import { getRoute, routes } from "../../Router";
 
 const fetchData = async (payload: RequestByID): Promise<any> => {
 	return await window.requestCategory.getByID(payload);
@@ -36,7 +37,7 @@ function CategoryUpdate() {
 	};
 
 	const options = {
-		url: "/main/categories/manage-categories/edit-existing-categories",
+		url: getRoute(routes.CATEGORIES.UPDATE), // "//categories/manage-categories/edit-existing-categories",
 		field,
 		payload: payload,
 		queryKey: "categoryUpdate",
@@ -63,8 +64,8 @@ function CategoryUpdate() {
 				{/* <CustomAlert /> */}
 				{ConfirmationModal}
 				<ViewTable isLoading={isLoading}>
-					<TableHeader indented />
-					<CategoriesData removable isEditable />
+					<TableHeader />
+					<CategoriesData edit />
 				</ViewTable>
 				<Divider />
 				<Footer />
@@ -75,7 +76,7 @@ function CategoryUpdate() {
 
 function Footer() {
 	const navigate = useNavigate();
-	const handleGoback = () => navigate("/main/categories/manage-categories");
+	const handleGoback = () => navigate(getRoute(routes.CATEGORIES.VIEW));
 	const {
 		useupdate: { handleUpdate, isUpdating },
 	} = useContext(TableUpdateContext);

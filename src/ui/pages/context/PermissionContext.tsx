@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { createContext, useLayoutEffect, useState } from "react";
-import { queryClient } from "../hooks/useReactQuery";
 
 interface PermissionContextType {
 	account: {

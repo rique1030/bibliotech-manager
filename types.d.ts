@@ -8,10 +8,12 @@ declare global {
 	interface columnsInterface {
 		id: string;
 		label: string;
-		title: string;
-		minWidth?: number;
-		maxWidth?: number;
+		sortable?: boolean | true;
+		widthPercent?: number | 40;
+		minWidth?: number | string;
+		maxWidth?: number | string;
 		width?: number | string;
+		box?: boolean | false;
 		align?: "right" | "center" | "left";
 	}
 
@@ -63,8 +65,18 @@ declare global {
 		is_verified: boolean;
 	};
 
-	// ELECTRON
+	interface InsertCopyPayload {
+		id: number;
+		book_id: number;
+		book_title: string;
+		book_author: string;
+		access_number: string;
+		status: string;
+	}
 	interface Window {
+		server: {
+			getURL: () => promise<any>;
+		},
 		requestUser: {
 			insertMultiple: (payload: InsertUsersPayload) => promise<any>;
 			getPaged: (payload: GetPagedPayload) => promise<any>;
@@ -85,9 +97,17 @@ declare global {
 			insertMultiple: (payload: InsertBooksPayload) => promise<any>;
 			getPaged: (payload: GetPagedPayload) => promise<any>;
 			getByID: (payload: RequestByID) => promise<any>;
-			// getByAccessNumber: (payload: string[]) => promise<any>;
 			update: (payload: BookUpdatePayload) => promise<any>;
 			delete: (payload: { id: RequestByID }) => promise<any>;
+		};
+		requestCopy: {
+			getByAccessNumber: (payload: string[]) => promise<any>;
+			insertMultiple: (payload: InsertCopyPayload) => promise<any>;
+			getPaged: (payload: GetPagedPayload) => promise<any>;
+			getByID: (payload: RequestByID) => promise<any>;
+			update: (payload: CopyUpdatePayload) => promise<any>;
+			delete: (payload: { id: RequestByID }) => promise<any>;
+			transaction: (payload: any) => promise<any>;
 		};
 		requestCategory: {
 			insertMultiple: (payload: InsertCategoriesPayload) => promise<any>;
@@ -112,15 +132,16 @@ declare global {
 		requestRecord: {
 			getBookCount: (payload: GetPagedPayload) => promise<any>;
 			getBorrowedBooks: (payload: GetPagedPayload) => promise<any>;
-			// getUserRecords: (payload: GetPagedPayload) => promise<any>;
 			getBookCategoryCount: (payload: GetPagedPayload) => promise<any>;
+			getUserCount: () => promise<any>;
+			getRoleCount: () => promise<any>;
+			getTotalBookCount: () => promise<any>;
 		};
 		webSocket: {
 			connect: () => void;
 			disconnect: () => void;
 			reviewRequest: (request_id: any) => void;
-			acceptRequest: (paytoad: any) => void;
-			denyRequest: (request_id: any) => void;
+			respondRequest: (payload: any) => void;
 		};
 		electron: {
 			on: (event: string, listener: (...args: any[]) => void) => void;

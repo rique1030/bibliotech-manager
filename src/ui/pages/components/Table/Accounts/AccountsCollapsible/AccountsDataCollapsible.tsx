@@ -18,14 +18,13 @@ import { useContext } from "react";
 import { TableContext } from "../../../../context/TableContext";
 import { convertProfile } from "../../../../../utils/ImageHelper";
 import RoleChip from "../../RoleChip";
-import columns from "../../columns/DefaultAccountsColumnsInterface";
 
 type Props = {
 	row: any;
-	isEditable?: boolean;
+	edit?: boolean;
 };
 
-export default function AccountsDataCollapsible({ row, isEditable }: Props) {
+export default function AccountsDataCollapsible({ row, edit }: Props) {
 	return (
 		<CollapsibleCotainer>
 			<Box
@@ -36,10 +35,9 @@ export default function AccountsDataCollapsible({ row, isEditable }: Props) {
 					justifyContent: "center",
 					gap: 2,
 					width: "100%",
-				}}
-			>
-				<UploadImageButton edit={isEditable} row={row} />
-				<DetailsContainer edit={isEditable} row={row} />
+				}}>
+				<UploadImageButton edit={edit} row={row} />
+				<DetailsContainer edit={edit} row={row} />
 			</Box>
 		</CollapsibleCotainer>
 	);
@@ -73,7 +71,6 @@ function UploadImageButton({
 		image_blob: row.profile_pic_blob,
 		metadata: { key: "profile_pic", id: row.id },
 	});
-  	
 
 	const uploadButton = (
 		<Container1>
@@ -93,13 +90,12 @@ function UploadImageButton({
 					},
 				}}
 				onClick={handleButtonClick}
-				variant="outlined"
-			>
+				variant="outlined">
 				UPLOAD
 			</ImageButton>
 		</Container1>
 	);
-
+	console.log(convertProfile(row.profile_pic));
 	const displayImage = (
 		<BorderedImage
 			sx={{ width: "6rem", height: "6rem" }}
@@ -108,7 +104,6 @@ function UploadImageButton({
 			alt="Profile"
 		/>
 	);
-
 	return edit ? uploadButton : displayImage;
 }
 
@@ -129,7 +124,31 @@ const HorizontalContaner = styled(Box)(() => ({
 function DetailsContainer({ edit, row }: { edit?: boolean | false; row: any }) {
 	const { availableRoles } = useContext(TableContext);
 	const { handleEditEntry: handleEdit } = useContext(TableContext);
-
+	const CustomTextBox = ({
+		label,
+		index,
+		value,
+		slotProps,
+		type,
+	}: {
+		label: string;
+		index: string;
+		value: string;
+		slotProps?: any;
+		type?: any;
+	}) => {
+		return (
+			<DetailsTextfield
+				type={type}
+				slotProps={slotProps}
+				disabled={!edit}
+				label={label}
+				iniitialValue={value}
+				required={edit || false}
+				dataIndex={{ id: row.id, key: index }}
+			/>
+		);
+	};
 	return (
 		<Container>
 			<HorizontalContaner>
@@ -180,8 +199,7 @@ function DetailsContainer({ edit, row }: { edit?: boolean | false; row: any }) {
 								)}`,
 							},
 						},
-					})}
-				>
+					})}>
 					<Tooltip
 						placement="right"
 						title={
@@ -190,8 +208,7 @@ function DetailsContainer({ edit, row }: { edit?: boolean | false; row: any }) {
 									? "Verified"
 									: "Not Verified"
 								: "Accounts are automatically verified when added using the manager"
-						}
-					>
+						}>
 						<VerifiedIcon
 							sx={(theme) => ({
 								fill: row.is_verified
@@ -201,58 +218,51 @@ function DetailsContainer({ edit, row }: { edit?: boolean | false; row: any }) {
 						/>
 					</Tooltip>
 				</IconButton>
-				<DetailsTextfield
-					slotProps={{
-						htmlInput: {
-							maxLength: 10,
-							minLength: 7,
-						},
-					}}
-					disabled={!edit}
-					label="School ID"
-					iniitialValue={row.school_id}
-					required={edit || false}
-					dataIndex={{ id: row.id, key: "school_id" }}
-				/>
-				<DetailsTextfield
-					disabled={!edit}
+				{edit && (
+					<CustomTextBox
+						slotProps={{
+							htmlInput: {
+								maxLength: 10,
+								minLength: 7,
+							},
+						}}
+						label="School ID"
+						index="school_id"
+						value={row.school_id}
+					/>
+				)}
+				<CustomTextBox
 					label="First Name"
-					iniitialValue={row.first_name}
-					required={edit || false}
-					dataIndex={{ id: row.id, key: "first_name" }}
+					index="first_name"
+					value={row.first_name}
 				/>
-				<DetailsTextfield
-					disabled={!edit}
+				<CustomTextBox
 					label="Last Name"
-					iniitialValue={row.last_name}
-					required={edit || false}
-					dataIndex={{ id: row.id, key: "last_name" }}
+					index="last_name"
+					value={row.last_name}
 				/>
 			</HorizontalContaner>
 			<HorizontalContaner>
-				<div className="" style={{ width: "5rem" }}></div>
-				<DetailsTextfield
-					disabled={!edit}
-					label="Email"
-					iniitialValue={row.email}
-					required={edit || false}
-					dataIndex={{ id: row.id, key: "email" }}
-				/>
-				<DetailsTextfield
-					type="password"
-					disabled={!edit}
-					label="Password"
-					iniitialValue={row.password}
-					required={edit || false}
-					dataIndex={{ id: row.id, key: "password" }}
-				/>
+				<div
+					className=""
+					style={{ minWidth: "1.5rem", maxWidth: "1.5rem" }}></div>
+				<CustomTextBox label="Email" index="email" value={row.email} />
+				{edit && (
+					<CustomTextBox
+						label="Password"
+						index="password"
+						value={row.password}
+						type="password"
+					/>
+				)}
 				{edit ? (
 					<LabeledSelect
 						defaultValue={row.role_id}
 						disabled={row.id === "4DM1N"}
-						label="role_id"
-						onChange={(e: any) => handleEdit(row.id, "role_id", e.target.value)}
-					>
+						label="Role"
+						onChange={(e: any) =>
+							handleEdit(row.id, "role_id", e.target.value)
+						}>
 						{(availableRoles || []).map((role: any) => {
 							return (
 								<MenuItem key={role.id} value={role.id}>
@@ -261,13 +271,19 @@ function DetailsContainer({ edit, row }: { edit?: boolean | false; row: any }) {
 							);
 						})}
 					</LabeledSelect>
-				) : <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-					<RoleChip column={{
-					id: "role_name",
-					label: "ROLE",
-					title: "Role",
-				}} columns={columns} color={row.color} newValue={row.role_name} wrapped={false} />
-				</Box> }
+				) : (
+					<CustomTextBox
+						slotProps={{
+							htmlInput: {
+								maxLength: 10,
+								minLength: 7,
+							},
+						}}
+						label="School ID"
+						index="school_id"
+						value={row.school_id}
+					/>
+				)}
 			</HorizontalContaner>
 		</Container>
 	);
@@ -282,16 +298,14 @@ interface LabeledSelectProps {
 export function LabeledSelect({
 	children,
 	label,
-
 	...props
 }: LabeledSelectProps) {
 	return (
-		<FormControl sx={{ width: "100%" }}>
+		<FormControl sx={{ width: "100%", "& .MuiInputBase-root": { fontSize: "0.8rem !important" }, }}>
 			<InputLabel
 				sx={{ fontWeight: "bold" }}
 				size="small"
-				id={`${label}-select-label`}
-			>
+				id={`${label}-select-label`}>
 				{label}
 			</InputLabel>
 			<Select
@@ -300,8 +314,7 @@ export function LabeledSelect({
 				id={`${label}-select`}
 				size="small"
 				{...props}
-				fullWidth
-			>
+				fullWidth>
 				{children}
 			</Select>
 		</FormControl>

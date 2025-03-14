@@ -1,4 +1,4 @@
-import { Box, Skeleton, Theme } from "@mui/material";
+import { Box, Skeleton, styled, Theme } from "@mui/material";
 import React from "react";
 
 const BorderedImage = ({
@@ -19,7 +19,6 @@ const BorderedImage = ({
 	};
 
 	const [imageLoading, setImageLoading] = React.useState(isLoading);
-
 	React.useEffect(() => {
 		if (!isLoading) {
 			setTimeout(() => {
@@ -28,10 +27,8 @@ const BorderedImage = ({
 		}
 	}, [isLoading]);
 
-	return (
-		<React.Fragment>
-			{imageLoading && (
-				<Skeleton
+	const Loader = (
+		<Skeleton
 					variant="rectangular"
 					sx={{
 						width: sx?.width,
@@ -45,27 +42,33 @@ const BorderedImage = ({
 					}}
 					animation="wave"
 				/>
-			)}
-			{!imageLoading && (
-				<Box
-					component={"img"}
-					src={src}
-					alt={alt}
-					onLoad={handleImageLoad}
-					sx={(theme: Theme) => ({
-						opacity: imageLoaded ? 1 : 0,
-						transition: "opacity 1s ease-in-out",
-						objectFit: "cover",
-						border: "solid",
-						borderWidth: 2,
-						borderColor: `primary.main`,
-						borderRadius: theme.shape.borderRadius,
-						...sx,
-					})}
-				/>
-			)}
-		</React.Fragment>
-	);
+	)
+
+	const CustomImage = styled("img") (({theme}: { theme: Theme }) => ({
+		opacity: imageLoaded ? 1 : 0,
+		width: sx?.width,
+		height: sx?.height,
+		minWidth: sx?.width,
+		minHeight: sx?.height,
+		transition: "opacity 1s ease-in-out",
+		objectFit: "cover",
+		border: "solid",
+		borderWidth: 2,
+		borderColor: theme.palette.primary.main,
+		borderRadius: theme.shape.borderRadius,
+		boxSizing: "border-box",
+		...sx,
+	}))
+
+	const ImageComponent = (
+		<CustomImage
+			src={src}
+			alt={alt}
+			onLoad={handleImageLoad}
+		/>
+	)
+
+	return imageLoading ? Loader : ImageComponent
 };
 
 export default BorderedImage;

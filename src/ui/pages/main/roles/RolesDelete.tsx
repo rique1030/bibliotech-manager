@@ -1,15 +1,16 @@
 import ViewTable from "../../components/Table/ViewTable";
 import MainContainer from "../../components/MainContainer";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useLayoutEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Divider, Stack, Button, Tooltip } from "@mui/material";
-import columns from "../../components/Table/columns/DefaultRolesColumnsInterface";
+import { Divider } from "@mui/material";
+import columns from "../../components/Table/columns/role/insert";
 import { useDelete } from "../../hooks/useDelete";
 import { TableContext } from "../../context/TableContext";
 import { TableDeleteContext } from "../../context/TableDeleteContext";
 import TableHeader from "../../components/Table/TableHeader";
 import RolesData from "../../components/Table/Roles/RolesData";
 import DeleteFooter from "../../components/delete/Footer";
+import { getRoute, routes } from "../../Router";
 
 const fetchData = async (payload: RequestByID): Promise<any> => {
 	return await window.requestRole.getByID(payload);
@@ -34,7 +35,7 @@ function RolesDelete() {
 	};
 
 	const options = {
-		url: "/main/roles/manage-roles/remove-roles",
+		url: getRoute(routes.ROLES.DELETE), //"//roles/manage-roles/remove-roles",
 		payload: payload,
 		queryKey: "rolesDelete",
 	};
@@ -50,11 +51,9 @@ function RolesDelete() {
 		isLoading,
 	} = usedelete;
 
-	useEffect(() => {
+	
+	useLayoutEffect(() => {
 		setColumns(columns);
-	}, [state]);
-
-	useEffect(() => {
 		setRows(preData?.data || []);
 	}, [preData]);
 
@@ -63,7 +62,7 @@ function RolesDelete() {
 			<MainContainer>
 				{ConfirmationModal}
 				<ViewTable isLoading={isLoading}>
-					<TableHeader indented />
+					<TableHeader />
 					<RolesData removable />
 				</ViewTable>
 				<Divider />
@@ -77,10 +76,8 @@ export default RolesDelete;
 
 function Footer() {
 	const navigate = useNavigate();
-	const handleGoback = () => navigate("/main/roles/manage-roles");
-	const {
-		rowData: { rows },
-	} = useContext(TableContext);
+	const handleGoback = () => navigate(getRoute(routes.ROLES.VIEW));	
+	const { rowData: { rows } } = useContext(TableContext);
 	const { handleDelete, isDeleting } = useContext(TableDeleteContext);
 	return (
 		<DeleteFooter

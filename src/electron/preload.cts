@@ -1,5 +1,3 @@
-// const electron = require("electron");
-import { get } from "axios";
 import electron from "electron";
 import { ipcRenderer } from "electron";
 
@@ -49,9 +47,14 @@ electron.contextBridge.exposeInMainWorld("requestUser", {
 	update: async (payload: RequestByID) => {
 		return await ipcRenderer.invoke("users-update", payload);
 	},
-
 	delete: async (payload: RequestByID) => {
 		return await ipcRenderer.invoke("users-delete", payload);
+	},
+});
+
+electron.contextBridge.exposeInMainWorld("server", {
+	getURL: async () => {
+		return await ipcRenderer.invoke("getURL");
 	},
 });
 
@@ -68,10 +71,6 @@ electron.contextBridge.exposeInMainWorld("requestBook", {
 		return await ipcRenderer.invoke("books-get-by-id", payload);
 	},
 
-	// getByAccessNumber: async (payload: RequestByID) => {
-	// 	return await ipcRenderer.invoke("books-get-by-access-number", payload);
-	// },
-
 	update: async (payload: RequestByID) => {
 		return await ipcRenderer.invoke("books-update", payload);
 	},
@@ -79,6 +78,35 @@ electron.contextBridge.exposeInMainWorld("requestBook", {
 	delete: async (payload: RequestByID) => {
 		return await ipcRenderer.invoke("books-delete", payload);
 	},
+});
+
+electron.contextBridge.exposeInMainWorld("requestCopy", {
+	getByAccessNumber: async (payload: RequestByID) => {
+		return await ipcRenderer.invoke("copy-via-access-number", payload);
+	},
+
+	insertMultiple: async (payload: InsertCopyPayload) => {
+		return await ipcRenderer.invoke("copy-insert-multiple", payload);
+	},
+
+	getPaged: async (payload: GetPagedPayload) => {
+		return await ipcRenderer.invoke("copy-get-paged", payload);
+	},
+
+	getByID: async (payload: RequestByID) => {
+		return await ipcRenderer.invoke("copy-get-by-id", payload);
+	},
+
+	update: async (payload: any) => {
+		return await ipcRenderer.invoke("copy-update", payload);
+	},
+
+	delete: async (payload: RequestByID) => {
+		return await ipcRenderer.invoke("copy-delete", payload);
+	},
+	transaction: async (payload: any) => {
+		return await ipcRenderer.invoke("copy-transaction", payload);
+	}
 });
 
 electron.contextBridge.exposeInMainWorld("requestCategory", {
@@ -145,13 +173,17 @@ electron.contextBridge.exposeInMainWorld("requestRecord", {
 	getBorrowedBooks: async (payload: GetPagedPayload) => {
 		return await ipcRenderer.invoke("book-borrow-get-paged", payload);
 	},
-
-	// getUserRecords: async (payload: GetPagedPayload) => {
-	// 	return await ipcRenderer.invoke("user-records-get-paged", payload);
-	// },
-
 	getBookCategoryCount: async (payload: GetPagedPayload) => {
 		return await ipcRenderer.invoke("book-category-count-get-paged", payload);
+	},
+	getUserCount: async () => {
+		return await ipcRenderer.invoke("user-count");
+	},
+	getRoleCount: async () => {
+		return await ipcRenderer.invoke("role-count");
+	},
+	getTotalBookCount: async () => {
+		return await ipcRenderer.invoke("book-count");
 	},
 });
 
@@ -172,12 +204,8 @@ electron.contextBridge.exposeInMainWorld("webSocket", {
 		return await ipcRenderer.invoke("review-request", request_id);
 	},
 
-	denyRequest: async (request_id: any) => {
-		return await ipcRenderer.invoke("deny-request", request_id);
-	},
-
-	acceptRequest: async (payload: any) => {
-		return await ipcRenderer.invoke("accept-request", payload);
+	respondRequest: async (payload: any) => {
+		return await ipcRenderer.invoke("respond-request", payload);
 	},
 });
 

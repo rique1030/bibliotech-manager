@@ -54,7 +54,6 @@ export function useDelete({ useDelete, options, getData }: useDeleteInterface) {
 				showTimedAlert("error", data.error);
 			}
 		},
-
 		onError: (error) => {
 			console.error(error);
 			showTimedAlert("error", "An error occurred. Please try again later.");

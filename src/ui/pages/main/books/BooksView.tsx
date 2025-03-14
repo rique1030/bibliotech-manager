@@ -1,16 +1,17 @@
 import { Divider } from "@mui/material";
 import useSearch from "../../hooks/useSearch";
-import { useEffect, useContext } from "react";
+import { useContext, useEffect, useLayoutEffect, useRef } from "react";
 import SearchPanel from "../../components/SearchPanel";
 import ViewTable from "../../components/Table/ViewTable";
 import MainContainer from "../../components/MainContainer";
 import TablePaginationBar from "../../components/Table/TablePaginationBar";
 import BooksData from "../../components/Table/Books/BooksData";
 import TableHeader from "../../components/Table/TableHeader";
-import columns from "../../components/Table/columns/DefaultBookColumnsInterface";
+import columns from "../../components/Table/columns/catalog/view";
 import { TableContext } from "../../context/TableContext";
 import { TableSearchContext } from "../../context/TableSearchContext";
 import { PermissionContext } from "../../context/PermissionContext";
+import { getRoute, routes } from "../../Router";
 
 const fetchData = async (payload: GetPagedPayload): Promise<any> => {
 	return await window.requestBook.getPaged(payload);
@@ -24,29 +25,21 @@ const searchFilter = [
 ];
 
 const URL = {
-	update: "/main/books/manage-books/edit-existing-books",
-	delete: "/main/books/manage-books/remove-books",
-	qr: "/main/books/manage-books/generate-qr-codes",
+	update: getRoute(routes.BOOKS.UPDATE),
+	delete: getRoute(routes.BOOKS.DELETE),
 };
 
 function BooksView() {
 	const { books } = useContext(PermissionContext);
-	/**
-	 * Table
-	 */
 	const {
 		rowData: { setRows },
 		columnData: { setColumns },
 	} = useContext(TableContext);
-	/**
-	 * Search
-	 */
 	const search = useSearch({
 		fetchData,
 		defaultFilter: "title",
 		queryKey: "booksView",
 	});
-
 	const { rowData, isLoading } = search;
 
 	useEffect(() => {
@@ -63,15 +56,11 @@ function BooksView() {
 				<SearchPanel />
 				<Divider variant="middle" />
 				<ViewTable isLoading={isLoading}>
-					<TableHeader selectable />
-					<BooksData selectable />
+					<TableHeader />
+					<BooksData selectable add />
 				</ViewTable>
 				<Divider variant="middle" />
-				<TablePaginationBar
-					canDelete={books.delete}
-					canUpdate={books.update}
-					QR
-				/>
+				<TablePaginationBar canDelete={books.delete} canUpdate={books.update} />
 			</MainContainer>
 		</TableSearchContext.Provider>
 	);

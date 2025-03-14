@@ -4,10 +4,10 @@ import DetailsTextfield from "../../DetailsTextField";
 
 const BooksDataCollapsible = ({
 	row,
-	isEditable,
+	edit,
 }: {
 	row: any;
-	isEditable?: boolean;
+	edit?: boolean;
 }) => {
 	return (
 		<CollapsibleCotainer>
@@ -24,12 +24,12 @@ const BooksDataCollapsible = ({
 						display: "flex",
 						flexDirection: "column",
 						gap: 2,
-						width: "90%",
-						maxWidth: "40vw",
+						width: "100%",
+						// maxWidth: "40vw",
 					}}
 				>
 					<DetailsTextfield
-						disabled={!isEditable}
+						disabled={!edit}
 						label="Name"
 						iniitialValue={row.name || ""}
 						required
@@ -40,7 +40,7 @@ const BooksDataCollapsible = ({
 					/>
 
 					<DetailsTextfield
-						disabled={!isEditable}
+						disabled={!edit}
 						label="Description"
 						iniitialValue={row.description || ""}
 						multiline

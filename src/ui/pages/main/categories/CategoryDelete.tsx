@@ -1,15 +1,16 @@
 import ViewTable from "../../components/Table/ViewTable";
 import MainContainer from "../../components/MainContainer";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useLayoutEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Divider, Stack, Button, Tooltip } from "@mui/material";
-import columns from "../../components/Table/columns/DefaultCategoryColumnsInterface";
+import { Divider } from "@mui/material";
+import columns from "../../components/Table/columns/category/insert";
 import { useDelete } from "../../hooks/useDelete";
 import { TableContext } from "../../context/TableContext";
 import { TableDeleteContext } from "../../context/TableDeleteContext";
 import TableHeader from "../../components/Table/TableHeader";
 import CategoriesData from "../../components/Table/Categories/CategoriesData";
 import DeleteFooter from "../../components/delete/Footer";
+import { getRoute, routes } from "../../Router";
 
 const fetchData = async (payload: RequestByID): Promise<any> => {
 	return await window.requestCategory.getByID(payload);
@@ -34,7 +35,8 @@ function CategoryDelete() {
 	};
 
 	const options = {
-		url: "/main/categories/manage-categories/remove-categories",
+		url: getRoute(routes.CATEGORIES.DELETE), 
+		// "categories/manage-categories/remove-categories",
 		payload: payload,
 		queryKey: "categoriesDelete",
 	};
@@ -50,12 +52,9 @@ function CategoryDelete() {
 		isLoading,
 		preData,
 	} = usedelete;
-
-	useEffect(() => {
+	
+	useLayoutEffect(() => {
 		setColumns(columns);
-	}, [state]);
-
-	useEffect(() => {
 		setRows(preData?.data || []);
 	}, [preData]);
 
@@ -64,8 +63,8 @@ function CategoryDelete() {
 			<MainContainer>
 				{ConfirmationModal}
 				<ViewTable isLoading={isLoading}>
-					<TableHeader indented />
-					<CategoriesData removable />
+					<TableHeader />
+					<CategoriesData />
 				</ViewTable>
 				<Divider />
 				<Footer />
@@ -78,7 +77,7 @@ export default CategoryDelete;
 
 function Footer() {
 	const navigate = useNavigate();
-	const handleGoback = () => navigate("/main/categories/manage-categories");
+	const handleGoback = () => navigate(getRoute(routes.CATEGORIES.VIEW));
 	const {
 		rowData: { rows },
 	} = useContext(TableContext);

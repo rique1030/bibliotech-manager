@@ -9,13 +9,13 @@ import CategoriesDataCollapsible from "./CategoriesCollapsible/CategoriesDataCol
 interface CategoriesDataInterface {
 	selectable?: boolean | false;
 	removable?: boolean | false;
-	isEditable?: boolean | false;
+	edit?: boolean | false;
 }
 
 const CategoriesData = ({
 	selectable,
 	removable,
-	isEditable,
+	edit,
 }: CategoriesDataInterface) => {
 	const {
 		rowData: { rows },
@@ -34,7 +34,7 @@ const CategoriesData = ({
 							row={row}
 						/>
 						<TableDataCollapsible openedRowIndex={OpenedRowIndex} index={index}>
-							<CategoriesDataCollapsible isEditable={isEditable} row={row} />
+							<CategoriesDataCollapsible edit={edit} row={row} />
 						</TableDataCollapsible>
 					</Fragment>
 				);

@@ -1,5 +1,5 @@
 import { Chip, Theme, useTheme, alpha, styled } from "@mui/material";
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { TableContext } from "../../context/TableContext";
 
 const StyledChip = styled(Chip)(() => ({
@@ -35,7 +35,7 @@ const GetStatus = ({
 	const [statusIndex, setStatusIndex] = useState(1);
 	const [statusDisplay, setStatusDisplay] = useState("select status");
 
-	React.useEffect(() => {
+	useLayoutEffect(() => {
 		if (!statuses.includes(row?.status || "") && row?.status !== "overdue") {
 			if (edit) {
 				return setStatusDisplay("Click Me");

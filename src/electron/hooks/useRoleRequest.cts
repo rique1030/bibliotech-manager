@@ -1,30 +1,29 @@
 import { ipcMain } from "electron";
-import useRequest from "../api/request_api.cjs";
-import CONFIG from "../config.cjs";
+import useRequest, { getURL } from "../api/request_api.cjs";
 
 ipcMain.handle(
 	"roles-insert-multiple",
-	async (event, payload: InsertRolesPayload) => {
-		return await useRequest(CONFIG.URL.ROLE.INSERT_MULTIPLE, "POST", payload);
+	async (_event, payload: InsertRolesPayload) => {
+		return await useRequest((await getURL()).API.ROLES.CREATE_MANY, "POST", payload);
 	}
 );
 
 ipcMain.handle("roles-get-all", async () => {
-	return await useRequest(CONFIG.URL.ROLE.GET_ALL_ROLES, "GET");
+	return await useRequest((await getURL()).API.ROLES.GET_ALL, "GET");
 });
 
-ipcMain.handle("roles-get-paged", async (event, payload: GetPagedPayload) => {
-	return await useRequest(CONFIG.URL.ROLE.GET_PAGED_ROLES, "POST", payload);
+ipcMain.handle("roles-get-paged", async (_event, payload: GetPagedPayload) => {
+	return await useRequest((await getURL()).API.ROLES.PAGED, "POST", payload);
 });
 
-ipcMain.handle("roles-get-by-id", async (event, payload: RequestByID) => {
-	return await useRequest(CONFIG.URL.ROLE.GET_ROLES_BY_ID, "POST", payload);
+ipcMain.handle("roles-get-by-id", async (_event, payload: RequestByID) => {
+	return await useRequest((await getURL()).API.ROLES.GET_BY_ID, "POST", payload);
 });
 
-ipcMain.handle("roles-update", async (event, payload: RoleUpdatePayload) => {
-	return await useRequest(CONFIG.URL.ROLE.UPDATE_ROLE, "POST", payload);
+ipcMain.handle("roles-update", async (_event, payload: RoleUpdatePayload) => {
+	return await useRequest((await getURL()).API.ROLES.UPDATE, "POST", payload);
 });
 
-ipcMain.handle("roles-delete", async (event, payload: { id: RequestByID }) => {
-	return await useRequest(CONFIG.URL.ROLE.DELETE_ROLE, "POST", payload);
+ipcMain.handle("roles-delete", async (_event, payload: { id: RequestByID }) => {
+	return await useRequest((await getURL()).API.ROLES.DELETE, "POST", payload);
 });

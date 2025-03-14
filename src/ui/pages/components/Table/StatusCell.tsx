@@ -2,16 +2,15 @@ import Box from "@mui/material/Box";
 import StyledCell from "./TableStyledCell";
 import GetStatus from "./TableBookStatus";
 
-const StatusCell = ({ column, columns, row, newValue }: any) => {
+const StatusCell = ({ column, row, newValue, sx={} }: any) => {
 	row.status = newValue;
 	return (
 		<StyledCell
 			key={column.id}
-			index={columns.indexOf(column)}
-			length={columns.length}
 			column={column}
 			borderColor="divider"
 			sx={{
+				...sx,
 				minWidth: column.minWidth,
 				maxWidth: column.maxWidth,
 			}}

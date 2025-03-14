@@ -8,13 +8,13 @@ import RolesDataCollapsible from "./RolesCollapsible/RolesDataCollapsible";
 interface RolesDataInterface {
 	selectable?: boolean | false;
 	removable?: boolean | false;
-	isEditable?: boolean | false;
+	edit?: boolean | false;
 }
 
 export default function RolesData({
 	selectable,
 	removable,
-	isEditable,
+	edit,
 }: RolesDataInterface) {
 	const {
 		rowData: { rows },
@@ -33,7 +33,7 @@ export default function RolesData({
 							row={row}
 						/>
 						<TableDataCollapsible openedRowIndex={OpenedRowIndex} index={index}>
-							<RolesDataCollapsible isEditable={isEditable} row={row} />
+							<RolesDataCollapsible edit={edit} row={row} />
 						</TableDataCollapsible>
 					</Fragment>
 				);

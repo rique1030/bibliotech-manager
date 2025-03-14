@@ -1,147 +1,104 @@
-import React, { useLayoutEffect } from "react";
-import { Box, Typography, TextField } from "@mui/material";
+import React from "react";
+import { Box, Typography, TextField, styled, Theme } from "@mui/material";
 import PasswordTextField from "../../../components/PasswordTextField";
-import { useNavigate } from "react-router-dom";
 import LogoIcon from "../../../components/LogoIcon";
-import { useMutation } from "@tanstack/react-query";
 import { LoadingButton } from "@mui/lab";
 import LoginIcon from "@mui/icons-material/Login";
+import { useNavigate } from "react-router-dom";
+import { getRoute, routes } from "../../../Router";
+import { validateEmail, validatePassword } from "../../../helper/Verify";
+import { useAuth } from "../../../context/AuthProvider";
+
+const LoginWrapper = styled(Box)(() => ({
+	display: "flex",
+	flexDirection: "column",
+	justifyContent: "center",
+	alignItems: "center",
+	gap: "2rem",
+	width: "45%",
+	boxSizing: "border-box",
+	padding: "2rem",
+}));
+
+const LoginLogoWrapper = styled(Box)(() => ({
+	display: "flex",
+	flexDirection: "row",
+	alignItems: "center",
+	gap: "0.4rem",
+}));
+
+const LogoTitle = styled(Typography)(({ theme }: { theme: Theme }) => ({
+	fontWeight: "bold",
+	margin: 0,
+	color: theme.palette.text.primary,
+}));
+
+const LoginTopPanelWrapper = styled(Box)(() => ({
+	display: "flex",
+	flexDirection: "column",
+	gap: "1rem",
+	justifyContent: "left",
+	width: "100%",
+	maxWidth: "25rem",
+}));
+
+const PanelContainer = styled(Box)(() => ({
+	display: "flex",
+	flexDirection: "column",
+	gap: "2rem",
+	width: "100%",
+	maxWidth: "25rem",
+}));
 
 function LoginPanel() {
 	return (
-		<Box
-			sx={{
-				display: "flex",
-				flexDirection: "column",
-				justifyContent: "center",
-				alignItems: "center",
-				gap: "2rem",
-				width: "45%",
-				boxSizing: "border-box",
-				padding: "2rem",
-			}}
-		>
+		<LoginWrapper>
 			<LoginPanelTop />
 			<LoginForm />
-		</Box>
+		</LoginWrapper>
 	);
 }
 
-export default LoginPanel;
-
 const LoginLogo = () => (
-	<Box
-		sx={{
-			display: "flex",
-			flexDirection: "row",
-			alignItems: "center",
-			gap: "0.4rem",
-		}}
-	>
+	<LoginLogoWrapper>
 		<LogoIcon sx={{ width: "4rem", height: "4rem", color: "primary.main" }} />
-		<Typography
-			variant="h5"
-			sx={{ fontWeight: "bold", margin: 0, color: "text.primary" }}
-		>
-			Bibliotech
-		</Typography>
-	</Box>
+		<LogoTitle variant="h5">Bibliotech</LogoTitle>
+	</LoginLogoWrapper>
 );
 
 const LoginPanelTop = () => {
 	return (
-		<Box
-			sx={{
-				display: "flex",
-				flexDirection: "column",
-				gap: "1rem",
-				justifyContent: "left",
-				width: "100%",
-				maxWidth: "25rem",
-			}}
-		>
+		<LoginTopPanelWrapper>
 			<LoginLogo />
 			<Typography
 				variant="h4"
-				sx={{ fontWeight: "bold", color: "text.primary" }}
-			>
+				sx={{ fontWeight: "bold", color: "text.primary" }}>
 				Login to your account
 			</Typography>
 			<Typography sx={{ color: "text.secondary" }}>Welcome back!</Typography>
-		</Box>
+		</LoginTopPanelWrapper>
 	);
 };
 
-const fetchData = async (payload: UserLoginPayload): Promise<any> => {
-	return await window.requestUser.login(payload);
-};
-
 const LoginForm = () => {
-	// State for email and password
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
-
 	const [emailError, setEmailError] = React.useState(false);
 	const [passwordError, setPasswordError] = React.useState(false);
 	const [errorText, setErrorText] = React.useState("");
-	const navigate = useNavigate();
-	const mutation = useMutation({
-		gcTime: 0,
-		mutationFn: (payload: UserLoginPayload) => fetchData(payload),
-		onSuccess: (data) => {
-			if (data && data.data) {
-				const connectToServer = async () => {
-					const account = {
-						email: data.data[0].email,
-						first_name: data.data[0].first_name,
-						id: data.data[0].id,
-						is_verified: data.data[0].is_verified,
-						last_name: data.data[0].last_name,
-						profile_pic: data.data[0].profile_pic,
-						role_id: data.data[0].role_id,
-						school_id: data.data[0].school_id,
-					};
-					console.log(account);
-					await window.storedSettings.saveAccount(account);
-					await window.webSocket.connect();
-					navigate("/main/records/book-copies");
-				};
-				connectToServer();
-			} else {
-				setEmailError(true);
-				setPasswordError(true);
-				if (data?.error === "ECONNREFUSED") {
-					setErrorText(
-						"The server is currently unavailable. Please try again later."
-					);
-					return;
-				}
-				setErrorText("Invalid email or password");
-			}
-		},
-		onError: (error) => {
-			console.error(error);
-		},
-	});
+	const { login, errorMessage, loading } = useAuth();
 
-	const handleLogin = () => {
-		const payload: UserLoginPayload = {
-			email,
-			password,
-		};
-		mutation.mutate(payload);
-	};
-
-	const handleMouseDownPassword = (
-		event: React.MouseEvent<HTMLButtonElement>
-	) => {
-		event.preventDefault();
-	};
-
-	const handleMouseUpPassword = (
-		event: React.MouseEvent<HTMLButtonElement>
-	) => {
-		event.preventDefault();
+	const handleLogin = async () => {
+		const loginResult = await login(
+			{ email, password },
+			"/main/records/dashboard"
+		);
+		if (!loginResult) {
+			setEmailError(true);
+			setPasswordError(true);
+			setErrorText(errorMessage);
+			return;
+		}
 	};
 
 	const onKeyDownEnter = (e: React.KeyboardEvent) => {
@@ -151,23 +108,27 @@ const LoginForm = () => {
 	};
 
 	const handleSubmit = () => {
-		const emailIsValid = !!email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/i.test(email);
-		const passwordIsValid = !!password;
-		if (!emailIsValid) {
-			setEmailError(true);
-			setErrorText("Please enter a valid email address");
-		} else if (!passwordIsValid) {
-			setPasswordError(true);
-			setErrorText("Please enter a valid password");
-		} else {
+		try {
+			if (!validateEmail(email))
+				throw {
+					message: "Please enter a valid email address",
+					email: true,
+					password: false,
+				};
+			if (!validatePassword(password))
+				throw {
+					message: "Please enter a valid password",
+					email: false,
+					password: true,
+				};
 			setEmailError(false);
 			setPasswordError(false);
 			setErrorText("");
-		}
-		if (emailIsValid && passwordIsValid) {
-			// Handle form submission
 			handleLogin();
-			//navigate("/main/");
+		} catch (e: any) {
+			setErrorText(e.message);
+			setEmailError(e.email);
+			setPasswordError(e.password);
 		}
 	};
 
@@ -177,25 +138,10 @@ const LoginForm = () => {
 		setErrorText("");
 	};
 
-	useLayoutEffect(() => {
-		const deleteAccount = async () => {
-			await window.storedSettings.deleteAccount();
-			await window.webSocket.disconnect();
-		};
-		deleteAccount();
-	}, []);
-
 	return (
-		<Box
-			sx={{
-				display: "flex",
-				flexDirection: "column",
-				gap: "2rem",
-				width: "100%",
-				maxWidth: "25rem",
-			}}
-		>
+		<PanelContainer>
 			<TextField
+				disabled={loading}
 				error={emailError}
 				id="login-email"
 				label="Email"
@@ -213,8 +159,8 @@ const LoginForm = () => {
 					}
 				}}
 			/>
-
 			<PasswordTextField
+				disabled={loading}
 				error={passwordError}
 				onChange={(e: any) => setPassword(e.target.value)}
 				onKeyDown={(e: any) => onKeyDownEnter(e)}
@@ -232,12 +178,11 @@ const LoginForm = () => {
 					padding: 0,
 					height: "0.8rem",
 					fontSize: "0.8rem",
-				}}
-			>
+				}}>
 				{errorText}
 			</Typography>
 			<LoadingButton
-				loading={mutation.isPending}
+				loading={loading}
 				loadingPosition="start"
 				startIcon={<LoginIcon />}
 				variant="outlined"
@@ -251,10 +196,11 @@ const LoginForm = () => {
 				onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
 					event.currentTarget.blur();
 					handleSubmit();
-				}}
-			>
+				}}>
 				Login
 			</LoadingButton>
-		</Box>
+		</PanelContainer>
 	);
 };
+
+export default LoginPanel;

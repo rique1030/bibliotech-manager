@@ -1,5 +1,7 @@
 import { Box, Typography } from "@mui/material";
+
 import LoginDisplay from "../../../../assets/login/LoginDisplay.svg";
+
 const DisplayPanel = () => {
 	return (
 		<Box
@@ -22,7 +24,6 @@ const DisplayPanel = () => {
 				alt="Login Display"
 				sx={{ width: "60%", height: "60%" }}
 			/>
-
 			<Box sx={{ textAlign: "center", color: "white" }}>
 				<Typography variant="h5"> Your library solution awaits.</Typography>
 				<Typography>

@@ -40,6 +40,7 @@ body {
 	place-items: center;
 	min-width: 320px;
 	min-height: 100vh;
+	/* background-color: #5b40e4; */
 }
 *::-webkit-scrollbar {
 	display: none;
@@ -47,14 +48,14 @@ body {
 }
 
 *::-webkit-scrollbar-track {
-	/* border-radius: 20px; */
-	background-color: #5b40e4;
+	border-radius: 20px; 
+	background-color: rgba(0, 0, 0, 0.1);
 }
 
 *::-webkit-scrollbar-thumb {
 	background-color: rgba(255, 255, 255, 0.214);
-	/* border-radius: 10px; */
-	/* border: 3px solid transparent; */
+	 border-radius: 10px; 
+	 border: 3px solid transparent; 
 	background-clip: content-box;
 }
 

@@ -2,7 +2,7 @@
 import { Divider, TableBody } from "@mui/material";
 // Hooks
 import useSearch from "../../hooks/useSearch";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useLayoutEffect } from "react";
 // Components
 import SearchPanel from "../../components/SearchPanel";
 import ViewTable from "../../components/Table/ViewTable";
@@ -45,7 +45,7 @@ function BookCategoryCount() {
 	});
 	const { rowData, isLoading } = search;
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		setRows(rowData);
 		setColumns(columns);
 	}, [rowData]);
@@ -63,8 +63,6 @@ function BookCategoryCount() {
 						})}
 					</TableBody>
 				</ViewTable>
-				<Divider variant="middle" />
-				<TablePaginationBar />
 			</MainContainer>
 		</TableSearchContext.Provider>
 	);

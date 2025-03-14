@@ -4,44 +4,44 @@ import DetailsTextfield from "../../DetailsTextField";
 
 interface TopDescriptionContainerProps {
 	row: booksRowsInterface | BookPayload;
-	isEditable?: boolean;
+	edit?: boolean;
 }
 
 const TopDescriptionContainer = ({
 	row,
-	isEditable = false,
+	edit = false,
 }: TopDescriptionContainerProps) => {
 	return (
 		<DetailsContainer>
 			<TextFieldContainer>
 				<DetailsTextfield
-					disabled={!isEditable}
+					disabled={!edit}
 					label="Title"
 					iniitialValue={row.title}
-					required={isEditable || false}
+					required={edit || false}
 					dataIndex={{ id: row.id, key: "title" }}
 				/>
 				<DetailsTextfield
-					disabled={!isEditable}
+					disabled={!edit}
 					label="Author"
 					iniitialValue={row.author}
-					required={isEditable || false}
+					required={edit || false}
 					dataIndex={{ id: row.id, key: "author" }}
 				/>
 			</TextFieldContainer>
 			<TextFieldContainer>
 				<DetailsTextfield
-					disabled={!isEditable}
+					disabled={!edit}
 					label="Call Number"
 					iniitialValue={row.call_number}
-					required={isEditable || false}
+					required={edit || false}
 					dataIndex={{ id: row.id, key: "call_number" }}
 				/>
 				<DetailsTextfield
-					disabled={!isEditable}
+					disabled={!edit}
 					label="Publisher"
 					iniitialValue={row.publisher || ""}
-					required={isEditable || false}
+					required={edit || false}
 					dataIndex={{ id: row.id, key: "publisher" }}
 				/>
 			</TextFieldContainer>

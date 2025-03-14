@@ -1,40 +1,43 @@
 const columns: columnsInterface[] = [
 	{
+		id: "index",
+		label: "#",
+		box: true,
+		align: "center",
+		sortable: false,
+	},
+	{
 		id: "call_number",
 		label: "CALL NO",
-		title: "Call No",
-		minWidth: 100,
-		maxWidth: 150,
+		widthPercent: 20,
+		sortable: true,
 	},
 	{
 		id: "title",
 		label: "TITLE",
-		title: "Title",
-		minWidth: 150,
-		maxWidth: 200,
+		widthPercent: 25,
+		sortable: true,
 	},
 	{
 		id: "author",
 		label: "AUTHOR",
-		title: "Author",
-		minWidth: 150,
-		maxWidth: 200,
+		widthPercent: 20,
+		sortable: true,
 	},
 	{
 		id: "publisher",
 		label: "PUBLISHER",
-		title: "Publisher",
-		minWidth: 150,
-		maxWidth: 200,
+		widthPercent: 20,
+		sortable: true,
 	},
 	{
 		id: "copies",
 		label: "COPY",
-		title: "Copies",
-		minWidth: 60,
-		maxWidth: 60,
 		align: "center",
+		widthPercent: 15,
+		sortable: true,
 	},
 ];
 
 export default columns;
+

@@ -1,15 +1,16 @@
 import { useContext, useLayoutEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Divider, Stack, Button, Tooltip } from "@mui/material";
+import { Divider } from "@mui/material";
 import { TableContext } from "../../context/TableContext";
 import { TableUpdateContext } from "../../context/TableUpdateContext";
 import { useUpdate } from "../../hooks/useUpdate";
 import ViewTable from "../../components/Table/ViewTable";
 import MainContainer from "../../components/MainContainer";
-import columns from "../../components/Table/columns/DefaultRolesColumnsInterface";
+import columns from "../../components/Table/columns/role/insert";
 import TableHeader from "../../components/Table/TableHeader";
 import RolesData from "../../components/Table/Roles/RolesData";
 import UpdateFooter from "../../components/update/Footer";
+import { getRoute, routes } from "../../Router";
 
 const fetchData = async (payload: RequestByID): Promise<any> => {
 	return await window.requestRole.getByID(payload);
@@ -36,7 +37,7 @@ function RolesUpdate() {
 	};
 
 	const options = {
-		url: "/main/roles/manage-roles/edit-existing-roles",
+		url: getRoute(routes.ROLES.UPDATE), // "//roles/manage-roles/edit-existing-roles",
 		field,
 		payload: payload,
 		queryKey: "rolesUpdate",
@@ -62,8 +63,8 @@ function RolesUpdate() {
 			<MainContainer>
 				{ConfirmationModal}
 				<ViewTable isLoading={isLoading}>
-					<TableHeader indented />
-					<RolesData removable isEditable />
+					<TableHeader/>
+					<RolesData edit/>
 				</ViewTable>
 				<Divider />
 				<Footer />
@@ -74,7 +75,7 @@ function RolesUpdate() {
 
 function Footer() {
 	const navigate = useNavigate();
-	const handleGoback = () => navigate("/main/roles/manage-roles");
+	const handleGoback = () => navigate(getRoute(routes.ROLES.VIEW));
 	const {
 		useupdate: { handleUpdate, isUpdating },
 	} = useContext(TableUpdateContext);

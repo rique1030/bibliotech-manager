@@ -1,15 +1,16 @@
 import ViewTable from "../../components/Table/ViewTable";
 import MainContainer from "../../components/MainContainer";
 import BooksData from "../../components/Table/Books/BooksData";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useLayoutEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Divider } from "@mui/material";
-import columns from "../../components/Table/columns/DefaultBookColumnsInterface";
+import columns from "../../components/Table/columns/catalog/insert";
 import { useDelete } from "../../hooks/useDelete";
 import { TableContext } from "../../context/TableContext";
 import { TableDeleteContext } from "../../context/TableDeleteContext";
 import TableHeader from "../../components/Table/TableHeader";
 import DeleteFooter from "../../components/delete/Footer";
+import { getRoute, routes } from "../../Router";
 
 const fetchData = async (payload: RequestByID): Promise<any> => {
 	console.log(payload);
@@ -35,7 +36,8 @@ function BooksDelete() {
 	};
 
 	const options = {
-		url: "/main/books/manage-books/remove-books",
+		// books/manage-books/remove-books",
+		url: getRoute(routes.BOOKS.DELETE),
 		payload: payload,
 		queryKey: "booksDelete",
 	};
@@ -50,14 +52,9 @@ function BooksDelete() {
 		isLoading,
 		preData,
 	} = usedelete;
-
-	useEffect(() => {
-		console.log(state);
+	
+	useLayoutEffect(() => {
 		setColumns(columns);
-	}, [state]);
-
-	useEffect(() => {
-		console.log(preData);
 		setRows(preData?.data || []);
 	}, [preData]);
 
@@ -66,8 +63,8 @@ function BooksDelete() {
 			<MainContainer>
 				{ConfirmationModal}
 				<ViewTable isLoading={isLoading}>
-					<TableHeader indented />
-					<BooksData removable />
+					<TableHeader/>
+					<BooksData/>
 				</ViewTable>
 				<Divider />
 				<Footer />
@@ -80,10 +77,8 @@ export default BooksDelete;
 
 function Footer() {
 	const navigate = useNavigate();
-	const handleGoback = () => navigate("/main/books/manage-books");
-	const {
-		rowData: { rows },
-	} = useContext(TableContext);
+	const handleGoback = () => navigate(getRoute(routes.BOOKS.VIEW));
+	const { rowData: { rows } } = useContext(TableContext);
 	const { handleDelete, isDeleting } = useContext(TableDeleteContext);
 	return (
 		<DeleteFooter

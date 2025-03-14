@@ -2,18 +2,19 @@
 import { Divider } from "@mui/material";
 // Hooks
 import useSearch from "../../hooks/useSearch";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useLayoutEffect } from "react";
 // Components
 import SearchPanel from "../../components/SearchPanel";
 import ViewTable from "../../components/Table/ViewTable";
 import MainContainer from "../../components/MainContainer";
 import TablePaginationBar from "../../components/Table/TablePaginationBar";
 import TableHeader from "../../components/Table/TableHeader";
-import columns from "../../components/Table/columns/DefaultRolesColumnsInterface";
+import columns from "../../components/Table/columns/role/view";
 import { TableContext } from "../../context/TableContext";
 import { TableSearchContext } from "../../context/TableSearchContext";
 import RolesData from "../../components/Table/Roles/RolesData";
 import { PermissionContext } from "../../context/PermissionContext";
+import { getRoute, routes } from "../../Router";
 
 const fetchData = async (payload: GetPagedPayload): Promise<any> => {
 	return await window.requestRole.getPaged(payload);
@@ -25,8 +26,8 @@ const searchFilter: any[] = [
 ];
 
 const URL = {
-	update: "/main/roles/manage-roles/edit-existing-roles",
-	delete: "/main/roles/manage-roles/remove-roles",
+	update: getRoute(routes.ROLES.UPDATE),//"//roles/manage-roles/edit-existing-roles",
+	delete: getRoute(routes.ROLES.DELETE)//"//roles/manage-roles/remove-roles",
 };
 
 function RolesView() {
@@ -48,7 +49,7 @@ function RolesView() {
 	});
 	const { rowData, isLoading } = search;
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		setRows(rowData);
 		setColumns(columns);
 	}, [rowData]);

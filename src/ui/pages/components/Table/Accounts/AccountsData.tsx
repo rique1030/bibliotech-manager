@@ -8,13 +8,13 @@ import AccountsDataCollapsible from "./AccountsCollapsible/AccountsDataCollapsib
 interface AccountsDataInterface {
 	selectable?: boolean | false;
 	removable?: boolean | false;
-	isEditable?: boolean | false;
+	edit?: boolean | false;
 }
 
 export default function AccountsData({
 	selectable,
 	removable,
-	isEditable,
+	edit,
 }: AccountsDataInterface) {
 	const {
 		rowData: { rows },
@@ -33,7 +33,7 @@ export default function AccountsData({
 							row={row}
 						/>
 						<TableDataCollapsible openedRowIndex={OpenedRowIndex} index={index}>
-							<AccountsDataCollapsible isEditable={isEditable} row={row} />
+							<AccountsDataCollapsible edit={edit} row={row} />
 						</TableDataCollapsible>
 					</Fragment>
 				);

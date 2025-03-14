@@ -5,13 +5,13 @@ import convertToLetterCase from "../../helper/ConvertToLetterCase";
 
 interface RoleChipProps {
 	column: columnsInterface;
-	columns: any[];
 	newValue: string;
 	color?: string;
 	wrapped?: boolean
+	width?: number
 }
 
-const RoleChip = ({ column, columns, newValue, color, wrapped=true }: RoleChipProps) => {
+const RoleChip = ({ column, newValue, color, wrapped=true, width }: RoleChipProps) => {
 
 	const MainChip = (
 		<Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
@@ -30,7 +30,6 @@ const RoleChip = ({ column, columns, newValue, color, wrapped=true }: RoleChipPr
 					backgroundColor: color || "#5b40e4",
 					color: theme.palette.getContrastText(color || "#5b40e4"),
 					borderColor: color,
-					// width: "8rem",
 					minWidth: 0,
 				})}
 			/>
@@ -38,13 +37,7 @@ const RoleChip = ({ column, columns, newValue, color, wrapped=true }: RoleChipPr
 	)
 
 	const WrappedChip = (
-		<StyledCell
-			borderColor="divider"
-			column={column}
-			index={columns.indexOf(column)}
-			key={column.id}
-			length={columns.length}
-		>
+		<StyledCell column={column} sx={{width: width}} >
 			{MainChip}
 		</StyledCell>
 		

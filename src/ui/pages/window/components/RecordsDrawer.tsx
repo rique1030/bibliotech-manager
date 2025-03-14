@@ -3,8 +3,7 @@ import {
 	SpaceDashboard,
 	CollectionsBookmarkOutlined,
 	BookmarksOutlined,
-	FolderSharedOutlined,
-	MoreOutlined,
+	PlaylistAddCheckCircle
 } from "@mui/icons-material";
 import CustomTreeItem from "./CustomTreeItem";
 
@@ -16,10 +15,20 @@ const RecordsDrawer = ({ expandedItems, handleExpandedItemChange }: any) => {
 				onExpandedItemsChange={handleExpandedItemChange}
 			>
 				<CustomTreeItem
+						itemId="Dashboard"
+						label="Dashboard"
+						src="/main/records/dashboard"
+						main
+						icon={<SpaceDashboard
+							sx={{ fontSize: "1.2rem", color: "primary.main" }}
+						/>
+					}
+				/>
+				<CustomTreeItem
 					itemId="Records"
 					label="Records"
 					icon={
-						<SpaceDashboard
+						<PlaylistAddCheckCircle
 							sx={{ fontSize: "1.2rem", color: "primary.main" }}
 						/>
 					}
@@ -40,16 +49,6 @@ const RecordsDrawer = ({ expandedItems, handleExpandedItemChange }: any) => {
 						src="/main/records/borrowings"
 						icon={
 							<BookmarksOutlined
-								sx={{ fontSize: "1.2rem", color: "primary.main" }}
-							/>
-						}
-					/>
-					<CustomTreeItem
-						itemId="SELECTBOOKCATEGORIES"
-						label="Book Categories"
-						src="/main/records/book-categories"
-						icon={
-							<MoreOutlined
 								sx={{ fontSize: "1.2rem", color: "primary.main" }}
 							/>
 						}

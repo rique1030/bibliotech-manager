@@ -1,19 +1,8 @@
 import StyledCell from "./TableStyledCell";
 
-const TextCell = ({ column, columns, newValue }: any) => {
+const TextCell = ({ column, newValue, width}: { column: any; newValue: any; width: number}) => {
 	return (
-		<StyledCell
-			color="text.secondary"
-			index={columns.indexOf(column)}
-			length={columns.length}
-			column={column}
-			key={column.id}
-			borderColor="divider"
-			sx={{
-				minWidth: column.minWidth,
-				maxWidth: column.maxWidth,
-			}}
-		>
+		<StyledCell column={column} sx={{width: width,}}>
 			{newValue}
 		</StyledCell>
 	);

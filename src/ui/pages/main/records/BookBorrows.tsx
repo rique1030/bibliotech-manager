@@ -1,10 +1,9 @@
 import { Divider, TableBody } from "@mui/material";
 import useSearch from "../../hooks/useSearch";
-import { useEffect, useContext } from "react";
+import { useContext, useLayoutEffect } from "react";
 import SearchPanel from "../../components/SearchPanel";
 import ViewTable from "../../components/Table/ViewTable";
 import MainContainer from "../../components/MainContainer";
-import TablePaginationBar from "../../components/Table/TablePaginationBar";
 import TableHeader from "../../components/Table/TableHeader";
 import columns from "../../components/Table/columns/DefaultBookBorrowColumnsInterface";
 import { TableContext } from "../../context/TableContext";
@@ -40,7 +39,7 @@ function BookBorrow() {
 	});
 	const { rowData, isLoading } = search;
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		setRows(rowData);
 		setColumns(columns);
 	}, [rowData]);
@@ -58,8 +57,6 @@ function BookBorrow() {
 						})}
 					</TableBody>
 				</ViewTable>
-				<Divider variant="middle" />
-				<TablePaginationBar />
 			</MainContainer>
 		</TableSearchContext.Provider>
 	);

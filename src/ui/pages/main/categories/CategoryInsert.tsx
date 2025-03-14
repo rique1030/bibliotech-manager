@@ -2,13 +2,14 @@ import ViewTable from "../../components/Table/ViewTable";
 import MainContainer from "../../components/MainContainer";
 import { useContext, useLayoutEffect } from "react";
 import { Divider } from "@mui/material";
-import columns from "../../components/Table/columns/DefaultCategoryColumnsInterface";
+import columns from "../../components/Table/columns/category/insert";
 import TableHeader from "../../components/Table/TableHeader";
 import { TableContext } from "../../context/TableContext";
 import { useInsert } from "../../hooks/useInsert";
 import { TableInsertContext } from "../../context/TableInsertContext";
 import CategoriesData from "../../components/Table/Categories/CategoriesData";
 import InsertFooter from "../../components/insert/Footer";
+import { getRoute, routes } from "../../Router";
 
 const insertData = async (payload: InsertCategoriesPayload): Promise<any> => {
 	return await window.requestCategory.insertMultiple(payload);
@@ -27,7 +28,7 @@ function CategoryInsert() {
 	};
 
 	const options = {
-		url: "/main/categories/manage-categories",
+		url: getRoute(routes.CATEGORIES.VIEW), //"categories/manage-categories",
 		field,
 		payload: payload,
 	};
@@ -56,7 +57,7 @@ function CategoryInsert() {
 			<MainContainer>
 				<ViewTable>
 					<TableHeader indented />
-					<CategoriesData removable isEditable />
+					<CategoriesData removable edit />
 				</ViewTable>
 				<Divider />
 				<Footer />

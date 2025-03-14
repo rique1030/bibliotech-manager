@@ -1,50 +1,53 @@
-import { Box, TableCell, Typography } from "@mui/material";
+import { Box, styled, TableCell, Typography } from "@mui/material";
 type StyledCellProps = {
 	children?: any;
 	column: any;
-	length: number;
-	index: number;
 	sx?: any;
 	borderColor?: string;
 	color?: string;
+	header?: boolean | false;
 };
 
+const StyledCellWrapper = styled(TableCell)(() => ({
+	padding: "0px",
+	height: "4rem",
+	boxSizing: "border-box",
+	whiteSpace: "nowrap",
+	overflow: "hidden",
+	textOverflow: "ellipsis",
+	backgroundColor: "background.paper",
+	borderBottom: "1px solid",
+	transition: "all 0.2s ease-in-out",
+}))
+
 const StyledCell = ({
-	borderColor,
+	borderColor="divider",
 	children,
 	column,
-	length,
-	index,
 	sx,
-	color,
+	color="text.secondary",
+	header,
 }: StyledCellProps) => {
 	return (
-		<TableCell
+		<StyledCellWrapper
 			sx={{
-				padding: "0px",
-				height: "4rem",
-				boxSizing: "border-box",
 				...sx,
-				minWidth: column.minWidth || "auto",
-				maxWidth: column.maxWidth || "auto",
-				whiteSpace: "nowrap",
-				overflow: "hidden",
-				textOverflow: "ellipsis",
-				backgroundColor: "background.paper",
-				borderBottom: "2px solid",
+				maxWidth: sx.width,
 				borderColor: borderColor || "secondary.dark",
 			}}
 			className="MuiTableCell-Header"
 		>
 			<Box
 				sx={{
+					"@keyframes fadeIn": { from: { opacity: 0 }, to: { opacity: 1 } },
+					animation: "fadeIn 0.3s ease-out",
+					transition: "width 0.3s ease-in-out",
 					display: "flex",
 					alignItems: "center",
-					borderRight: length - 1 !== index ? "2px solid" : "0px",
-					borderColor: borderColor || "secondary.dark",
 					height: "100%",
 					paddingLeft: "1rem",
 					paddingRight: "1rem",
+					// maxWidth: "min-content",
 					justifyContent:
 						column.align === "right"
 							? "flex-end"
@@ -55,11 +58,13 @@ const StyledCell = ({
 			>
 				{typeof children === "string" || typeof children === "number" ? (
 					<Typography
+						variant= {header ? "overline" : "body2"}
 						sx={{
 							color: color || "text.primary",
 							fontSize: "0.9rem",
-							fontWeight: "bold",
-							maxWidth: "100%",
+							// maxWidth: "min-content",
+							// maxWidth: "100%",
+							fontWeight: header ? "bold" : "normal",
 							whiteSpace: "nowrap",
 							overflow: "hidden",
 							textOverflow: "ellipsis",
@@ -72,7 +77,7 @@ const StyledCell = ({
 					children
 				)}
 			</Box>
-		</TableCell>
+		</StyledCellWrapper>
 	);
 };
 

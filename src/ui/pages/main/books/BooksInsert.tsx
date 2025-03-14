@@ -3,12 +3,13 @@ import MainContainer from "../../components/MainContainer";
 import { useContext, useLayoutEffect } from "react";
 import { Divider } from "@mui/material";
 import BooksData from "../../components/Table/Books/BooksData";
-import columns from "../../components/Table/columns/DefaultBookColumnsInterface";
+import columns from "../../components/Table/columns/catalog/insert";
 import TableHeader from "../../components/Table/TableHeader";
 import { TableContext } from "../../context/TableContext";
 import { useInsert } from "../../hooks/useInsert";
 import { TableInsertContext } from "../../context/TableInsertContext";
 import InsertFooter from "../../components/insert/Footer";
+import { getRoute, routes } from "../../Router";
 
 const insertData = async (payload: InsertBooksPayload): Promise<any> => {
 	return await window.requestBook.insertMultiple(payload);
@@ -30,7 +31,7 @@ function BooksInsert() {
 	};
 
 	const options = {
-		url: "/main/books/manage-books",
+		url: getRoute(routes.BOOKS.VIEW), //books/manage-books",
 		field,
 		payload: payload,
 	};
@@ -66,7 +67,7 @@ function BooksInsert() {
 			<MainContainer>
 				<ViewTable>
 					<TableHeader indented />
-					<BooksData removable isEditable />
+					<BooksData removable edit />
 				</ViewTable>
 				<Divider />
 				<Footer />

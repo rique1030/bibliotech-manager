@@ -33,8 +33,6 @@ function TableContextProvider({ children }: { children: React.ReactNode }) {
 	};
 
 	const handleEditEntry = (index: number, key: string, value: any) => {
-		console.log(index, key, value);
-		console.log(rows);
 		setRows((prevRows) =>
 			prevRows.map((entry) => {
 				if (entry.id === index) {
@@ -59,13 +57,15 @@ function TableContextProvider({ children }: { children: React.ReactNode }) {
 	const { data: roles, refetch: refetchRoles } = useQuery<any>({
 		queryKey: ["roles"],
 		queryFn: () => getRoles(),
-		staleTime: 60 * 1000,
+		staleTime: 0,
+		refetchInterval: 1000 * 10,
 	});
 
 	const { data: categories, refetch: refetchCategories } = useQuery<any>({
 		queryKey: ["categories"],
 		queryFn: () => getCategories(),
-		staleTime: 60 * 1000,
+		staleTime: 0,
+		refetchInterval: 1000 * 10,
 	});
 
 	useLayoutEffect(() => {

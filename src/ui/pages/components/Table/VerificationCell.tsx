@@ -4,20 +4,14 @@ import VerifiedIcon from "@mui/icons-material/Verified";
 import { Typography } from "@mui/material";
 
 interface VerificationCellProps {
-    columns: any[];
     column: any;
     isVerified: boolean
+    width: number
 }
 
-function VerificationCell ({columns, column, isVerified}: VerificationCellProps ) {
+function VerificationCell ({column, isVerified, width}: VerificationCellProps ) {
     return (
-        <StyledCell
-            index={columns.indexOf(column)}
-            length={columns.length}
-            key={column.id}
-            column={column}
-            borderColor="divider"
-        >
+        <StyledCell column={column} sx={{width: width,}}>
             <Box
                 sx={{
                     width: "100%",
@@ -35,7 +29,7 @@ function VerificationCell ({columns, column, isVerified}: VerificationCellProps 
                                 : theme.palette.text.secondary,
                     })}
                 />
-                <Typography variant="overline" sx={{ color: "text.secondary" }}>
+                <Typography variant="overline" sx={{ color: "text.secondary", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                     {isVerified === true ? "Verified" : "Not Verified"}
                 </Typography>
             </Box>

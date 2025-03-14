@@ -19,7 +19,7 @@ import { TableContext } from "../../../../context/TableContext";
 
 type Props = {
 	row: any;
-	isEditable?: boolean;
+	edit?: boolean;
 };
 
 const StyledColorPicker = styled(HexColorPicker)(({ theme }) => ({
@@ -77,7 +77,7 @@ const CheckboxContainer = styled(Box)(() => ({
 	alignItems: "center",
 }));
 
-export default function RolesDataCollapsible({ row, isEditable }: Props) {
+export default function RolesDataCollapsible({ row, edit }: Props) {
 	return (
 		<CollapsibleCotainer>
 			<Box
@@ -112,15 +112,15 @@ export default function RolesDataCollapsible({ row, isEditable }: Props) {
 							sx={{ width: "100%" }}
 							label="Name"
 							dataIndex={{ id: row.id, key: "role_name" }}
-							required={isEditable || false}
-							disabled={!isEditable}
+							required={edit || false}
+							disabled={!edit}
 							iniitialValue={row.role_name || ""}
 						/>
 						<DetailsTextfield
 							sx={{ flexGrow: 1 }}
 							label="Notes"
 							dataIndex={{ id: row.id, key: "notes" }}
-							disabled={!isEditable}
+							disabled={!edit}
 							iniitialValue={row.notes || ""}
 							multiline
 							rows={3}
@@ -128,7 +128,7 @@ export default function RolesDataCollapsible({ row, isEditable }: Props) {
 					</Box>
 					<Divider variant="fullWidth" />
 					<Box>
-						<PermissionTable isEditable={isEditable} row={row} />
+						<PermissionTable edit={edit} row={row} />
 					</Box>
 				</Box>
 			</Box>
@@ -136,7 +136,7 @@ export default function RolesDataCollapsible({ row, isEditable }: Props) {
 	);
 }
 
-const PermissionTable = ({ row, isEditable }: Props) => {
+const PermissionTable = ({ row, edit }: Props) => {
 	const { handleEditEntry: handleEdit } = useContext(TableContext);
 
 	return (
@@ -164,7 +164,7 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 					<StyledHeadCell>
 						<CheckboxContainer>REMOVE</CheckboxContainer>
 					</StyledHeadCell>
-					{isEditable && (
+					{edit && (
 						<StyledHeadCell>
 							<CheckboxContainer>COLOR</CheckboxContainer>
 						</StyledHeadCell>
@@ -181,7 +181,7 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 								onChange={(e) =>
 									handleEdit(row.id, "account_view", e.target.checked)
 								}
-								disabled={!isEditable || false}
+								disabled={!edit || false}
 							/>
 						</CheckboxContainer>
 					</StyledBodyCell>
@@ -192,7 +192,7 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 								onChange={(e) =>
 									handleEdit(row.id, "account_insert", e.target.checked)
 								}
-								disabled={!isEditable || false}
+								disabled={!edit || false}
 							/>
 						</CheckboxContainer>
 					</StyledBodyCell>
@@ -203,7 +203,7 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 								onChange={(e) =>
 									handleEdit(row.id, "account_update", e.target.checked)
 								}
-								disabled={!isEditable || false}
+								disabled={!edit || false}
 							/>
 						</CheckboxContainer>
 					</StyledBodyCell>
@@ -214,11 +214,11 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 								onChange={(e) =>
 									handleEdit(row.id, "account_delete", e.target.checked)
 								}
-								disabled={!isEditable || false}
+								disabled={!edit || false}
 							/>
 						</CheckboxContainer>
 					</StyledBodyCell>
-					{isEditable && (
+					{edit && (
 						<StyledBodyCell
 							sx={{
 								fontWeight: "bold !important",
@@ -246,7 +246,7 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 								onChange={(e) =>
 									handleEdit(row.id, "roles_view", e.target.checked)
 								}
-								disabled={!isEditable || false}
+								disabled={!edit || false}
 							/>
 						</CheckboxContainer>
 					</StyledBodyCell>
@@ -257,7 +257,7 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 								onChange={(e) =>
 									handleEdit(row.id, "roles_insert", e.target.checked)
 								}
-								disabled={!isEditable || false}
+								disabled={!edit || false}
 							/>
 						</CheckboxContainer>
 					</StyledBodyCell>
@@ -268,7 +268,7 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 								onChange={(e) =>
 									handleEdit(row.id, "roles_update", e.target.checked)
 								}
-								disabled={!isEditable || false}
+								disabled={!edit || false}
 							/>
 						</CheckboxContainer>
 					</StyledBodyCell>
@@ -279,7 +279,7 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 								onChange={(e) =>
 									handleEdit(row.id, "roles_delete", e.target.checked)
 								}
-								disabled={!isEditable || false}
+								disabled={!edit || false}
 							/>
 						</CheckboxContainer>
 					</StyledBodyCell>
@@ -293,7 +293,7 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 								onChange={(e) =>
 									handleEdit(row.id, "books_view", e.target.checked)
 								}
-								disabled={!isEditable || false}
+								disabled={!edit || false}
 							/>
 						</CheckboxContainer>
 					</StyledBodyCell>
@@ -304,7 +304,7 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 								onChange={(e) =>
 									handleEdit(row.id, "books_insert", e.target.checked)
 								}
-								disabled={!isEditable || false}
+								disabled={!edit || false}
 							/>
 						</CheckboxContainer>
 					</StyledBodyCell>
@@ -315,7 +315,7 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 								onChange={(e) =>
 									handleEdit(row.id, "books_update", e.target.checked)
 								}
-								disabled={!isEditable || false}
+								disabled={!edit || false}
 							/>
 						</CheckboxContainer>
 					</StyledBodyCell>
@@ -326,7 +326,7 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 								onChange={(e) =>
 									handleEdit(row.id, "books_delete", e.target.checked)
 								}
-								disabled={!isEditable || false}
+								disabled={!edit || false}
 							/>
 						</CheckboxContainer>
 					</StyledBodyCell>
@@ -340,7 +340,7 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 								onChange={(e) =>
 									handleEdit(row.id, "categories_view", e.target.checked)
 								}
-								disabled={!isEditable || false}
+								disabled={!edit || false}
 							/>
 						</CheckboxContainer>
 					</StyledBodyCell>
@@ -351,7 +351,7 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 								onChange={(e) =>
 									handleEdit(row.id, "categories_insert", e.target.checked)
 								}
-								disabled={!isEditable || false}
+								disabled={!edit || false}
 							/>
 						</CheckboxContainer>
 					</StyledBodyCell>
@@ -362,7 +362,7 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 								onChange={(e) =>
 									handleEdit(row.id, "categories_update", e.target.checked)
 								}
-								disabled={!isEditable || false}
+								disabled={!edit || false}
 							/>
 						</CheckboxContainer>
 					</StyledBodyCell>
@@ -373,7 +373,7 @@ const PermissionTable = ({ row, isEditable }: Props) => {
 								onChange={(e) =>
 									handleEdit(row.id, "categories_delete", e.target.checked)
 								}
-								disabled={!isEditable || false}
+								disabled={!edit || false}
 							/>
 						</CheckboxContainer>
 					</StyledBodyCell>

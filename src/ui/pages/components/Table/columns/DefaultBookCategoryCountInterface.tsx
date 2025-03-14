@@ -1,25 +1,29 @@
 const columns: columnsInterface[] = [
 	{
+		id: "index",
+		label: "#",
+		box: true,
+		align: "center",
+		sortable: false,
+	},
+	{
 		id: "name",
 		label: "CATEGORY",
-		title: "Category",
-		minWidth: 20,
-		maxWidth: 150,
+		sortable: true,
+		widthPercent: 20,
 	},
 	{
 		id: "description",
 		label: "DESCRIPTION",
-		title: "Description",
-		minWidth: 300,
-		maxWidth: 500,
+		sortable: true,
+		widthPercent: 65,
 	},
 	{
 		id: "book_count",
 		label: "BOOKS",
-		title: "Books",
-		minWidth: 20,
-		maxWidth: 80,
 		align: "center",
+		sortable: true,
+		widthPercent: 15,
 	},
 ];
 

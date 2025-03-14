@@ -2,19 +2,20 @@ import ViewTable from "../../components/Table/ViewTable";
 import MainContainer from "../../components/MainContainer";
 import { useContext, useLayoutEffect } from "react";
 import { Divider } from "@mui/material";
-import columns from "../../components/Table/columns/DefaultAccountsColumnsInterface";
+import columns from "../../components/Table/columns/account/insert";
 import TableHeader from "../../components/Table/TableHeader";
 import { TableContext } from "../../context/TableContext";
 import { useInsert } from "../../hooks/useInsert";
 import { TableInsertContext } from "../../context/TableInsertContext";
 import AccountsData from "../../components/Table/Accounts/AccountsData";
 import InsertFooter from "../../components/insert/Footer";
+import { getRoute, routes } from "../../Router";
 
 const insertData = async (payload: InsertUsersPayload): Promise<any> => {
 	return await window.requestUser.insertMultiple(payload);
 };
 
-const field = ["first_name", "last_name", "email", "password", "role_id"];
+const field = ["first_name", "last_name", "email", "role_id", "password"];
 
 function AccountInsert() {
 	const {
@@ -28,7 +29,7 @@ function AccountInsert() {
 	};
 
 	const options = {
-		url: "/main/accounts/manage-accounts",
+		url: getRoute(routes.ACCOUNTS.VIEW), //accounts/manage-accounts
 		field,
 		payload: payload,
 	};
@@ -51,7 +52,7 @@ function AccountInsert() {
 					email: "",
 					password: "",
 					school_id: null,
-					role_id: 2,
+					role_id: "U5ER",
 					is_verified: true,
 					created_at: null,
 				},
@@ -65,7 +66,7 @@ function AccountInsert() {
 			<MainContainer>
 				<ViewTable>
 					<TableHeader indented />
-					<AccountsData removable isEditable />
+					<AccountsData removable edit />
 				</ViewTable>
 				<Divider />
 				<Footer />

@@ -10,30 +10,30 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
 
-interface PasswordTextFieldProps {
-	error: boolean;
-}
-
 const PasswordTextField = ({ error, ...props }: any) => {
 	const [showPassword, setShowPassword] = useState(false);
 	const handleShowPassword = () => setShowPassword(!showPassword);
 	return (
 		<FormControl
-			sx={{ width: "100%", maxWidth: "25rem" }}
+			sx={{ width: "100%", maxWidth: "25rem",
+			"& .MuiInputBase-root": { fontSize: "0.8rem !important" }, }}
 			size="small"
 			variant="outlined"
 			error={error}
 		>
 			<InputLabel
-				sx={{ fontSize: "0.8rem", fontWeight: "bold" }}
+				sx={{ fontSize: "0.8rem !important", 
+
+					fontWeight: "bold" }}
 				htmlFor="outlined-adornment-password"
 			>
-				Password
+			Password
 			</InputLabel>
 			<OutlinedInput
 				sx={{
 					"&:hover": { cursor: "pointer" },
 					color: "text.primary",
+
 				}}
 				size="small"
 				type={showPassword ? "text" : "password"}

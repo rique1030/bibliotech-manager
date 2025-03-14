@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const useIsImageValid = (src: string) => {
 	if (!src) return false;
@@ -15,7 +15,7 @@ const useIsImageValid = (src: string) => {
 		}
 	}, [src]);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		checkImage().then((result) => setIsValid(result || false));
 	}, [checkImage]);
 

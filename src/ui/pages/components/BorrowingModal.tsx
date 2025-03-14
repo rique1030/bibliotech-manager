@@ -7,19 +7,19 @@ import {
 	Divider,
 	Paper,
 	styled,
-	Table,
-	TableBody,
 	TableCell,
-	TableContainer,
 	TableRow,
 	TextField,
+	Tooltip,
 	Typography,
 } from "@mui/material";
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import MultipleStopRoundedIcon from "@mui/icons-material/MultipleStopRounded";
 import { convertCover, convertProfile } from "../../utils/ImageHelper";
+import ConvertToLetterCase from "../helper/ConvertToLetterCase";
 
 interface RequestImageProps {
+	data?: any;
 	src: string;
 	width: number;
 	height: number;
@@ -29,6 +29,7 @@ interface RequestImageProps {
 }
 
 const RequestImage = ({
+	data,
 	src,
 	width,
 	height,
@@ -56,16 +57,18 @@ const RequestImage = ({
 
 	return (
 		<ImageContainer sx={sx}>
-			<StyledImage src={src} />
+			<Tooltip title={data}>
+				<StyledImage src={src} />
+			</Tooltip>
 		</ImageContainer>
 	);
 };
 
 const RowCell = styled(TableCell)(() => ({
-	// fontSize: "0.75rem",
 	fontSize: "0.8rem",
 	padding: "0.5rem",
 	boxSizing: "border-box",
+	borderBottom: 0,
 }));
 
 const LeftRowCell = styled(RowCell)(() => ({
@@ -78,59 +81,151 @@ interface ConfirmBorrowProps {
 }
 
 const ConfirmBorrow = memo(({ requestHook }: ConfirmBorrowProps) => {
+	const [book, setBook] = useState<any>({});
+	const [user, setUser] = useState<any>({});
 	const {
 		dayState: { days, setDays },
 		error,
 		data,
 		requestModalOpen,
-		handleBorrowDeny,
-		handleBorrowAccept,
+		handleRequestResponse,
 	} = requestHook;
 
+	const handleBorrowAccept = async () => {
+		await handleRequestResponse({
+			approved: true,
+			request_id: data.request_id,
+			borrow: data.borrow,
+			num_days: days,
+		});
+	};
+
+	const handleBorrowDeny = async () => {
+		await handleRequestResponse({
+			approved: false,
+			request_id: data.request_id,
+			borrow: data.borrow,
+			num_days: days,
+		});
+	};
+
+	useEffect(() => {
+		setBook(data?.book);
+		setUser(data?.user);
+	}, [data]);
+
+	const UserLabel = () => {
+		const name = `${ConvertToLetterCase(
+			user?.first_name
+		)} ${ConvertToLetterCase(user?.last_name)}`;
+		return (
+			<Box>
+				<Typography variant="subtitle2">{name}</Typography>
+				<Typography sx={{ color: "text.secondary" }} variant="caption">
+					{user?.school_id}
+				</Typography>
+			</Box>
+		);
+	};
+
+	const ModalText = ({
+		bold,
+		center,
+		children,
+		sx,
+	}: {
+		bold?: boolean;
+		center?: boolean;
+		children: React.ReactNode;
+		sx?: any;
+	}) => {
+		return (
+			<Typography
+				sx={{
+					fontWeight: bold ? "bold" : undefined,
+					fontSize: 24,
+					lineHeight: 1.8,
+					whiteSpace: "nowrap",
+					overflow: "hidden",
+					textOverflow: "ellipsis",
+					textAlign: center ? "center" : undefined,
+					...sx,
+				}}>
+				{children}
+			</Typography>
+		);
+	};
 	return (
 		<Dialog open={requestModalOpen}>
-			<Box sx={{ height: "450px", width: "400px" }}>
+			<Box
+				sx={{ height: 350, width: 450, backgroundColor: "background.paper" }}>
 				<ModalImages
-					book_image={convertCover(data?.book?.cover_image)}
-					user_image={convertProfile(data?.user?.profile_pic)}
+					book_label={""}
+					user_label={<UserLabel />}
+					book_image={convertCover(book?.cover_image)}
+					user_image={convertProfile(user?.profile_pic)}
 				/>
+
 				<Divider variant="middle" />
 				<DialogContent
 					sx={{
-						padding: "1rem",
+						padding: "1rem 2rem",
 						boxSizing: "border-box",
-					}}
-				>
-					<Typography sx={{ padding: "1rem 0px" }} variant="h6">
-						{data?.user?.first_name} would like to{" "}
-						{data?.type === "borrow" ? "borrow" : "return"} :
-					</Typography>
-					<TableContainer>
-						<Table>
-							<TableBody>
-								<ModalRow label="Title" text={data?.book?.title} />
-								<ModalRow label="Author" text={data?.book?.author} />
-								<ModalRow label="Publisher" text={data?.book?.publisher} />
-								<ModalRow
-									label="Access Number"
-									text={data?.book?.access_number}
-								/>
-								<ModalRow label="Call Number" text={data?.book?.call_number} />
-							</TableBody>
-						</Table>
-					</TableContainer>
+					}}>
+					<ModalText center sx={{ color: "text.secondary" }} bold>
+						<Box
+							component={"span"}
+							sx={{
+								color: "text.primary",
+								fontWeight: "bold",
+								textTransform: "capitalize",
+								whiteSpace: "wrap",
+							}}>
+							{ConvertToLetterCase(user?.first_name) || "User"}
+						</Box>
+						{" would like to "}
+						<Box
+							component={"span"}
+							sx={{
+								color: "text.primary",
+								fontWeight: "bold",
+								textTransform: "capitalize",
+								whiteSpace: "wrap",
+							}}>
+							{data?.borrow === true ? "borrow" : "return"}
+						</Box>
+					</ModalText>
+					<Box
+						sx={{
+							marginTop: "1rem",
+							display: "flex",
+							flexDirection: "column",
+						}}>
+						<ModalText bold>{book?.title || "Unknown Book"}</ModalText>
+						<ModalText sx={{ opacity: 0.5, fontSize: "0.8rem" }}>
+							{"by "}
+							{book?.author || "Unknown"}
+						</ModalText>
+						<ModalText
+							sx={{
+								opacity: 0.5,
+								fontSize: "0.8rem",
+							}}>
+							{book?.access_number}
+						</ModalText>
+					</Box>
 				</DialogContent>
 			</Box>
 			<DialogActions
 				sx={{
 					padding: "1rem",
 					boxSizing: "border-box",
+					backgroundColor: "background.paper",
 					display: data?.type === "borrow" ? "flex" : "inline-flex",
 					justifyContent:
 						data?.type === "borrow" ? "space-between" : "flex-end",
-				}}
-			>
-				{data?.type === "borrow" && (
+				}}>
+				{data?.borrow && (
 					<TextField
 						value={days.toString()}
 						onChange={(e) => setDays(parseInt(e.target.value))}
@@ -139,7 +234,7 @@ const ConfirmBorrow = memo(({ requestHook }: ConfirmBorrowProps) => {
 						type="number"
 						size="small"
 						slotProps={{ input: { inputProps: { min: 1 } } }}
-						sx={{ maxWidth: "150px" }}
+						sx={{ maxWidth: "120px" }}
 					/>
 				)}
 				<Box>
@@ -151,7 +246,17 @@ const ConfirmBorrow = memo(({ requestHook }: ConfirmBorrowProps) => {
 	);
 });
 const ModalImages = memo(
-	({ book_image, user_image }: { book_image: string; user_image: string }) => {
+	({
+		book_image,
+		book_label,
+		user_image,
+		user_label,
+	}: {
+		book_image: string;
+		book_label: any;
+		user_image: string;
+		user_label: any;
+	}) => {
 		return (
 			<Box
 				sx={{
@@ -162,8 +267,7 @@ const ModalImages = memo(
 					width: "100%",
 					padding: "1rem",
 					boxSizing: "border-box",
-				}}
-			>
+				}}>
 				<RequestImage
 					sx={{
 						"@keyframes fromRight": {
@@ -172,13 +276,13 @@ const ModalImages = memo(
 						},
 						animation: "fromRight 0.3s ease-out forwards",
 					}}
+					data={user_label}
 					width={6}
 					height={6}
 					padding={0.75}
 					radius={0.5}
 					src={user_image}
 				/>
-
 				<MultipleStopRoundedIcon sx={{ color: "text.secondary" }} />
 				<RequestImage
 					sx={{
@@ -193,6 +297,7 @@ const ModalImages = memo(
 					padding={0.75}
 					radius={0.5}
 					src={book_image}
+					data={book_label}
 				/>
 			</Box>
 		);
@@ -211,8 +316,7 @@ function ModalRow({ label, text }: { label: string; text: string }) {
 						textOverflow: "ellipsis",
 						whiteSpace: "nowrap",
 					}}
-					variant="body2"
-				>
+					variant="body2">
 					{text}
 				</Typography>
 			</RowCell>

@@ -12,7 +12,13 @@ import TopDescriptionContainer from "./TopDescriptionContainer";
 import DetailsContainer from "../../../StyledComponent/DetailsContainer";
 import DetailsTextfield from "../../DetailsTextField";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { useContext, useEffect, useRef, useState } from "react";
+import {
+	useContext,
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useState,
+} from "react";
 import { TableContext } from "../../../../context/TableContext";
 
 const SmallDetails = styled(Box)(() => ({
@@ -28,45 +34,24 @@ const BookDetailsContainer = styled(Box)(() => ({
 	gap: "1rem",
 	width: "100%",
 }));
-{
-	/* {!isEditable && (
-	<BorderedImage
-		src={convertQRCode(row.qrcode)}
-		alt="QR Code"
-		sx={{ width: 85, height: 85 }}
-		isLoading={false}
-	/>
-)} */
-}
-{
-	/* </QRHoler> */
-}
-
-// const QRHoler = styled(Box)(() => ({
-// 	display: "flex",
-// 	flexDirection: "row",
-// 	gap: "0.5rem",
-// 	width: "100%",
-// 	justifyContent: "space-between",
-// }))
 
 const BooksDataCollapsible = ({
 	row,
-	isEditable,
+	edit,
 }: {
 	row: booksRowsInterface | BookPayload;
-	isEditable?: boolean;
+	edit?: boolean;
 }) => {
 	return (
 		<CollapsibleCotainer>
 			<BookDetailsContainer>
 				<Box sx={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
-					<CoverAndStatusContainer edit={isEditable} row={row} />
+					<CoverAndStatusContainer edit={edit} row={row} />
 					<SmallDetails>
-						<TopDescriptionContainer row={row} isEditable={isEditable} />
+						<TopDescriptionContainer row={row} edit={edit} />
 						<DetailsContainer>
 							<DetailsTextfield
-								disabled={!isEditable}
+								disabled={!edit}
 								label="Description"
 								iniitialValue={row.description || ""}
 								required={false}
@@ -79,7 +64,7 @@ const BooksDataCollapsible = ({
 						</DetailsContainer>
 					</SmallDetails>
 				</Box>
-				<CategorySelector row={row} edit={isEditable} />
+				<CategorySelector row={row} edit={edit} />
 			</BookDetailsContainer>
 		</CollapsibleCotainer>
 	);
@@ -124,7 +109,9 @@ function CategorySelector({ row, edit }: any) {
 
 		console.log(newValue);
 
-		const categories = Array.isArray(row?.book_categories) ? row.book_categories : [];
+		const categories = Array.isArray(row?.book_categories)
+			? row.book_categories
+			: [];
 
 		const savedValue = categories.find((v: any) => v?.id === newValue?.id)
 			? categories.filter((v: any) => v?.id !== newValue?.id)
@@ -133,7 +120,7 @@ function CategorySelector({ row, edit }: any) {
 		handleEditEntry(row.id, "book_categories", savedValue);
 	};
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (row?.book_category_ids && !row.book_categories) {
 			row.book_categories = [];
 			const newBookCategories = availableCategories.filter((category: any) =>
@@ -160,8 +147,7 @@ function CategorySelector({ row, edit }: any) {
 				"&::-webkit-scrollbar": {
 					display: "block",
 				},
-			}}
-		>
+			}}>
 			{row?.book_categories?.map((category: any) => (
 				<Chip
 					key={category?.id}
@@ -192,14 +178,18 @@ function ChipAutocomplete({ handleAdd }: { handleAdd: any }) {
 	const filterOptions = createFilterOptions({
 		limit: 8,
 	});
-	const { availableCategories } = useContext(TableContext);
+	const { availableCategories, refetch } = useContext(TableContext);
 	const handleOpen = () => {
 		setOpen(!open);
 	};
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (inputRef.current) inputRef.current.focus();
 	}, [open]);
+
+	useEffect(() => {
+		refetch();
+	}, []);
 
 	return (
 		<ChipAutoComplete
@@ -221,6 +211,7 @@ function ChipAutocomplete({ handleAdd }: { handleAdd: any }) {
 			id="combo-box-demo"
 			sx={{
 				width: open ? "100%" : "min-content",
+				// maxWidth: "10rem",
 				minWidth: open ? "fit-content" : 0,
 			}}
 			renderInput={(params) => (

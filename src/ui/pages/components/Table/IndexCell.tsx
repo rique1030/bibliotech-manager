@@ -7,18 +7,12 @@ const IndexCell = ({ index }: { index: number }) => {
 	const {
 		search: { currentPage: page },
 	} = useContext(TableSearchContext);
-
+	
 	return (
 		<StyledCell
 			color={"primary.main"}
 			column={{ label: "index", align: "center" }}
-			index={0}
-			length={2}
-			borderColor="divider"
-			sx={{
-				width: "4rem",
-				fontWeight: "bold",
-			}}
+			sx={{ width: 40, fontWeight: "bold"}}
 		>
 			<Box
 				sx={{

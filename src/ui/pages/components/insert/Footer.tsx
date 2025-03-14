@@ -1,5 +1,5 @@
 import { Stack, Tooltip, Button } from "@mui/material";
-import ConverToLetterCase from "../../helper/ConvertToLetterCase";
+import ConvertToLetterCase from "../../helper/ConvertToLetterCase";
 import CallNumberDropdown from "../Table/Books/CallNumberDropdown";
 
 interface InsertFooterProps {
@@ -27,9 +27,8 @@ export default function InsertFooter({
 					<Button
 						sx={{ height: "2rem" }}
 						onClick={handleAddEntry}
-						variant="contained"
-					>
-						New&nbsp;{ConverToLetterCase(type)}&nbsp;Entry
+						variant="contained">
+						New&nbsp;{ConvertToLetterCase(type)}&nbsp;Entry
 					</Button>
 				</span>
 			</Tooltip>
@@ -41,16 +40,14 @@ export default function InsertFooter({
 						: isInserting
 						? "Please wait..."
 						: `Please add a/an ${type.toLowerCase()} entry`
-				}
-			>
+				}>
 				<span>
 					<Button
 						disabled={length === 0}
 						onClick={handleInsert}
 						variant="contained"
-						sx={{ height: "2rem" }}
-					>
-						Submit&nbsp;{ConverToLetterCase(type)}&nbsp;Entries
+						sx={{ height: "2rem" }}>
+						Submit&nbsp;{ConvertToLetterCase(type)}&nbsp;Entries
 					</Button>
 				</span>
 			</Tooltip>

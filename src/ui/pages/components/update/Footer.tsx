@@ -1,5 +1,5 @@
 import { Stack, Tooltip, Button } from "@mui/material";
-import ConverToLetterCase from "../../helper/ConvertToLetterCase";
+import ConvertToLetterCase from "../../helper/ConvertToLetterCase";
 import CallNumberDropdown from "../Table/Books/CallNumberDropdown";
 
 interface UpdateFooterProps {
@@ -25,8 +25,7 @@ export default function UpdateFooter({
 			<Button
 				onClick={() => handleGoback()}
 				variant="contained"
-				sx={{ height: "2rem" }}
-			>
+				sx={{ height: "2rem" }}>
 				Back
 			</Button>
 			<Tooltip
@@ -37,15 +36,13 @@ export default function UpdateFooter({
 						: isUpdating
 						? "Please wait..."
 						: `Please add a/an ${type.toLowerCase()} entry`
-				}
-			>
+				}>
 				<span>
 					<Button
 						disabled={length === 0}
 						onClick={handleUpdate}
 						variant="contained"
-						sx={{ height: "2rem" }}
-					>
+						sx={{ height: "2rem" }}>
 						Apply&nbsp;Changes
 					</Button>
 				</span>

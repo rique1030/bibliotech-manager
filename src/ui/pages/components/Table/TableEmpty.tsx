@@ -1,4 +1,4 @@
-import { Stack, Typography, TableRow, TableCell } from "@mui/material";
+import { Stack, TableRow, TableCell } from "@mui/material";
 
 import { useContext } from "react";
 import { TableContext } from "../../context/TableContext";

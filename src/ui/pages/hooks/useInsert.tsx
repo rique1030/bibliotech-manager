@@ -27,10 +27,22 @@ export function useInsert({ insertData, options }: any) {
 			console.error(error);
 			showTimedAlert(
 				"error",
-				"An error occurred. There might be a duplicate of one of the fields. Please try again later."
+				error?.message || "An error occurred. Please try again later."
 			);
 		},
 	});
+
+	const CleanInsertCopy = (payload: any) => {
+		if (!payload) return [];
+		if (!payload[0].hasOwnProperty("catalog_id")) return payload;
+		return payload.map((entry: any) => {
+			return Object.entries(entry).reduce(
+				(acc, [key, value]) =>
+					key !== "title" && key !== "author" ? { ...acc, [key]: value } : acc,
+				{} as any
+			);
+		});
+	};
 
 	const handleInsert = async () => {
 		console.log(options.payload.entries);
@@ -40,14 +52,15 @@ export function useInsert({ insertData, options }: any) {
 		}
 		const allow = await confirmationModal.showConfirmationModal();
 		if (allow) {
-			const filteredPayload = options.payload.entries.map((entry: any) =>
+			const newPayload = CleanInsertCopy(options.payload.entries);
+			const filteredPayload = newPayload.map((entry: any) =>
 				Object.entries(entry).reduce(
 					(acc, [key, value]) =>
 						!key.includes("blob") ? { ...acc, [key]: value } : acc,
 					{} as any
 				)
 			);
-			mutation.mutate(filteredPayload);
+			mutation.mutate(JSON.parse(JSON.stringify(filteredPayload)));
 		}
 	};
 	return {

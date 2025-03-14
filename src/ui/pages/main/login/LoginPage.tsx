@@ -1,28 +1,73 @@
-// import React from "react";
-import { Box } from "@mui/material";
-
-import DisplayPanel from "./components/DisplayPanel";
 import LoginPanel from "./components/LoginPanel";
+import { Box, LinearProgress, styled } from "@mui/material";
+import DisplayPanel from "./components/DisplayPanel";
+
+const RootStyle = {
+	display: "flex",
+	flexDirection: "row",
+	justifyContent: "center",
+	alignItems: "center",
+	height: "100vh",
+	width: "100vw",
+	backgroundColor: "background.default",
+	"@keyframes fadeIn": {
+		from: { opacity: 0 },
+		to: { opacity: 1 },
+	},
+	animation: "fadeIn 0.3s ease-out",
+};
+
+import LogoIcon from "../../components/LogoIcon";
+import { useAuth } from "../../context/AuthProvider";
+import { useEffect, useState } from "react";
+
 function LoginPage() {
-  return (
-    <Box
-      component="form"
-      noValidate
-      autoComplete="off"
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        width: "100vw",
-        backgroundColor: "background.default",
-      }}
-    >
-      <LoginPanel />
-      <DisplayPanel />
-    </Box>
-  );
+	const { login } = useAuth();
+	const [doLogin, setDoLogin] = useState(false);
+
+	useEffect(() => {
+		window.storedSettings.getAccount().then((user: any) => {
+			if (user) {
+				login(
+					{ email: user.email, password: user.password },
+					"/main/records/dashboard"
+				).then((result) => {
+					if (result) {
+						setDoLogin(true);
+					}
+				});
+			} else {
+				setTimeout(() => {
+					setDoLogin(true);
+				}, 3000);
+			}
+		});
+	}, []);
+
+	const LoadingPanel = (
+		<Box
+			sx={{
+				backgroundColor: "background.default",
+				height: "100vh",
+				width: "100vw",
+				display: "flex",
+				flexDirection: "column",
+				justifyContent: "center",
+				alignItems: "center",
+				gap: "2rem",
+			}}>
+			<LogoIcon sx={{ width: "6rem", height: "6rem", color: "primary.main" }} />
+			<LinearProgress sx={{ width: "6rem", borderRadius: "0.5rem" }} />
+		</Box>
+	);
+
+	const Login = (
+		<Box component="form" noValidate autoComplete="off" sx={RootStyle}>
+			<LoginPanel />
+			<DisplayPanel />
+		</Box>
+	);
+	return doLogin ? Login : LoadingPanel;
 }
 
 export default LoginPage;

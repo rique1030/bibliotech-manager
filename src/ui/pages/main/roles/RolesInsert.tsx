@@ -1,14 +1,15 @@
 import ViewTable from "../../components/Table/ViewTable";
 import MainContainer from "../../components/MainContainer";
 import { useContext, useLayoutEffect } from "react";
-import { Divider, Stack, Button, Tooltip } from "@mui/material";
-import columns from "../../components/Table/columns/DefaultRolesColumnsInterface";
+import { Divider } from "@mui/material";
+import columns from "../../components/Table/columns/role/insert";
 import TableHeader from "../../components/Table/TableHeader";
 import { TableContext } from "../../context/TableContext";
 import { useInsert } from "../../hooks/useInsert";
 import { TableInsertContext } from "../../context/TableInsertContext";
 import RolesData from "../../components/Table/Roles/RolesData";
-import InsertFooter from "../../components/insert/footer";
+import InsertFooter from "../../components/insert/Footer";
+import { getRoute, routes } from "../../Router";
 
 const insertData = async (payload: InsertRolesPayload): Promise<any> => {
 	return await window.requestRole.insertMultiple(payload);
@@ -27,7 +28,7 @@ function RolesInsert() {
 	};
 
 	const options = {
-		url: "/main/roles/manage-roles",
+		url: getRoute(routes.ROLES.INSERT), // "//roles/manage-roles",
 		field,
 		payload: payload,
 	};
@@ -72,8 +73,8 @@ function RolesInsert() {
 			{ConfirmationModal}
 			<MainContainer>
 				<ViewTable>
-					<TableHeader indented />
-					<RolesData removable isEditable />
+					<TableHeader/>
+					<RolesData removable edit />
 				</ViewTable>
 				<Divider />
 				<Footer />

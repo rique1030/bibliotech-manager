@@ -20,7 +20,6 @@ export const AlertContext = createContext<AlertContextType>({
 export function AlertContextProvider({ children }: any) {
 	const resultAlert = useResultAlert();
 	const {
-		showTimedAlert,
 		alertOpen,
 		handleClose,
 		severity,

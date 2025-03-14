@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { TableContext } from "../context/TableContext";
 import { AlertContext } from "../context/AlertContext";
@@ -7,20 +7,22 @@ export default function useSearch({
 	fetchData,
 	queryKey,
 	defaultFilter,
+	fastRefetch,
 }: {
 	fetchData: any;
 	queryKey: string;
 	defaultFilter: string;
+	fastRefetch?: boolean;
 }) {
 	const { availableRoles } = useContext(TableContext);
 	const { resultAlert } = useContext(AlertContext);
 	const { showTimedAlert } = resultAlert;
 	const [searchTerm, setSearchTerm] = useState<string>("");
 	const [filterTerm, setFilterTerm] = useState<string>(defaultFilter);
+	const [orderBy, setOrderBy] = useState<string>(defaultFilter);
+	const [asc, setAsc] = useState<boolean>(true);
 	const [page, setPage] = useState(0);
 	const [perPage, setPerPage] = useState(10);
-	// const [orderBy] = useState(defaultFilter);
-	// const [orderDirection] = useState<"asc" | "desc">("asc");
 
 	const [suggestions, setSuggestions] = useState<string[]>([]);
 
@@ -28,20 +30,21 @@ export default function useSearch({
 		page: page,
 		per_page: perPage,
 		filters: searchTerm ? { [filterTerm]: searchTerm } : undefined,
+		order_by: orderBy,
+		order_direction: asc ? "asc" : "desc",
 	};
 
 	const { data, isLoading, refetch } = useQuery({
 		queryKey: [queryKey, payload],
 		queryFn: () => fetchData(payload),
 		retry: 0,
-		staleTime: 1000 * 60,
+		staleTime: fastRefetch ? 1000 * 20 : 1000 * 60,
 		refetchOnReconnect: true,
 		refetchOnMount: false,
 	});
 
 	const refresh = () => {
 		refetch();
-		console.log("refetch");
 	};
 
 	const [totalCount, setTotalCount] = useState<number>(0);
@@ -58,26 +61,24 @@ export default function useSearch({
 
 	useEffect(() => {
 		refetch();
-	}, []);
+	}, [asc, orderBy]);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (filterTerm === "status") {
 			setSuggestions(["Available", "Borrowed", "Overdue", "Lost"]);
-		}
-		// else if (filterTerm === "is_verified") {
-		// 	setSuggestions(["Verified", "Not Verified"]);
-		// }
-		else if (filterTerm === "role_id") {
+		} else if (filterTerm === "role_id") {
 			setSuggestions(availableRoles.map((role: any) => role.role_name));
 		} else {
+			const uniqueValues = new Set(
+				rowData.map((item: any) => item[filterTerm])
+			);
 			setSuggestions(
-				data?.data?.items.map((item: any) => item[filterTerm]) || []
+				Array.from(uniqueValues).filter((value: any) => value !== null)
 			);
 		}
 	}, [filterTerm, rowData]);
 
-	useEffect(() => {
-		console.log(data?.data?.items);
+	useLayoutEffect(() => {
 		if (!data?.success) {
 			if (data?.error) {
 				if (data?.error === "ECONNREFUSED") {
@@ -97,6 +98,10 @@ export default function useSearch({
 		setFilterTerm,
 		setPage,
 		setPerPage,
+		setOrderBy,
+		setAsc,
+		asc,
+		orderBy,
 		filterTerm,
 		perPage,
 		suggestions,

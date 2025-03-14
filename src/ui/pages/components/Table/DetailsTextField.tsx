@@ -1,8 +1,8 @@
 import { useContext, useLayoutEffect, useRef, useState } from "react";
 import StyledDetailsTextfield from "../StyledComponent/StyledDetailsTextField";
 import { TableContext } from "../../context/TableContext";
-import { PasswordOutlined } from "@mui/icons-material";
 import PasswordTextField from "../PasswordTextField";
+import { validateEmail, validateID, validatePassword } from "../../helper/Verify";
 
 type DetailsTextfieldProps = {
 	maxLength?: number | 255;
@@ -64,12 +64,32 @@ const DetailsTextfield = ({
 	const verifyTextContent = () => {
 		const text = InputRef.current?.value;
 		if (!text) return !required;
-		if (dataIndex.key === "call_number") {
-			const result = verifyCallNumber(text);
-			setErrorMessage("Invalid call number format");
-			setError(!result);
-			return result;
+		try {
+			switch (dataIndex.key) {
+				case "call_number":
+					if (!verifyCallNumber(text)) throw new Error("Invalid call number format");
+					break;
+				case "email":
+					validateEmail(text);
+					break;
+				case "password":
+					validatePassword(text);
+					break;
+				case "school_id":
+					validateID(text);
+					break;
+				default:
+					break;
+			}
+			setError(false);
+			return true;
+		} catch (error: any) {
+			setErrorMessage(error.message);
+			setError(true);
+			return false;
 		}
+		setErrorMessage("This field is required");
+		setError(required || false);
 		return !required;
 	};
 
@@ -124,7 +144,7 @@ const DetailsTextfield = ({
 			sx={sx}
 			error={error && !disabled}
 			slotProps={slotProps}
-			helperText={error ? errorMessage : (disabled && "") || ""}
+			// helperText={error ? errorMessage : (disabled && "") || ""}
 			fullWidth
 		/>
 	);

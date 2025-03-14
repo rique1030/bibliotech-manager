@@ -23,12 +23,8 @@ const DataActionCell = ({ id, selectable, removable }: DataActionCellProps) => {
 	return (
 		<StyledCell
 			column={{ label: "initial" }}
-			index={0}
-			length={2}
 			borderColor="divider"
-			sx={{
-				width: 10,
-			}}
+			sx={{ width: 40,}}
 		>
 			{removable && <RemoveButton onClick={() => handleRemoveEntry(id)} />}
 			{selectable && (
