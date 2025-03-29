@@ -31,309 +31,311 @@ const AccountUpdate = lazy(() => import("./main/account/AccountUpdate"));
 const BooksCopy = lazy(() => import("./main/records/BookCopies"));
 const BookBorrow = lazy(() => import("./main/records/BookBorrows"));
 const BookCategoryCount = lazy(
-	() => import("./main/records/BookCategoryCount")
+  () => import("./main/records/BookCategoryCount"),
 );
+
 const mainRoutes = {
-	CATALOG: "book-title",
-	COPIES: "physical-copy",
-	CATEGORIES: "category",
-	ROLES: "role",
-	ACCOUNTS: "account",
+  CATALOG: "book-title",
+  COPIES: "physical-copy",
+  CATEGORIES: "category",
+  ROLES: "role",
+  ACCOUNTS: "account",
 };
 
 export const routes = {
-	BOOKS: getCrudRoute(mainRoutes.CATALOG),
-	COPIES: getCrudRoute(mainRoutes.COPIES, true),
-	CATEGORIES: getCrudRoute(mainRoutes.CATEGORIES),
-	ROLES: getCrudRoute(mainRoutes.ROLES),
-	ACCOUNTS: getCrudRoute(mainRoutes.ACCOUNTS),
+  BOOKS: getCrudRoute(mainRoutes.CATALOG),
+  COPIES: getCrudRoute(mainRoutes.COPIES, true),
+  CATEGORIES: getCrudRoute(mainRoutes.CATEGORIES),
+  ROLES: getCrudRoute(mainRoutes.ROLES),
+  ACCOUNTS: getCrudRoute(mainRoutes.ACCOUNTS),
 };
 
 function getCrudRoute(route: string, qr = false) {
-	return {
-		INSERT: `${route}/add`,
-		VIEW: `${route}/manage`,
-		UPDATE: `${route}/manage/edit`,
-		DELETE: `${route}/manage/delete`,
-		QR: qr ? `${route}/manage/qr` : undefined,
-	};
+  return {
+    INSERT: `${route}/add`,
+    VIEW: `${route}/manage`,
+    UPDATE: `${route}/manage/edit`,
+    DELETE: `${route}/manage/delete`,
+    QR: qr ? `${route}/manage/qr` : undefined,
+  };
 }
 
 export function getRoute(route: string) {
-	return `/main/${route}`;
+  return `/main/${route}`;
 }
 
 function CustomSuspense({ children }: any) {
-	const Sus = () => {
-		return (
-			<Box
-				sx={{
-					height: "100%",
-					width: "100%",
-					display: "flex",
-					justifyContent: "center",
-					alignItems: "center",
-				}}>
-				<CircularProgress color="primary" size={100} thickness={0.5} />
-			</Box>
-		);
-	};
-	return <Suspense fallback={<Sus />}>{children}</Suspense>;
+  const Sus = () => {
+    return (
+      <Box
+        sx={{
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress color="primary" size={100} thickness={0.5} />
+      </Box>
+    );
+  };
+  return <Suspense fallback={<Sus />}>{children}</Suspense>;
 }
 
 const router = createHashRouter([
-	{
-		path: "/",
-		element: <Navigate to={"/login"} />,
-	},
-	{
-		path: "/login",
-		element: (
-			<AuthProvider>
-				<LoginPage />
-			</AuthProvider>
-		),
-	},
-	{
-		path: "/main",
-		element: <MainWindow />,
-		children: [
-			{
-				path: mainRoutes.CATALOG,
-				children: [
-					{
-						path: "add",
-						element: (
-							<CustomSuspense>
-								<BooksInsert />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "manage",
-						element: (
-							<CustomSuspense>
-								<BooksView />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "manage/edit",
-						element: (
-							<CustomSuspense>
-								<BooksUpdate />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "manage/delete",
-						element: (
-							<CustomSuspense>
-								<BooksDelete />
-							</CustomSuspense>
-						),
-					},
-				],
-			},
-			{
-				path: mainRoutes.COPIES,
-				children: [
-					{
-						path: "add",
-						element: (
-							<CustomSuspense>
-								<CopyInsert />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "manage",
-						element: (
-							<CustomSuspense>
-								<CopyView />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "manage/edit",
-						element: (
-							<CustomSuspense>
-								<CopyUpdate />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "manage/delete",
-						element: (
-							<CustomSuspense>
-								<CopyDelete />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "manage/qr",
-						element: (
-							<CustomSuspense>
-								<CopyQRView />
-							</CustomSuspense>
-						),
-					},
-				],
-			},
-			{
-				path: mainRoutes.CATEGORIES,
-				children: [
-					{
-						path: "add",
-						element: (
-							<CustomSuspense>
-								<CategoryInsert />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "manage",
-						element: (
-							<CustomSuspense>
-								<CategoryView />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "manage/edit",
-						element: (
-							<CustomSuspense>
-								<CategoryUpdate />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "manage/delete",
-						element: (
-							<CustomSuspense>
-								<CategoryDelete />
-							</CustomSuspense>
-						),
-					},
-				],
-			},
-			{
-				path: mainRoutes.ROLES,
-				children: [
-					{
-						path: "add",
-						element: (
-							<CustomSuspense>
-								<RolesInsert />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "manage",
-						element: (
-							<CustomSuspense>
-								<RolesView />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "manage/edit",
-						element: (
-							<CustomSuspense>
-								<RolesUpdate />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "manage/delete",
-						element: (
-							<CustomSuspense>
-								<RolesDelete />
-							</CustomSuspense>
-						),
-					},
-				],
-			},
-			{
-				path: mainRoutes.ACCOUNTS,
-				children: [
-					{
-						path: "add",
-						element: (
-							<CustomSuspense>
-								<AccountInsert />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "manage",
-						element: (
-							<CustomSuspense>
-								<AccountView />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "manage/edit",
-						element: (
-							<CustomSuspense>
-								<AccountUpdate />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "manage/delete",
-						element: (
-							<CustomSuspense>
-								<AccountDelete />
-							</CustomSuspense>
-						),
-					},
-				],
-			},
-			{
-				path: "records",
-				children: [
-					{
-						path: "dashboard",
-						element: (
-							<CustomSuspense>
-								<Dashboard />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "book-copies",
-						element: (
-							<CustomSuspense>
-								<BooksCopy />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "borrowings",
-						element: (
-							<CustomSuspense>
-								<BookBorrow />
-							</CustomSuspense>
-						),
-					},
-					{
-						path: "book-categories",
-						element: (
-							<CustomSuspense>
-								<BookCategoryCount />
-							</CustomSuspense>
-						),
-					},
-				],
-			},
-		],
-	},
-	{
-		path: "*",
-		element: <Navigate to={"/main"} />,
-	},
+  {
+    path: "/",
+    element: <Navigate to={"/login"} />,
+  },
+  {
+    path: "/login",
+    element: (
+      <AuthProvider>
+        <LoginPage />
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/main",
+    element: <MainWindow />,
+    children: [
+      {
+        path: mainRoutes.CATALOG,
+        children: [
+          {
+            path: "add",
+            element: (
+              <CustomSuspense>
+                <BooksInsert />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "manage",
+            element: (
+              <CustomSuspense>
+                <BooksView />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "manage/edit",
+            element: (
+              <CustomSuspense>
+                <BooksUpdate />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "manage/delete",
+            element: (
+              <CustomSuspense>
+                <BooksDelete />
+              </CustomSuspense>
+            ),
+          },
+        ],
+      },
+      {
+        path: mainRoutes.COPIES,
+        children: [
+          {
+            path: "add",
+            element: (
+              <CustomSuspense>
+                <CopyInsert />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "manage",
+            element: (
+              <CustomSuspense>
+                <CopyView />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "manage/edit",
+            element: (
+              <CustomSuspense>
+                <CopyUpdate />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "manage/delete",
+            element: (
+              <CustomSuspense>
+                <CopyDelete />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "manage/qr",
+            element: (
+              <CustomSuspense>
+                <CopyQRView />
+              </CustomSuspense>
+            ),
+          },
+        ],
+      },
+      {
+        path: mainRoutes.CATEGORIES,
+        children: [
+          {
+            path: "add",
+            element: (
+              <CustomSuspense>
+                <CategoryInsert />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "manage",
+            element: (
+              <CustomSuspense>
+                <CategoryView />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "manage/edit",
+            element: (
+              <CustomSuspense>
+                <CategoryUpdate />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "manage/delete",
+            element: (
+              <CustomSuspense>
+                <CategoryDelete />
+              </CustomSuspense>
+            ),
+          },
+        ],
+      },
+      {
+        path: mainRoutes.ROLES,
+        children: [
+          {
+            path: "add",
+            element: (
+              <CustomSuspense>
+                <RolesInsert />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "manage",
+            element: (
+              <CustomSuspense>
+                <RolesView />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "manage/edit",
+            element: (
+              <CustomSuspense>
+                <RolesUpdate />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "manage/delete",
+            element: (
+              <CustomSuspense>
+                <RolesDelete />
+              </CustomSuspense>
+            ),
+          },
+        ],
+      },
+      {
+        path: mainRoutes.ACCOUNTS,
+        children: [
+          {
+            path: "add",
+            element: (
+              <CustomSuspense>
+                <AccountInsert />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "manage",
+            element: (
+              <CustomSuspense>
+                <AccountView />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "manage/edit",
+            element: (
+              <CustomSuspense>
+                <AccountUpdate />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "manage/delete",
+            element: (
+              <CustomSuspense>
+                <AccountDelete />
+              </CustomSuspense>
+            ),
+          },
+        ],
+      },
+      {
+        path: "records",
+        children: [
+          {
+            path: "dashboard",
+            element: (
+              <CustomSuspense>
+                <Dashboard />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "book-copies",
+            element: (
+              <CustomSuspense>
+                <BooksCopy />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "borrowings",
+            element: (
+              <CustomSuspense>
+                <BookBorrow />
+              </CustomSuspense>
+            ),
+          },
+          {
+            path: "book-categories",
+            element: (
+              <CustomSuspense>
+                <BookCategoryCount />
+              </CustomSuspense>
+            ),
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: <Navigate to={"/main"} />,
+  },
 ]);
 
 export default router;

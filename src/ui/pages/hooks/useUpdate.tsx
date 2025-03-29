@@ -9,7 +9,7 @@ import { TableContext } from "../context/TableContext";
 interface optionInterface {
 	url: string;
 	field: string[];
-	payload: { entryIds: number[]; [key: string]: any };
+	payload: { entryIds: number[];[key: string]: any };
 	queryKey: string;
 }
 
@@ -32,10 +32,6 @@ export function useUpdate({
 	const confirmationModal = useConfirmationModal();
 	const navigate = useNavigate();
 
-	/**
-	 * Initial data fetching
-	 */
-
 	const { data: preData, refetch, isLoading } = useQuery({
 		queryKey: [options.queryKey, options.payload.entryIds],
 		queryFn: () => getData(options.payload.entryIds),
@@ -49,23 +45,17 @@ export function useUpdate({
 	}, []);
 
 	useEffect(() => {
-		if (!preData?.success) {
-			if (preData?.error) {
-				if (preData?.error === "ECONNREFUSED") {
-					showTimedAlert(
-						"error",
-						"Unable to connect to server. Please try again later."
-					);
-				} else {
-					console.error(preData.error);
-				}
-			}
+		if (preData?.success) return
+		if (!preData?.error) return
+		if (preData?.error === "ECONNREFUSED") {
+			showTimedAlert(
+				"error",
+				"Unable to connect to server. Please try again later."
+			);
+		} else {
+			console.error(preData.error);
 		}
 	}, [preData]);
-
-	/**
-	 * Mutation
-	 */
 
 	const mutation = useMutation({
 		mutationFn: (payload) => updateData(payload),
@@ -104,7 +94,7 @@ export function useUpdate({
 		}
 		const allow = await confirmationModal.showConfirmationModal();
 		if (allow) {
-			const newEntries : any = convertCategoriesToCategoryIDs(options.payload.entries);
+			const newEntries: any = convertCategoriesToCategoryIDs(options.payload.entries);
 			mutation.mutate(newEntries);
 		}
 	};
@@ -136,7 +126,7 @@ export function useUpdate({
 
 	const convertCategoriesToCategoryIDs = (entries: any[]) => {
 		for (const entry of entries) {
-			
+
 			if (entry && entry.hasOwnProperty("book_categories")) {
 				const newIds = entry.book_categories.map((category: any) => category.id);
 				entry.new_ids = newIds

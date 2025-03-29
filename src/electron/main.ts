@@ -18,7 +18,7 @@ const createWindow = () => {
 	win = new BrowserWindow({
 		backgroundColor: "#121212",
 		minWidth: 1024,
-		minHeight: 720,
+		minHeight: 600,
 		width: bounds.windowSize[0],
 		height: bounds.windowSize[1],
 		hasShadow: true,
